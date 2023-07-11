@@ -1,0 +1,46 @@
+{
+  "shift_length": 720,
+  "capacity": 10,
+  "humanoids": [
+    {
+      "name": "data_set_3/test_set_a/corpse/c_0000_mb_bg_s_n_c_s.png",
+      "state": "corpse",
+      "value": 0
+    },
+    {
+      "name": "data_set_3/test_set_a/healthy/h_0000_mb_ab_s_n_c_s.png",
+      "state": "healthy",
+      "value": 1
+    },
+    {
+      "name": "data_set_3/test_set_a/healthy/h_0002_mb_ab_s_n_c_s.png",
+      "state": "healthy",
+      "value": 10
+    },
+    {
+      "name": "data_set_3/test_set_a/zombie/z_0022_mb_bg_s_n_c_s.png",
+      "state": "zombie",
+      "value": 0
+    },
+    {
+      "name": "data_set_3/test_set_a/injured/i_0012_mb_ab_s_n_c_s.png",
+      "state": "injured",
+      "value": 10
+    },
+    {
+      "name": "data_set_3/test_set_a/healthy/h_0106_mb_ab_s_n_c_s.png",
+      "state": "healthy",
+      "value": 1
+    },
+    {
+      "name": "data_set_3/test_set_a/zombie/z_0087_mb_bg_s_n_c_s.png",
+      "state": "zombie",
+      "value": 0
+    },
+    {
+      "name": "data_set_3/test_set_a/injured/i_0024_mb_ab_s_n_c_s.png",
+      "state": "injured",
+      "value": 1
+    }
+  ]
+}
