@@ -22,10 +22,10 @@ class Main(object):
             simon = MachineInterface(None, None, None, is_automode)
             while len(self.data_parser.unvisited) > 0:
                 if self.scorekeeper.remaining_time <= 0:
-                    pass
+                    break
                 else:
                     humanoid = self.data_parser.get_random()
-                    simon.suggest(humanoid)
+                    simon.suggest(humanoid, self.scorekeeper.at_capacity())
                     simon.act(self.scorekeeper, humanoid)
             print(self.scorekeeper.get_score())
 
