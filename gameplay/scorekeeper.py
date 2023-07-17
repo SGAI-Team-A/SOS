@@ -6,7 +6,8 @@ class ScoreKeeper(object):
         self.__ambulance = {
             "zombie": 0,
             "injured": 0,
-            "healthy": 0
+            "healthy": 0,
+            "corpse": 0
         }
         self.__scorekeeper = {
             "killed_h": 0,
@@ -21,6 +22,7 @@ class ScoreKeeper(object):
         self.remaining_time -= ActionCost.SAVE.value
         if humanoid.is_zombie() or humanoid.is_infected():
             self.__ambulance["zombie"] += 1
+            self.__scorekeeper["saved_z"] += 1
 
             # Immediately kill injured and healthy
             self.__scorekeeper["killed_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
@@ -29,15 +31,18 @@ class ScoreKeeper(object):
             self.__ambulance["zombie"] = 0
             self.__ambulance["injured"] = 0
             self.__ambulance["healthy"] = 0
+            self.__ambulance["corpse"] = 0
             
         elif humanoid.is_injured():
             self.__ambulance["injured"] += 1
+        elif humanoid.is_corpse():
+            self.__ambulance["corpse"] += 1
         else:
             self.__ambulance["healthy"] += 1
 
     def squish(self, humanoid):
         self.remaining_time -= ActionCost.SQUISH.value
-        if not humanoid.is_zombie():
+        if not humanoid.is_zombie() or not humanoid.is_corpse():
             self.__scorekeeper["killed_h"] += 1
         else:
             self.__scorekeeper["killed_z"] += 1
@@ -49,14 +54,13 @@ class ScoreKeeper(object):
 
     def scram(self):
         self.remaining_time -= ActionCost.SCRAM.value
-        if self.__ambulance["zombie"] > 0:
-            self.__scorekeeper["killed_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
-        else:
-            self.__scorekeeper["saved_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
+        self.__scorekeeper["saved_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
+        self.__scorekeeper["saved_z"] += self.__ambulance["corpse"]
 
         self.__ambulance["zombie"] = 0
         self.__ambulance["injured"] = 0
         self.__ambulance["healthy"] = 0
+        self.__ambulance["corpse"] = 0
 
     def get_current_capacity(self):
         return sum(self.__ambulance.values())

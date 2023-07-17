@@ -26,3 +26,6 @@ class Humanoid(object):
     
     def is_healthy(self):
         return self.state == State.HEALTHY.value
+    
+    def is_corpse(self):
+        return self.state == State.CORPSE.value
