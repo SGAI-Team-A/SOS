@@ -1,4 +1,8 @@
 # PYTHON GENERIC FROM GITHUB
+
+# ignore metadata
+data/default_dataset/metadata.yaml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

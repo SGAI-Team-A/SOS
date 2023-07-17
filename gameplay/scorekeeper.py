@@ -19,10 +19,17 @@ class ScoreKeeper(object):
 
     def save(self, humanoid):
         self.remaining_time -= ActionCost.SAVE.value
-        if humanoid.is_zombie():
+        if humanoid.is_zombie() or humanoid.is_infected():
             self.__ambulance["zombie"] += 1
-        elif humanoid.is_infected():
-            self.__ambulance["zombie"] += 1
+
+            # Immediately kill injured and healthy
+            self.__scorekeeper["killed_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
+
+            # Remove those killed and the zombie from the van
+            self.__ambulance["zombie"] = 0
+            self.__ambulance["injured"] = 0
+            self.__ambulance["healthy"] = 0
+            
         elif humanoid.is_injured():
             self.__ambulance["injured"] += 1
         else:
