@@ -20,7 +20,7 @@ class Humanoid(object):
         if self.state == State.INJURED.value:
             randNum = random.randint(0,9)
             if randNum == 0 or randNum == 1:
-                self.state = State.INFECTED
+                self.state = State.INFECTED.value
                 print ("infected")
         return self.state == State.INFECTED.value
     
