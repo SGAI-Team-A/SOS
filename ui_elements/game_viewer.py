@@ -24,8 +24,10 @@ class GameViewer(object):
 
     def display_score(self, score):
         tk.Label(self.canvas, text="FINAL SCORE", font=("Arial", 30)).pack(anchor=tk.NW)
-        tk.Label(self.canvas, text="Killed {}".format(score["killed"]), font=("Arial", 15)).pack(anchor=tk.NW)
-        tk.Label(self.canvas, text="Saved {}".format(score["saved"]), font=("Arial", 15)).pack(anchor=tk.NW)
+        tk.Label(self.canvas, text="Killed {}".format(score["killed_z"]) + " zombies", font=("Arial", 15)).pack(anchor=tk.NW)
+        tk.Label(self.canvas, text="Killed {}".format(score["killed_h"]) + " humans", font=("Arial", 15)).pack(anchor=tk.NW)
+        tk.Label(self.canvas, text="Saved {}".format(score["saved_z"]) + " zombies", font=("Arial", 15)).pack(anchor=tk.NW)
+        tk.Label(self.canvas, text="Saved {}".format(score["saved_h"]) + " humans", font=("Arial", 15)).pack(anchor=tk.NW)
 
 
 def display_photo(img_path, w, h):
