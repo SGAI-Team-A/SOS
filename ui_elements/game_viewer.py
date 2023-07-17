@@ -30,7 +30,7 @@ class GameViewer(object):
 
 def display_photo(img_path, w, h):
     img = Image.open(img_path)
-    resized = img.resize((w, h), Image.ANTIALIAS)
+    resized = img.resize((w, h), Image.LANCZOS)
 
     tk_img = ImageTk.PhotoImage(resized)
     return tk_img

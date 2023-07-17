@@ -1,153 +1,153 @@
 capacity: 10
 humanoids:
-- name: corpse\c_0185_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: injured\i_0050_mb_ab_s_n_c_s.png
-  state: injured
-  value: 1
-- name: healthy\h_0076_mb_ab_s_n_c_s.png
+- name: healthy\h_0054_mb_ab_s_n_c_s.png
   state: healthy
-  value: 2
-- name: injured\i_0102_mb_ab_s_n_c_s.png
-  state: injured
   value: 1
-- name: corpse\c_0053_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: healthy\h_0018_mb_ab_s_n_c_s.png
+- name: healthy\h_0023_mb_ab_s_n_c_s.png
   state: healthy
-  value: 2
-- name: healthy\h_0166_mb_ab_s_n_c_s.png
+  value: 1
+- name: injured\i_0130_mb_ab_s_n_c_s.png
+  state: injured
+  value: 5
+- name: injured\i_0065_mb_ab_s_n_c_s.png
+  state: injured
+  value: 5
+- name: corpse\c_0145_mb_bg_s_n_c_s.png
+  state: corpse
+  value: 0
+- name: healthy\h_0172_mb_ab_s_n_c_s.png
   state: healthy
-  value: 2
-- name: injured\i_0097_mb_ab_s_n_c_s.png
-  state: injured
   value: 1
-- name: corpse\c_0027_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: corpse\c_0079_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: injured\i_0029_mb_ab_s_n_c_s.png
-  state: injured
-  value: 1
-- name: zombie\z_0023_mb_bg_s_n_c_s.png
+- name: zombie\z_0045_mb_bg_s_n_c_s.png
   state: zombie
   value: 0
-- name: corpse\c_0168_mb_bg_s_n_c_s.png
+- name: corpse\c_0195_mb_bg_s_n_c_s.png
   state: corpse
   value: 0
-- name: corpse\c_0090_mb_bg_s_n_c_s.png
+- name: corpse\c_0060_mb_bg_s_n_c_s.png
   state: corpse
   value: 0
-- name: injured\i_0046_mb_ab_s_n_c_s.png
-  state: injured
+- name: healthy\h_0187_mb_ab_s_n_c_s.png
+  state: healthy
   value: 1
-- name: injured\i_0087_mb_ab_s_n_c_s.png
+- name: injured\i_0106_mb_ab_s_n_c_s.png
   state: injured
+  value: 5
+- name: healthy\h_0041_mb_ab_s_n_c_s.png
+  state: healthy
   value: 1
-- name: corpse\c_0040_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: corpse\c_0104_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: healthy\h_0048_mb_ab_s_n_c_s.png
+- name: healthy\h_0193_mb_ab_s_n_c_s.png
   state: healthy
-  value: 2
-- name: corpse\c_0133_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: healthy\h_0154_mb_ab_s_n_c_s.png
-  state: healthy
-  value: 2
-- name: zombie\z_0011_mb_bg_s_n_c_s.png
-  state: zombie
-  value: 0
-- name: healthy\h_0158_mb_ab_s_n_c_s.png
-  state: healthy
-  value: 2
-- name: zombie\z_0170_mb_bg_s_n_c_s.png
-  state: zombie
-  value: 0
-- name: zombie\z_0039_mb_bg_s_n_c_s.png
-  state: zombie
-  value: 0
-- name: corpse\c_0095_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: zombie\z_0056_mb_bg_s_n_c_s.png
-  state: zombie
-  value: 0
-- name: zombie\z_0169_mb_bg_s_n_c_s.png
-  state: zombie
-  value: 0
-- name: healthy\h_0145_mb_ab_s_n_c_s.png
-  state: healthy
-  value: 2
-- name: injured\i_0195_mb_ab_s_n_c_s.png
-  state: injured
   value: 1
-- name: zombie\z_0146_mb_bg_s_n_c_s.png
+- name: healthy\h_0083_mb_ab_s_n_c_s.png
+  state: healthy
+  value: 1
+- name: zombie\z_0083_mb_bg_s_n_c_s.png
   state: zombie
   value: 0
 - name: injured\i_0013_mb_ab_s_n_c_s.png
   state: injured
-  value: 1
-- name: corpse\c_0037_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: zombie\z_0116_mb_bg_s_n_c_s.png
-  state: zombie
-  value: 0
-- name: corpse\c_0122_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
+  value: 5
 - name: corpse\c_0108_mb_bg_s_n_c_s.png
   state: corpse
   value: 0
-- name: injured\i_0053_mb_ab_s_n_c_s.png
+- name: injured\i_0025_mb_ab_s_n_c_s.png
   state: injured
-  value: 1
-- name: healthy\h_0013_mb_ab_s_n_c_s.png
+  value: 5
+- name: corpse\c_0043_mb_bg_s_n_c_s.png
+  state: corpse
+  value: 0
+- name: healthy\h_0185_mb_ab_s_n_c_s.png
   state: healthy
-  value: 2
+  value: 1
+- name: corpse\c_0009_mb_bg_s_n_c_s.png
+  state: corpse
+  value: 0
+- name: injured\i_0052_mb_ab_s_n_c_s.png
+  state: injured
+  value: 5
+- name: zombie\z_0167_mb_bg_s_n_c_s.png
+  state: zombie
+  value: 0
+- name: corpse\c_0083_mb_bg_s_n_c_s.png
+  state: corpse
+  value: 0
+- name: zombie\z_0128_mb_bg_s_n_c_s.png
+  state: zombie
+  value: 0
+- name: healthy\h_0114_mb_ab_s_n_c_s.png
+  state: healthy
+  value: 1
+- name: healthy\h_0199_mb_ab_s_n_c_s.png
+  state: healthy
+  value: 1
+- name: corpse\c_0007_mb_bg_s_n_c_s.png
+  state: corpse
+  value: 0
+- name: zombie\z_0033_mb_bg_s_n_c_s.png
+  state: zombie
+  value: 0
+- name: corpse\c_0051_mb_bg_s_n_c_s.png
+  state: corpse
+  value: 0
+- name: healthy\h_0036_mb_ab_s_n_c_s.png
+  state: healthy
+  value: 1
+- name: corpse\c_0139_mb_bg_s_n_c_s.png
+  state: corpse
+  value: 0
+- name: injured\i_0074_mb_ab_s_n_c_s.png
+  state: injured
+  value: 5
+- name: injured\i_0011_mb_ab_s_n_c_s.png
+  state: injured
+  value: 5
+- name: healthy\h_0135_mb_ab_s_n_c_s.png
+  state: healthy
+  value: 1
+- name: corpse\c_0146_mb_bg_s_n_c_s.png
+  state: corpse
+  value: 0
+- name: injured\i_0096_mb_ab_s_n_c_s.png
+  state: injured
+  value: 5
+- name: zombie\z_0052_mb_bg_s_n_c_s.png
+  state: zombie
+  value: 0
+- name: zombie\z_0006_mb_bg_s_n_c_s.png
+  state: zombie
+  value: 0
+- name: healthy\h_0030_mb_ab_s_n_c_s.png
+  state: healthy
+  value: 1
+- name: injured\i_0007_mb_ab_s_n_c_s.png
+  state: injured
+  value: 5
+- name: zombie\z_0094_mb_bg_s_n_c_s.png
+  state: zombie
+  value: 0
+- name: zombie\z_0063_mb_bg_s_n_c_s.png
+  state: zombie
+  value: 0
+- name: zombie\z_0199_mb_bg_s_n_c_s.png
+  state: zombie
+  value: 0
+- name: injured\i_0018_mb_ab_s_n_c_s.png
+  state: injured
+  value: 5
+- name: healthy\h_0089_mb_ab_s_n_c_s.png
+  state: healthy
+  value: 1
+- name: zombie\z_0106_mb_bg_s_n_c_s.png
+  state: zombie
+  value: 0
+- name: corpse\c_0134_mb_bg_s_n_c_s.png
+  state: corpse
+  value: 0
+- name: zombie\z_0160_mb_bg_s_n_c_s.png
+  state: zombie
+  value: 0
 - name: corpse\c_0068_mb_bg_s_n_c_s.png
   state: corpse
   value: 0
-- name: corpse\c_0164_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: healthy\h_0009_mb_ab_s_n_c_s.png
-  state: healthy
-  value: 2
-- name: corpse\c_0166_mb_bg_s_n_c_s.png
-  state: corpse
-  value: 0
-- name: injured\i_0090_mb_ab_s_n_c_s.png
-  state: injured
-  value: 1
-- name: injured\i_0085_mb_ab_s_n_c_s.png
-  state: injured
-  value: 1
-- name: zombie\z_0175_mb_bg_s_n_c_s.png
-  state: zombie
-  value: 0
-- name: healthy\h_0020_mb_ab_s_n_c_s.png
-  state: healthy
-  value: 2
-- name: zombie\z_0042_mb_bg_s_n_c_s.png
-  state: zombie
-  value: 0
-- name: healthy\h_0132_mb_ab_s_n_c_s.png
-  state: healthy
-  value: 2
-- name: healthy\h_0161_mb_ab_s_n_c_s.png
-  state: healthy
-  value: 2
-- name: healthy\h_0097_mb_ab_s_n_c_s.png
-  state: healthy
-  value: 2
 shift_length: 720

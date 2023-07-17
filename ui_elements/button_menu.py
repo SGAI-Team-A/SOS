@@ -40,7 +40,7 @@ def create_buttons(canvas, items):
 
 def create_menu(buttons):
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'graphics', 'logo.png')
-    logo = ImageTk.PhotoImage(Image.open(path).resize((300, 50), Image.ANTIALIAS))
+    logo = ImageTk.PhotoImage(Image.open(path).resize((300, 50), Image.LANCZOS))
     label = tk.Label(image=logo)
     label.image = logo
 
