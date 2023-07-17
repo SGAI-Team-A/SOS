@@ -25,11 +25,11 @@ class CapacityMeter(object):
 
     def update_fill(self, index):
         if index != 0:
-            self.canvas.itemconfig(self.__units[index-1], stipple="")
+            self.canvas.itemconfig(self.__units[index-1], fill="midnightblue")
         else:
             for unit in self.__units:
-                self.canvas.itemconfig(unit, stipple="gray25")
+                self.canvas.itemconfig(unit, fill="gray25")
 
 
 def create_unit(canvas, x, y, size):
-    return canvas.create_rectangle(x, y, x+size, y+size, fill='midnightblue', stipple="gray25")
+    return canvas.create_rectangle(x, y, x+size, y+size, fill='gray25')

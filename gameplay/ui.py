@@ -92,6 +92,8 @@ class UI(object):
             self.capacity_meter.update_fill(0)
             self.game_viewer.delete_photo(None)
             self.game_viewer.display_score(scorekeeper.get_score())
+            self.machine_menu.disable_all_buttons()
+            self.button_menu.disable_buttons(scorekeeper.remaining_time, remaining, scorekeeper.at_capacity())
         else:
             humanoid = data_parser.get_random()
             # Update visual display

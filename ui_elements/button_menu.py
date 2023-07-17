@@ -13,6 +13,15 @@ class ButtonMenu(object):
         create_menu(self.buttons)
 
     def disable_buttons(self, remaining_time, remaining_humanoids, at_capacity):
+        if at_capacity:
+            self.buttons[0].config(state="disabled")
+            self.buttons[1].config(state="disabled")
+            self.buttons[2].config(state="disabled")
+        else:
+            self.buttons[0].config(state="normal")
+            self.buttons[1].config(state="normal")
+            self.buttons[2].config(state="normal")
+
         if remaining_humanoids == 0 or remaining_time <= 0:
             for i in range(0, len(self.buttons)):
                 self.buttons[i].config(state="disabled")
@@ -22,10 +31,6 @@ class ButtonMenu(object):
         if (remaining_time - ActionCost.SCRAM.value) < ActionCost.SQUISH.value:
             self.buttons[1].config(state="disabled")
         if (remaining_time - ActionCost.SCRAM.value) < ActionCost.SAVE.value:
-            self.buttons[2].config(state="disabled")
-        if at_capacity:
-            self.buttons[0].config(state="disabled")
-            self.buttons[1].config(state="disabled")
             self.buttons[2].config(state="disabled")
 
 
@@ -40,7 +45,7 @@ def create_buttons(canvas, items):
 
 def create_menu(buttons):
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'graphics', 'logo.png')
-    logo = ImageTk.PhotoImage(Image.open(path).resize((300, 50), Image.ANTIALIAS))
+    logo = ImageTk.PhotoImage(Image.open(path).resize((300, 50), Image.LANCZOS))
     label = tk.Label(image=logo)
     label.image = logo
 

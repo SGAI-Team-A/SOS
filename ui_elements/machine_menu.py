@@ -8,6 +8,10 @@ class MachineMenu(object):
         self.buttons = create_buttons(self.canvas, items)
         create_menu(self.buttons)
 
+    def disable_all_buttons(self):
+        for button in self.buttons:
+            button.config(state="disabled")
+
 
 def create_buttons(canvas, items):
     buttons = []
