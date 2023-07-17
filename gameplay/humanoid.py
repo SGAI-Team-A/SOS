@@ -1,5 +1,5 @@
 from gameplay.enums import State
-
+import random
 
 class Humanoid(object):
     """
@@ -15,6 +15,14 @@ class Humanoid(object):
 
     def is_injured(self):
         return self.state == State.INJURED.value
-
+    
+    def is_infected(self):
+        if self.state == State.INJURED.value:
+            randNum = random.randint(0,9)
+            if randNum == 0 or randNum == 1:
+                self.state = State.INFECTED
+                print ("infected")
+        return self.state == State.INFECTED.value
+    
     def is_healthy(self):
         return self.state == State.HEALTHY.value

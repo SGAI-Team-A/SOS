@@ -21,6 +21,8 @@ class ScoreKeeper(object):
         self.remaining_time -= ActionCost.SAVE.value
         if humanoid.is_zombie():
             self.__ambulance["zombie"] += 1
+        elif humanoid.is_infected():
+            self.__ambulance["zombie"] += 1
         elif humanoid.is_injured():
             self.__ambulance["injured"] += 1
         else:

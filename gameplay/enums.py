@@ -5,6 +5,7 @@ class State(Enum):
     ZOMBIE = "zombie"
     HEALTHY = "healthy"
     INJURED = "injured"
+    INFECTED = "infected"
     CORPSE = "corpse"
 
 
