@@ -42,10 +42,10 @@ class ScoreKeeper(object):
 
     def squish(self, humanoid):
         self.remaining_time -= ActionCost.SQUISH.value
-        if not humanoid.is_zombie() or not humanoid.is_corpse():
-            self.__scorekeeper["killed_h"] += 1
-        else:
+        if humanoid.is_zombie() or humanoid.is_corpse():
             self.__scorekeeper["killed_z"] += 1
+        else:
+            self.__scorekeeper["killed_h"] += 1
 
     def skip(self, humanoid):
         self.remaining_time -= ActionCost.SKIP.value
