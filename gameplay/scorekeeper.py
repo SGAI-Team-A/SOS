@@ -9,11 +9,12 @@ class ScoreKeeper(object):
             "healthy": 0,
             "corpse": 0
         }
+        self.__injured_people = []
         self.__scorekeeper = {
             "killed_h": 0,
             "saved_h": 0,
-            "killed_z" : 0,
-            "saved_z" : 0
+            "killed_z": 0,
+            "saved_z": 0
         }
         self.__capacity = capacity
         self.remaining_time = int(shift_len)  # minutes
@@ -27,14 +28,10 @@ class ScoreKeeper(object):
             # Immediately kill injured and healthy
             self.__scorekeeper["killed_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
 
-            # Remove those killed and the zombie from the van
-            self.__ambulance["zombie"] = 0
-            self.__ambulance["injured"] = 0
-            self.__ambulance["healthy"] = 0
-            self.__ambulance["corpse"] = 0
-            
+            self.empty_ambulance()
         elif humanoid.is_injured():
             self.__ambulance["injured"] += 1
+            self.__injured_people.append(humanoid)
         elif humanoid.is_corpse():
             self.__ambulance["corpse"] += 1
         else:
@@ -54,13 +51,12 @@ class ScoreKeeper(object):
 
     def scram(self):
         self.remaining_time -= ActionCost.SCRAM.value
+
+        # Update score
         self.__scorekeeper["saved_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
         self.__scorekeeper["saved_z"] += self.__ambulance["corpse"]
 
-        self.__ambulance["zombie"] = 0
-        self.__ambulance["injured"] = 0
-        self.__ambulance["healthy"] = 0
-        self.__ambulance["corpse"] = 0
+        self.empty_ambulance()
 
     def gain_battery(self):
         self.remaining_time += 60
@@ -74,3 +70,8 @@ class ScoreKeeper(object):
     def get_score(self):
         self.scram()
         return self.__scorekeeper
+
+    def empty_ambulance(self):
+        for category in self.__ambulance.keys():
+            self.__ambulance[category] = 0
+        self.__injured_people.clear()
