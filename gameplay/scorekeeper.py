@@ -9,11 +9,12 @@ class ScoreKeeper(object):
             "healthy": 0,
             "corpse": 0
         }
+        self.__cures = 0
         self.__scorekeeper = {
             "killed_h": 0,
             "saved_h": 0,
-            "killed_z" : 0,
-            "saved_z" : 0
+            "killed_z": 0,
+            "saved_z": 0
         }
         self.__capacity = capacity
         self.remaining_time = int(shift_len)  # minutes
@@ -23,6 +24,11 @@ class ScoreKeeper(object):
 
     def save(self, humanoid):
         self.remaining_time -= ActionCost.SAVE.value
+
+        if self.__cures > 0 and humanoid.is_injured():
+            humanoid.cure(scorekeeper=self)
+            self.__cures -= 1
+
         if humanoid.is_zombie() or humanoid.is_infected():
             self.__ambulance["zombie"] += 1
             self.__scorekeeper["saved_z"] += 1
@@ -31,12 +37,8 @@ class ScoreKeeper(object):
             self.__scorekeeper["killed_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
 
             # Remove those killed and the zombie from the van
-            self.__ambulance["zombie"] = 0
-            self.__ambulance["injured"] = 0
-            self.__ambulance["healthy"] = 0
-            self.__ambulance["corpse"] = 0
-
             self.last_picked = "zombie"
+            self.empty_ambulance()
             
         elif humanoid.is_injured():
             self.__ambulance["injured"] += 1
@@ -47,6 +49,7 @@ class ScoreKeeper(object):
         else:
             self.__ambulance["healthy"] += 1
             self.last_picked = "healthy"
+            humanoid.perform_action(scorekeeper=self)
 
     def squish(self, humanoid):
         self.remaining_time -= ActionCost.SQUISH.value
@@ -62,13 +65,18 @@ class ScoreKeeper(object):
 
     def scram(self):
         self.remaining_time -= ActionCost.SCRAM.value
+
+        # Update score
         self.__scorekeeper["saved_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
         self.__scorekeeper["saved_z"] += self.__ambulance["corpse"]
 
-        self.__ambulance["zombie"] = 0
-        self.__ambulance["injured"] = 0
-        self.__ambulance["healthy"] = 0
-        self.__ambulance["corpse"] = 0
+        self.empty_ambulance()
+
+    def gain_battery(self):
+        self.remaining_time += 60
+
+    def gain_cure(self):
+        self.__cures += 1
 
     def get_current_capacity(self):
         return sum(self.__ambulance.values())
@@ -82,3 +90,8 @@ class ScoreKeeper(object):
     def get_score(self):
         self.scram()
         return self.__scorekeeper
+
+    def empty_ambulance(self):
+        for category in self.__ambulance.keys():
+            self.__ambulance[category] = 0
+        cures = 0  # reset cures when emptied
