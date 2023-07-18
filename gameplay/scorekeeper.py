@@ -9,7 +9,7 @@ class ScoreKeeper(object):
             "healthy": 0,
             "corpse": 0
         }
-        self.__injured_people = []
+        self.__cures = 0
         self.__scorekeeper = {
             "killed_h": 0,
             "saved_h": 0,
@@ -21,6 +21,11 @@ class ScoreKeeper(object):
 
     def save(self, humanoid):
         self.remaining_time -= ActionCost.SAVE.value
+
+        if self.__cures > 0 and humanoid.is_injured():
+            humanoid.cure(scorekeeper=self)
+            self.__cures -= 1
+
         if humanoid.is_zombie() or humanoid.is_infected():
             self.__ambulance["zombie"] += 1
             self.__scorekeeper["saved_z"] += 1
@@ -31,11 +36,11 @@ class ScoreKeeper(object):
             self.empty_ambulance()
         elif humanoid.is_injured():
             self.__ambulance["injured"] += 1
-            self.__injured_people.append(humanoid)
         elif humanoid.is_corpse():
             self.__ambulance["corpse"] += 1
         else:
             self.__ambulance["healthy"] += 1
+            humanoid.perform_action(scorekeeper=self)
 
     def squish(self, humanoid):
         self.remaining_time -= ActionCost.SQUISH.value
@@ -61,6 +66,9 @@ class ScoreKeeper(object):
     def gain_battery(self):
         self.remaining_time += 60
 
+    def gain_cure(self):
+        self.__cures += 1
+
     def get_current_capacity(self):
         return sum(self.__ambulance.values())
 
@@ -74,4 +82,3 @@ class ScoreKeeper(object):
     def empty_ambulance(self):
         for category in self.__ambulance.keys():
             self.__ambulance[category] = 0
-        self.__injured_people.clear()

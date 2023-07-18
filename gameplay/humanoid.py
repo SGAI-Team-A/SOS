@@ -41,3 +41,9 @@ class Humanoid(object):
     def perform_action(self, scorekeeper):
         if self.is_engineer():
             scorekeeper.gain_battery()
+        elif self.is_doctor():
+            scorekeeper.gain_cure()
+
+    def cure(self, scorekeeper):
+        self.state = State.HEALTHY.value
+        self.perform_action(scorekeeper)
