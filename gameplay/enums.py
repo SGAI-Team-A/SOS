@@ -9,6 +9,12 @@ class State(Enum):
     CORPSE = "corpse"
 
 
+class Occupation(Enum):
+    DOCTOR = "doctor"
+    ENGINEER = "engineer"
+    OTHER = "other"
+
+
 class ActionCost(Enum):
     SAVE = 30
     SQUISH = 5

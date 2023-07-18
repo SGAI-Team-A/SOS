@@ -11,7 +11,7 @@ class Main(object):
     Base class for the SGAI 2023 game
     """
     def __init__(self, is_automode, is_disable):
-        self.data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'default_dataset'))
+        self.data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
         self.data_parser = DataParser(self.data_fp)
 
         self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
