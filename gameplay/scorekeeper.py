@@ -18,6 +18,9 @@ class ScoreKeeper(object):
         self.__capacity = capacity
         self.remaining_time = int(shift_len)  # minutes
 
+        self.last_picked = None
+        assert self.last_picked in {None, "healthy", "zombie", "injured", "corpse"}
+
     def save(self, humanoid):
         self.remaining_time -= ActionCost.SAVE.value
         if humanoid.is_zombie() or humanoid.is_infected():
@@ -32,13 +35,18 @@ class ScoreKeeper(object):
             self.__ambulance["injured"] = 0
             self.__ambulance["healthy"] = 0
             self.__ambulance["corpse"] = 0
+
+            self.last_picked = "zombie"
             
         elif humanoid.is_injured():
             self.__ambulance["injured"] += 1
+            self.last_picked = "injured"
         elif humanoid.is_corpse():
             self.__ambulance["corpse"] += 1
+            self.last_picked = "corpse"
         else:
             self.__ambulance["healthy"] += 1
+            self.last_picked = "healthy"
 
     def squish(self, humanoid):
         self.remaining_time -= ActionCost.SQUISH.value
@@ -64,6 +72,9 @@ class ScoreKeeper(object):
 
     def get_current_capacity(self):
         return sum(self.__ambulance.values())
+    
+    def get_last_saved(self):
+        return self.last_picked
 
     def at_capacity(self):
         return sum(self.__ambulance.values()) >= self.__capacity

@@ -1,6 +1,9 @@
 import math
 import tkinter as tk
 
+# green = healthy
+# yellow = injured
+# red = infected/zombie (deprecated?)
 
 class CapacityMeter(object):
     def __init__(self, root, w, h, max_cap):
@@ -23,12 +26,22 @@ class CapacityMeter(object):
                 x = 3
                 y += size * 1.5
 
-    def update_fill(self, index):
+    def update_fill(self, index, type):
+        color = "gray25"
         if index != 0:
-            self.canvas.itemconfig(self.__units[index-1], fill="midnightblue")
+            if type == "healthy":
+                color = "green"
+            elif type == "injured":
+                color = "yellow"
+            elif type == "corpse" or "zombie":
+                color = "red"
+            else:
+                color = "gray25"
+
+            self.canvas.itemconfig(self.__units[index-1], fill=color)
         else:
             for unit in self.__units:
-                self.canvas.itemconfig(unit, fill="gray25")
+                self.canvas.itemconfig(unit, fill=color)
 
 
 def create_unit(canvas, x, y, size):

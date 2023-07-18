@@ -78,7 +78,7 @@ class UI(object):
         m = 60 - (scorekeeper.remaining_time % 60)
         self.clock.update_time(h, m)
 
-        self.capacity_meter.update_fill(scorekeeper.get_current_capacity())
+        self.capacity_meter.update_fill(scorekeeper.get_current_capacity(), scorekeeper.get_last_saved())
 
     def on_resize(self, event):
         w, h = 0.6 * self.root.winfo_width(), 0.7 * self.root.winfo_height()
@@ -89,7 +89,7 @@ class UI(object):
 
         # Ran out of humanoids? Disable skip/save/squish
         if remaining == 0 or scorekeeper.remaining_time <= 0:
-            self.capacity_meter.update_fill(0)
+            self.capacity_meter.update_fill(0, None)
             self.game_viewer.delete_photo(None)
             self.game_viewer.display_score(scorekeeper.get_score())
             self.machine_menu.disable_all_buttons()
