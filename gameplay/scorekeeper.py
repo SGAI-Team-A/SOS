@@ -82,3 +82,4 @@ class ScoreKeeper(object):
     def empty_ambulance(self):
         for category in self.__ambulance.keys():
             self.__ambulance[category] = 0
+        cures = 0  # reset cures when emptied

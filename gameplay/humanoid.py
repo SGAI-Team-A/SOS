@@ -45,5 +45,6 @@ class Humanoid(object):
             scorekeeper.gain_cure()
 
     def cure(self, scorekeeper):
+        print("cured!")
         self.state = State.HEALTHY.value
         self.perform_action(scorekeeper)
