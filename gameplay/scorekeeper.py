@@ -62,6 +62,9 @@ class ScoreKeeper(object):
         self.__ambulance["healthy"] = 0
         self.__ambulance["corpse"] = 0
 
+    def gain_battery(self):
+        self.remaining_time += 60
+
     def get_current_capacity(self):
         return sum(self.__ambulance.values())
 
