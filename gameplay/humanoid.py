@@ -69,4 +69,4 @@ class Humanoid(object):
         return self.state
 
     def get_occupation(self):
-        return self.state
+        return self.occupation
