@@ -64,8 +64,8 @@ class UI(object):
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
 
         # Display the countdown
-        init_h = (12 - (math.floor(scorekeeper.remaining_time / 60.0)))
-        init_m = 60 - (scorekeeper.remaining_time % 60)
+        init_h = max((math.floor(scorekeeper.remaining_time / 60.0)), 0)
+        init_m = max(scorekeeper.remaining_time % 60, 0)
         self.clock = Clock(self.root, w, h, init_h, init_m)
 
         # Display ambulance capacity
@@ -79,8 +79,11 @@ class UI(object):
         self.capacity_meter.update_fill(scorekeeper.get_current_capacity(), scorekeeper.get_last_saved())
     
     def update_clock(self, scorekeeper):
-        h = max((math.floor(scorekeeper.remaining_time / 60.0)), 0)
+        h = (math.floor(scorekeeper.remaining_time / 60.0))
         m = max(scorekeeper.remaining_time % 60, 0)
+        if h < 0:
+            h = 0
+            m = 0
         self.clock.update_time(h, m)
 
     def on_resize(self, event):

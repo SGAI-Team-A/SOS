@@ -18,16 +18,11 @@ class Clock(object):
 
     def render(self):
         tk.Label(self.canvas, text="Remaining time", font=("Arial", 15)).place(x=80, y=30)
-        self.generate_bg()
-        return
-
-    def generate_bg(self):
-        self.image = tk.PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'graphics', 'clock.gif'))  #'/home/ly30959/catkin_ws/SGAI_2023/data/clock.gif')
-        self.canvas.create_image(self.x, self.y, image=self.image)
         return
 
     def update_time(self, h, m):
-        tk.Label(self.canvas, text=str(h) + " " + str(m), font=("Arial", 15)).place(x=80, y=140)
+        time = '{:02d}:{:02d}'.format(h, m)
+        tk.Label(self.canvas, text=time, font=("Arial", 15)).place(x=80, y=140)
         
         return
 
