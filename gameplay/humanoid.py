@@ -1,16 +1,26 @@
 from gameplay.enums import State, Occupation
+from gameplay.names import generate_name
 import random
-
 
 class Humanoid(object):
     """
     Are they a human or a zombie???
     """
 
-    def __init__(self, fp, state, occupation):
+    def __init__(self, fp, state, occupation, age=None, name=None):
         self.fp = fp
         self.state = state
         self.occupation = occupation
+
+        if age is None:
+            self.age = random.randint(8, 80)
+        else:
+            self.age = age
+
+        if name is None:
+            self.name = generate_name()
+        else:
+            self.name = name
 
     def is_zombie(self):
         return self.state == State.ZOMBIE.value
@@ -20,8 +30,8 @@ class Humanoid(object):
 
     def is_infected(self):
         if self.state == State.INJURED.value:
-            randNum = random.randint(0, 9)
-            if randNum == 0 or randNum == 1:
+            rand_num = random.randint(0, 9)
+            if rand_num == 0 or rand_num == 1:
                 self.state = State.INFECTED.value
                 print("infected")
         return self.state == State.INFECTED.value
@@ -48,3 +58,15 @@ class Humanoid(object):
         print("cured!")
         self.state = State.HEALTHY.value
         self.perform_action(scorekeeper)
+
+    def get_name(self):
+        return self.name
+
+    def get_age(self):
+        return self.age
+
+    def get_state(self):
+        return self.state
+
+    def get_occupation(self):
+        return self.state
