@@ -8,8 +8,8 @@ from ui_elements.game_viewer import GameViewer
 from ui_elements.machine_menu import MachineMenu
 from os.path import join
 
-
 class UI(object):
+    canvas = ''
     def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
         #  Base window setup
         w, h = 1280, 800
@@ -17,7 +17,9 @@ class UI(object):
         self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
         self.root.geometry(str(w) + 'x' + str(h))
         self.root.resizable(False, False)
-
+        UI.canvas = tk.Canvas(width=600, height=100)
+        UI.canvas.place(x=1000, y=40)
+        
         self.humanoid = data_parser.get_random()
         if not is_disable:
             self.machine_interface = MachineInterface(self.root, w, h)
@@ -100,6 +102,6 @@ class UI(object):
             self.humanoid = humanoid
             fp = join(data_fp, self.humanoid.fp)
             self.game_viewer.create_photo(fp)
-
+            #UpdateLog(ScoreKeeper.update, UI.parent)
         # Disable button(s) if options are no longer possible
         self.button_menu.disable_buttons(scorekeeper.remaining_time, remaining, scorekeeper.at_capacity())
