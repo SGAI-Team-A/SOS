@@ -74,11 +74,14 @@ class UI(object):
         self.root.mainloop()
 
     def update_ui(self, scorekeeper):
-        h = (12 - (math.floor(scorekeeper.remaining_time / 60.0)))
-        m = 60 - (scorekeeper.remaining_time % 60)
-        self.clock.update_time(h, m)
+        self.update_clock(scorekeeper)
 
         self.capacity_meter.update_fill(scorekeeper.get_current_capacity(), scorekeeper.get_last_saved())
+    
+    def update_clock(self, scorekeeper):
+        h = max((math.floor(scorekeeper.remaining_time / 60.0)), 0)
+        m = max(scorekeeper.remaining_time % 60, 0)
+        self.clock.update_time(h, m)
 
     def on_resize(self, event):
         w, h = 0.6 * self.root.winfo_width(), 0.7 * self.root.winfo_height()

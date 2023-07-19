@@ -27,9 +27,9 @@ class CapacityMeter(object):
                 y += size * 1.5
 
     def update_fill(self, index, type):
-        color = "gray25"
-        if index != 0:
-            if type == "healthy":
+        color = "gray25" 
+        if index != 0: 
+            if type == "healthy": #the best code
                 color = "green"
             elif type == "injured":
                 color = "yellow"
