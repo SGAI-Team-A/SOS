@@ -13,7 +13,17 @@ class Humanoid(object):
         self.occupation = occupation
 
         if age is None:
-            self.age = random.randint(8, 80)
+            lower_bound = 8
+            upper_bound = 80
+
+            if self.is_doctor():
+                lower_bound = 25
+                upper_bound = 65
+            elif self.is_engineer():
+                lower_bound = 20
+                upper_bound = 70
+
+            self.age = random.randint(lower_bound, upper_bound)
         else:
             self.age = age
 
