@@ -1,6 +1,5 @@
 import math
 import tkinter as tk
-
 from os.path import join
 from PIL import ImageTk, Image
 

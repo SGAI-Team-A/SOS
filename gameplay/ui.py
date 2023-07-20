@@ -7,7 +7,7 @@ from endpoints.machine_interface import MachineInterface
 from ui_elements.game_viewer import GameViewer
 from ui_elements.machine_menu import MachineMenu
 from os.path import join
-
+from ui_elements.update_log import UpdateLog
 
 class UI(object):
     def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
@@ -17,7 +17,10 @@ class UI(object):
         self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
         self.root.geometry(str(w) + 'x' + str(h))
         self.root.resizable(False, False)
-
+        # Creates a canvas for update log
+        self.canvas = tk.Canvas(width=700, height=100)
+        self.canvas.place(x=1200, y=40)
+        
         self.humanoid = data_parser.get_random()
         if not is_disable:
             self.machine_interface = MachineInterface(self.root, w, h)
@@ -64,8 +67,8 @@ class UI(object):
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
 
         # Display the countdown
-        init_h = (12 - (math.floor(scorekeeper.remaining_time / 60.0)))
-        init_m = 60 - (scorekeeper.remaining_time % 60)
+        init_h = max((math.floor(scorekeeper.remaining_time / 60.0)), 0)
+        init_m = max(scorekeeper.remaining_time % 60, 0)
         self.clock = Clock(self.root, w, h, init_h, init_m)
 
         # Display ambulance capacity
@@ -74,11 +77,18 @@ class UI(object):
         self.root.mainloop()
 
     def update_ui(self, scorekeeper):
-        h = (12 - (math.floor(scorekeeper.remaining_time / 60.0)))
-        m = 60 - (scorekeeper.remaining_time % 60)
+        self.update_clock(scorekeeper)
+        self.capacity_meter.update_fill(scorekeeper.get_current_capacity(), scorekeeper.get_last_saved())
+         # Creates texts onto the canvas
+        UpdateLog(scorekeeper.get_update(), self.canvas)
+        
+    def update_clock(self, scorekeeper):
+        h = (math.floor(scorekeeper.remaining_time / 60.0))
+        m = max(scorekeeper.remaining_time % 60, 0)
+        if h < 0:
+            h = 0
+            m = 0
         self.clock.update_time(h, m)
-
-        self.capacity_meter.update_fill(scorekeeper.get_current_capacity())
 
     def on_resize(self, event):
         w, h = 0.6 * self.root.winfo_width(), 0.7 * self.root.winfo_height()
@@ -89,7 +99,7 @@ class UI(object):
 
         # Ran out of humanoids? Disable skip/save/squish
         if remaining == 0 or scorekeeper.remaining_time <= 0:
-            self.capacity_meter.update_fill(0)
+            self.capacity_meter.update_fill(0, None)
             self.game_viewer.delete_photo(None)
             self.game_viewer.display_score(scorekeeper.get_score())
             self.machine_menu.disable_all_buttons()
