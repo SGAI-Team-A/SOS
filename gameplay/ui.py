@@ -7,9 +7,9 @@ from endpoints.machine_interface import MachineInterface
 from ui_elements.game_viewer import GameViewer
 from ui_elements.machine_menu import MachineMenu
 from os.path import join
+from ui_elements.update_log import UpdateLog
 
 class UI(object):
-    canvas = ''
     def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
         #  Base window setup
         w, h = 1280, 800
@@ -17,8 +17,9 @@ class UI(object):
         self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
         self.root.geometry(str(w) + 'x' + str(h))
         self.root.resizable(False, False)
-        UI.canvas = tk.Canvas(width=600, height=100)
-        UI.canvas.place(x=1000, y=40)
+        # Creates a canvas for update log
+        self.canvas = tk.Canvas(width=700, height=100)
+        self.canvas.place(x=1200, y=40)
         
         self.humanoid = data_parser.get_random()
         if not is_disable:
@@ -79,8 +80,9 @@ class UI(object):
         h = (12 - (math.floor(scorekeeper.remaining_time / 60.0)))
         m = 60 - (scorekeeper.remaining_time % 60)
         self.clock.update_time(h, m)
-
         self.capacity_meter.update_fill(scorekeeper.get_current_capacity())
+        # Creates texts onto the canvas
+        UpdateLog(scorekeeper.get_update(), self.canvas)
 
     def on_resize(self, event):
         w, h = 0.6 * self.root.winfo_width(), 0.7 * self.root.winfo_height()
