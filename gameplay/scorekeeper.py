@@ -16,6 +16,7 @@ class ScoreKeeper(object):
             "saved_z": 0
         }
         self.__capacity = capacity
+        self.max_time = int(shift_len)
         self.remaining_time = int(shift_len)  # minutes
         
         self.last_picked = None
@@ -92,7 +93,8 @@ class ScoreKeeper(object):
         return self.update
 
     def gain_battery(self):
-        self.remaining_time += 60
+        if self.remaining_time < self.max_time:
+            self.remaining_time += 60
 
     def gain_cure(self):
         self.__cures += 1
