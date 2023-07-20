@@ -26,6 +26,7 @@ class ScoreKeeper(object):
         self.update = ""
         if self.__cures > 0 and humanoid.is_injured():
             humanoid.cure(scorekeeper=self)
+            self.set_update("You used one of your cures to cure an injured person!")
             self.__cures -= 1
         
         if humanoid.is_zombie() or humanoid.is_infected():
