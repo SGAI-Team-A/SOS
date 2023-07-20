@@ -1,7 +1,9 @@
 import random
 import yaml
 from gameplay.humanoid import Humanoid
+from gameplay.enums import State, Occupation
 import os
+import numpy as np
 
 
 class DataParser(object):
@@ -22,39 +24,68 @@ class DataParser(object):
                 filename = h["name"]
                 pic_fp = os.path.join(data_fp, filename)
                 if os.path.isfile(pic_fp) and pic_fp.endswith('.png'):
-                    self.unvisited.append(Humanoid(h["name"], h["state"], h["value"]))
+                    self.unvisited.append(Humanoid(h["name"], h["state"], h["occupation"]))
                     i += 1
             self.shift_length = md['shift_length']
             self.capacity = md['capacity']
+
+        # print(len([x for x in self.unvisited if x.occupation == "other"]) / len(self.unvisited)) # double check probabilities
 
     @staticmethod
     def _build_yaml(data_fp, max_num_data=50):
         shift_length = 720
         capacity = 10
-        classes_values = {'corpse': [0], 'healthy': [1, 2, 5, 10], 'injured': [1, 2, 5, 10], 'zombie': [0]}
+
+        # probabilities for each state when being randomly chosen
+        states_probabilities = {
+            State.ZOMBIE.value: 0.25,
+            State.CORPSE.value: 0.1,
+            State.HEALTHY.value: 0.25,
+            State.INJURED.value: 0.4
+        }
+        assert(sum(states_probabilities.values()) == 1)
+
+        # probabilities for each occupation when being randomly chosen
+        occupation_probabilities = {
+            Occupation.DOCTOR.value: 0.1,
+            Occupation.ENGINEER.value: 0.1,
+        }
+        occupation_probabilities[Occupation.OTHER.value] = 1 - sum(occupation_probabilities.values())
+
         humanoid_list = []
+        probability_list = []
+
         # assumes each class has a directory within a dataset (and no other dirs exist)
         for path_ in os.listdir(data_fp):
             if os.path.isdir(os.path.join(data_fp, path_)):
-                class_str = path_
-                class_val_options = classes_values.get(class_str, [0])
-                class_val = random.choice(class_val_options)
-                for img_file_path in os.listdir(os.path.join(data_fp, path_)):
-                    pic_dict = {'name': os.path.join(path_, img_file_path),
-                                'state': class_str, 'value': class_val}
-                    humanoid_list.append(pic_dict)
+                # iterate through each of the different occupations
+                for occupation_path in os.listdir(os.path.join(data_fp, path_)):
+                    if os.path.isdir(os.path.join(data_fp, path_, occupation_path)):
+                        state_str = path_
+                        occupation_str = occupation_path
+
+                        num_imgs = 0  # number of images in the current folder
+                        for img_file_path in os.listdir(os.path.join(data_fp, path_, occupation_path)):
+                            if img_file_path.endswith('.png'):
+                                num_imgs += 1
+                                pic_dict = {
+                                    'name': os.path.join(path_, occupation_path, img_file_path),
+                                    'state': state_str,
+                                    'occupation': occupation_str
+                                }
+                                humanoid_list.append(pic_dict)
+
+                        # calculate probability of this image being drawn
+                        probability = states_probabilities[state_str] * occupation_probabilities[occupation_str] * (1 / num_imgs)
+                        probability_list.append(probability)
 
         # filter humanoid list to the maximum number of images
-        # if the available humanoids is more than the max available, sample without replacement
-        # otherwise, sample with replacement so that you still get the desired num of images
-        if len(humanoid_list) > max_num_data:
-            humanoid_list_filtered = random.sample(humanoid_list, k=max_num_data)  # without replacement
-        else:
-            humanoid_list_filtered = random.choices(humanoid_list, k=max_num_data)  # with replacement
+        # sample with replacement to get correct probabilities
+        humanoid_list_filtered = np.random.choice(humanoid_list, size=max_num_data, replace=True, p=probability_list)
         assert(len(humanoid_list_filtered) == max_num_data)
 
         # make full dictionary and export into the yaml file
-        md_dict = {'shift_length': shift_length, 'capacity': capacity, 'humanoids': humanoid_list_filtered}
+        md_dict = {'shift_length': shift_length, 'capacity': capacity, 'humanoids': humanoid_list_filtered.tolist()}
         with open(os.path.join(data_fp, "metadata.yaml"), 'w') as f_:
             yaml.dump(md_dict, f_)
 
