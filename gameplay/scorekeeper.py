@@ -90,10 +90,6 @@ class ScoreKeeper(object):
     
     def get_update(self):
         return self.update
-    
-    def gain_battery(self):
-        self.remaining_time += 60
-        self.empty_ambulance()
 
     def gain_battery(self):
         self.remaining_time += 60
