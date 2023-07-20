@@ -54,7 +54,7 @@ class Humanoid(object):
             scorekeeper.update("You took in an engineer and got +1 hour of time!")
         elif self.is_doctor():
             scorekeeper.gain_cure()
-            scorekeeper.update("You took in a doctor and got +1 cure (save the next infected).")
+            scorekeeper.set_update("You took in a doctor and got +1 cure (save the next infected).")
 
     def cure(self, scorekeeper):
         print("cured!")
