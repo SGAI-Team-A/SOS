@@ -5,7 +5,6 @@ from endpoints.machine_interface import MachineInterface
 from gameplay.scorekeeper import ScoreKeeper
 from gameplay.ui import UI
 
-
 class Main(object):
     """
     Base class for the SGAI 2023 game

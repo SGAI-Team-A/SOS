@@ -1,6 +1,5 @@
 from gameplay.enums import ActionCost
 
-
 class ScoreKeeper(object):
     def __init__(self, shift_len, capacity):
         self.__ambulance = {
@@ -18,24 +17,33 @@ class ScoreKeeper(object):
         }
         self.__capacity = capacity
         self.remaining_time = int(shift_len)  # minutes
-
+        
         self.last_picked = None
         assert self.last_picked in {None, "healthy", "zombie", "injured", "corpse"}
 
     def save(self, humanoid):
         self.remaining_time -= ActionCost.SAVE.value
-
+        self.update = ""
         if self.__cures > 0 and humanoid.is_injured():
             humanoid.cure(scorekeeper=self)
             self.__cures -= 1
-
+        
         if humanoid.is_zombie() or humanoid.is_infected():
             self.__ambulance["zombie"] += 1
             self.__scorekeeper["saved_z"] += 1
-
+            if humanoid.is_zombie():
+                if self.__ambulance["injured"] + self.__ambulance["healthy"] == 0:
+                    self.update = "You saved a zombie! Fortunately, no passengers who were alive were in the van."
+                else:
+                    self.update = "The zombie you saved killed " + str(self.__ambulance["injured"] + self.__ambulance["healthy"]) + " people. The van is empty now."
+            else:
+                if self.__ambulance["injured"] + self.__ambulance["healthy"] == 0:
+                    self.update = "The injured person you saved was actually infected! Fortunately, no passengers who were alive were in the van."
+                else:
+                    self.update = "The infected person you saved killed " + str(self.__ambulance["injured"] + self.__ambulance["healthy"]) + " people. The van is empty now."
+            
             # Immediately kill injured and healthy
             self.__scorekeeper["killed_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
-
             # Remove those killed and the zombie from the van
             self.last_picked = "zombie"
             self.empty_ambulance()
@@ -46,6 +54,7 @@ class ScoreKeeper(object):
         elif humanoid.is_corpse():
             self.__ambulance["corpse"] += 1
             self.last_picked = "corpse"
+            self.update = "You saved a corpse, one less space on the van that could have been used for others."
         else:
             self.__ambulance["healthy"] += 1
             self.last_picked = "healthy"
@@ -55,21 +64,31 @@ class ScoreKeeper(object):
         self.remaining_time -= ActionCost.SQUISH.value
         if humanoid.is_zombie() or humanoid.is_corpse():
             self.__scorekeeper["killed_z"] += 1
+            self.update = ""
         else:
             self.__scorekeeper["killed_h"] += 1
-
+            self.update = "You killed a human!"
+            
     def skip(self, humanoid):
+        self.update = ""
         self.remaining_time -= ActionCost.SKIP.value
         if humanoid.is_injured():
             self.__scorekeeper["killed_h"] += 1
-
+        
     def scram(self):
+        self.update = ""
         self.remaining_time -= ActionCost.SCRAM.value
 
         # Update score
         self.__scorekeeper["saved_h"] += self.__ambulance["injured"] + self.__ambulance["healthy"]
         self.__scorekeeper["saved_z"] += self.__ambulance["corpse"]
-
+        self.empty_ambulance()
+    
+    def get_update(self):
+        return self.update
+    
+    def gain_battery(self):
+        self.remaining_time += 60
         self.empty_ambulance()
 
     def gain_battery(self):

@@ -7,7 +7,7 @@ from endpoints.machine_interface import MachineInterface
 from ui_elements.game_viewer import GameViewer
 from ui_elements.machine_menu import MachineMenu
 from os.path import join
-
+from ui_elements.update_log import UpdateLog
 
 class UI(object):
     def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
@@ -17,7 +17,10 @@ class UI(object):
         self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
         self.root.geometry(str(w) + 'x' + str(h))
         self.root.resizable(False, False)
-
+        # Creates a canvas for update log
+        self.canvas = tk.Canvas(width=700, height=100)
+        self.canvas.place(x=1200, y=40)
+        
         self.humanoid = data_parser.get_random()
         if not is_disable:
             self.machine_interface = MachineInterface(self.root, w, h)
@@ -75,9 +78,10 @@ class UI(object):
 
     def update_ui(self, scorekeeper):
         self.update_clock(scorekeeper)
-
         self.capacity_meter.update_fill(scorekeeper.get_current_capacity(), scorekeeper.get_last_saved())
-    
+         # Creates texts onto the canvas
+        UpdateLog(scorekeeper.get_update(), self.canvas)
+        
     def update_clock(self, scorekeeper):
         h = (math.floor(scorekeeper.remaining_time / 60.0))
         m = max(scorekeeper.remaining_time % 60, 0)
@@ -106,6 +110,6 @@ class UI(object):
             self.humanoid = humanoid
             fp = join(data_fp, self.humanoid.fp)
             self.game_viewer.create_photo(fp)
-
+            
         # Disable button(s) if options are no longer possible
         self.button_menu.disable_buttons(scorekeeper.remaining_time, remaining, scorekeeper.at_capacity())
