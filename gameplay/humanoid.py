@@ -51,13 +51,14 @@ class Humanoid(object):
     def perform_action(self, scorekeeper):
         if self.is_engineer():
             scorekeeper.gain_battery()
+            scorekeeper.update("You took in an engineer and got +1 hour of time!")
         elif self.is_doctor():
             scorekeeper.gain_cure()
+            scorekeeper.update("You took in a doctor and got +1 cure (save the next infected).")
 
     def cure(self, scorekeeper):
         print("cured!")
         self.state = State.HEALTHY.value
-        self.perform_action(scorekeeper)
 
     def get_name(self):
         return self.name

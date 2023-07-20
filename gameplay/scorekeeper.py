@@ -51,10 +51,13 @@ class ScoreKeeper(object):
         elif humanoid.is_injured():
             self.__ambulance["injured"] += 1
             self.last_picked = "injured"
+            humanoid.perform_action(scorekeeper=self)
+
         elif humanoid.is_corpse():
             self.__ambulance["corpse"] += 1
             self.last_picked = "corpse"
             self.update = "You saved a corpse, one less space on the van that could have been used for others."
+
         else:
             self.__ambulance["healthy"] += 1
             self.last_picked = "healthy"
@@ -114,3 +117,6 @@ class ScoreKeeper(object):
         for category in self.__ambulance.keys():
             self.__ambulance[category] = 0
         cures = 0  # reset cures when emptied
+
+    def set_update(self, update):
+        self.update = update
