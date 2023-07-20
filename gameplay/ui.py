@@ -109,7 +109,7 @@ class UI(object):
             # Update visual display
             self.humanoid = humanoid
             fp = join(data_fp, self.humanoid.fp)
-            self.game_viewer.create_photo(fp)
-            
+            self.game_viewer.update(fp, self.humanoid)
+
         # Disable button(s) if options are no longer possible
         self.button_menu.disable_buttons(scorekeeper.remaining_time, remaining, scorekeeper.at_capacity())
