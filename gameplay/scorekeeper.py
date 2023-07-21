@@ -132,7 +132,7 @@ class ScoreKeeper(object):
     def get_reward(self):
         return self.reward
 
-    # handles whenver you want to adjust self.__scorekeeper
+    # handles whenever you want to adjust self.__scorekeeper
     # add to current amount (if you need to subtract, make amount negative)
     # handles rewards based on scorekeeper
     def increment_scorekeeper(self, key, amount):
