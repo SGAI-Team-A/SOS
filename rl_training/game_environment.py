@@ -26,21 +26,32 @@ class GameEnv(gym.Env):
             val: index for index, val in enumerate([e.value for e in State])
         }
 
+        self.illegal_moves = 0
+
     # perform relevant function based on action number
     def _action_to_function(self, action):
         if not self.is_legal(action):
             # print("illegal")
+            self.illegal_moves += 1
             self.scorekeeper.set_reward(-100000)
             return
 
         self.scorekeeper.set_reward(0)
+        # save
         if action == 0:
+            self.scorekeeper.set_reward(-ActionCost.SAVE.value // 5)
             self.scorekeeper.save(self.humanoid)
+        # scram
         elif action == 1:
+            self.scorekeeper.set_reward(-ActionCost.SCRAM.value // 5)
             self.scorekeeper.scram()
+        # skip
         elif action == 2:
+            self.scorekeeper.set_reward(-ActionCost.SCRAM.value // 5)
             self.scorekeeper.skip(self.humanoid)
+        # squish
         elif action == 3:
+            self.scorekeeper.set_reward(-ActionCost.SQUISH.value // 5)
             self.scorekeeper.squish(self.humanoid)
 
     def is_legal(self, action):
@@ -79,6 +90,9 @@ class GameEnv(gym.Env):
         # if terminated or truncated:
         #     print(self.scorekeeper.get_scorekeeper())
 
+        # select humanoid
+        self.humanoid = self.data_parser.get_random()
+
         observation = self._get_obs()
         info = self._get_info()
 
@@ -90,6 +104,8 @@ class GameEnv(gym.Env):
     def reset(self, seed=None, options=None):
         # seed self.np_random
         super().reset(seed=seed)
+
+        self.illegal_moves = 0
 
         # select new random set of images
         self.data_parser.reset_game()
