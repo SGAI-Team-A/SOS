@@ -105,6 +105,9 @@ class ScoreKeeper(object):
     def get_last_saved(self):
         return self.last_picked
 
+    def get_remaining_time(self):
+        return self.remaining_time
+
     def at_capacity(self):
         return sum(self.__ambulance.values()) >= self.__capacity
 
