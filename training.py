@@ -1,8 +1,8 @@
 import os
 from endpoints.data_parser import DataParser
-from game_environment import GameEnv
+from rl_training.game_environment import GameEnv
 
-data_fp = os.getenv("SGAI_DATA", default=os.path.join('..', 'data', 'test_dataset'))
+data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
 data_parser = DataParser(data_fp)
 
 env = GameEnv(data_parser)
