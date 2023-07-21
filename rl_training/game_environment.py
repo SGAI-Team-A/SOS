@@ -1,3 +1,5 @@
+import os
+
 import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
@@ -39,8 +41,15 @@ class GameEnv(gym.Env):
     def render(self):
         pass
 
-    def reset(self):
-        pass
+    def reset(self, seed=None, options=None):
+        # seed self.np_random
+        super().reset(seed=seed)
+
+        # select new random set of images
+        self.data_parser.reset_game()
+
+        # reset scorekeeper
+        self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
 
     def close(self):
         pass
