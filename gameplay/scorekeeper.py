@@ -94,7 +94,7 @@ class ScoreKeeper(object):
 
     def gain_battery(self):
         if self.remaining_time < self.max_time:
-            self.remaining_time += 60
+            self.remaining_time += min(60, self.max_time - self.remaining_time)
 
     def gain_cure(self):
         self.__cures += 1

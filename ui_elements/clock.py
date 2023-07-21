@@ -11,6 +11,7 @@ class Clock(object):
         self.image = None
         self.x = 150  # Center Point x
         self.y = 150  # Center Point
+        self.time_label = self.set_time('')
 
         self.render()
         self.update_time(init_h, init_m)
@@ -22,8 +23,15 @@ class Clock(object):
 
     def update_time(self, h, m):
         time = '{:02d}:{:02d}'.format(h, m)
-        tk.Label(self.canvas, text=time, font=("Arial", 15)).place(x=80, y=140)
+        self.time_label = self.set_time(time)
         
+        return
+    
+    def set_time(self, time):
+        return tk.Label(self.canvas, text=time, font=("Arial", 15)).place(x=80, y=140)
+    
+    def kill_time(self):
+        self.time_label.destroy()
         return
 
 

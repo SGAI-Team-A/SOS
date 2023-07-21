@@ -8,6 +8,7 @@ from ui_elements.game_viewer import GameViewer
 from ui_elements.machine_menu import MachineMenu
 from os.path import join
 from ui_elements.update_log import UpdateLog
+from ui_elements.hud import HUD
 
 class UI(object):
     def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
@@ -73,6 +74,9 @@ class UI(object):
 
         # Display ambulance capacity
         self.capacity_meter = CapacityMeter(self.root, w, h, data_parser.capacity)
+
+        # displays ambulance hud
+        self.hud = HUD(self.root, w, h)
 
         self.root.mainloop()
 
