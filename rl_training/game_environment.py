@@ -3,6 +3,8 @@ from gymnasium import spaces
 
 from endpoints.data_parser import DataParser
 from gameplay.scorekeeper import ScoreKeeper
+from gameplay.enums import State
+
 
 class GameEnv(gym.Env):
     def __init__(self, data_parser: DataParser):
@@ -12,7 +14,7 @@ class GameEnv(gym.Env):
 
         self.observation_space = spaces.Dict(
             {
-                "humanoid_status": spaces.Discrete(4),
+                "humanoid_status": spaces.Discrete(5),
                 "capacity": spaces.Discrete(11),
                 "time": spaces.Discrete(145),  # 720 / 5 + 1 (all time controls are in 5 minute intervals)
             }
@@ -20,6 +22,10 @@ class GameEnv(gym.Env):
 
         # 4 actions: save, scram, skip, squish
         self.action_space = spaces.Discrete(4)
+
+        self._humanoid_state_to_number = {
+            val: index for index, val in enumerate([e.value for e in State])
+        }
 
     # perform relevant function based on action number
     def _action_to_function(self, action):
@@ -34,9 +40,9 @@ class GameEnv(gym.Env):
 
     def _get_obs(self):
         return {
-            "humanoid_status": self.humanoid.get_state(),
+            "humanoid_status": self._humanoid_state_to_number[self.humanoid.get_state()],
             "capacity": self.scorekeeper.get_current_capacity(),
-            "time": self.scorekeeper.get_remaining_time() / 5
+            "time": self.scorekeeper.get_remaining_time() // 5
         }
 
     def _get_info(self):

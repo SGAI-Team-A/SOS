@@ -1,12 +1,14 @@
 import os
 from endpoints.data_parser import DataParser
 from rl_training.game_environment import GameEnv
+from gymnasium.wrappers import FlattenObservation
 
 data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
 data_parser = DataParser(data_fp)
 
-env = GameEnv(data_parser)
+env = FlattenObservation(GameEnv(data_parser))
 observation, info = env.reset()
+
 
 for _ in range(1000):
     action = env.action_space.sample()
