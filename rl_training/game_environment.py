@@ -29,6 +29,7 @@ class GameEnv(gym.Env):
 
     # perform relevant function based on action number
     def _action_to_function(self, action):
+        self.scorekeeper.set_reward(0)
         if action == 0:
             self.scorekeeper.save(self.humanoid)
         elif action == 1:
@@ -56,8 +57,8 @@ class GameEnv(gym.Env):
         truncated = len(self.data_parser.unvisited) <= 0
         terminated = self.scorekeeper.remaining_time <= 0
 
-        if terminated or truncated:
-            print(self.scorekeeper.get_scorekeeper())
+        # if terminated or truncated:
+        #     print(self.scorekeeper.get_scorekeeper())
 
         observation = self._get_obs()
         info = self._get_info()

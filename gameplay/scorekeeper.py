@@ -26,6 +26,9 @@ class ScoreKeeper(object):
         self.reward = 0  # for RL model
 
     def save(self, humanoid):
+        if self.get_current_capacity() >= self.__capacity:
+            return
+
         self.remaining_time -= ActionCost.SAVE.value
         self.update = ""
         if self.__cures > 0 and humanoid.is_injured():
