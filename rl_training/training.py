@@ -1,7 +1,11 @@
-import gymnasium
+import os
+from endpoints.data_parser import DataParser
 from game_environment import GameEnv
 
-env = GameEnv()
+data_fp = os.getenv("SGAI_DATA", default=os.path.join('..', 'data', 'test_dataset'))
+data_parser = DataParser(data_fp)
+
+env = GameEnv(data_parser)
 observation, info = env.reset()
 
 for _ in range(1000):
