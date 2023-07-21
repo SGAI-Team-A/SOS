@@ -50,10 +50,13 @@ class GameEnv(gym.Env):
 
         reward = self.scorekeeper.get_reward()
 
+        truncated = len(self.data_parser.unvisited) <= 0
+        terminated = self.scorekeeper.remaining_time <= 0
+
         observation = self._get_obs()
         info = self._get_info()
 
-        # return observation, reward, terminated, truncated, info
+        return observation, reward, terminated, truncated, info
 
     def render(self):
         pass
