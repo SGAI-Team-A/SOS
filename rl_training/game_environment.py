@@ -36,7 +36,7 @@ class GameEnv(gym.Env):
         return {
             "humanoid_status": self.humanoid.get_state(),
             "capacity": self.scorekeeper.get_current_capacity(),
-            "time": self.scorekeeper.get_remaining_time()
+            "time": self.scorekeeper.get_remaining_time() / 5
         }
 
     def _get_info(self):
