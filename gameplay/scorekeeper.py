@@ -142,3 +142,6 @@ class ScoreKeeper(object):
             self.set_reward(-amount)
         if key == "saved_h":
             self.set_reward(amount)
+
+    def get_scorekeeper(self):
+        return self.__scorekeeper

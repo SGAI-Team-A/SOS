@@ -1,7 +1,4 @@
-import os
-
 import gymnasium as gym
-import numpy as np
 from gymnasium import spaces
 
 from endpoints.data_parser import DataParser
@@ -43,7 +40,7 @@ class GameEnv(gym.Env):
         }
 
     def _get_info(self):
-        return None  # No extra info (maybe change later?
+        return None  # No extra info (maybe change later?)
 
     def step(self, action):
         self._action_to_function(action)
@@ -52,6 +49,9 @@ class GameEnv(gym.Env):
 
         truncated = len(self.data_parser.unvisited) <= 0
         terminated = self.scorekeeper.remaining_time <= 0
+
+        if terminated or truncated:
+            print(self.scorekeeper.get_scorekeeper())
 
         observation = self._get_obs()
         info = self._get_info()
