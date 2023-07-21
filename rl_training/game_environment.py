@@ -29,6 +29,8 @@ class GameEnv(gym.Env):
     # perform relevant function based on action number
     def _action_to_function(self, action):
         if not self.is_legal(action):
+            # print("illegal")
+            self.scorekeeper.set_reward(-100000)
             return
 
         self.scorekeeper.set_reward(0)

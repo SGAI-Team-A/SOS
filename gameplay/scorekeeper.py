@@ -141,9 +141,11 @@ class ScoreKeeper(object):
         self.__scorekeeper[key] += amount
 
         if key == "killed_h":
-            self.set_reward(-amount)
+            self.set_reward(self.get_reward() - amount)
         if key == "saved_h":
-            self.set_reward(amount)
+            self.set_reward(self.get_reward() + amount)
+        if key == "saved_z":
+            self.set_reward(self.get_reward() - amount)
 
     def get_scorekeeper(self):
         return self.__scorekeeper

@@ -39,12 +39,13 @@ class Humanoid(object):
         return self.state == State.INJURED.value
 
     def is_infected(self):
-        if self.state == State.INJURED.value:
-            rand_num = random.randint(0, 9)
-            if rand_num == 0 or rand_num == 1:
-                self.state = State.INFECTED.value
-                # print("infected")
-        return self.state == State.INFECTED.value
+        return False
+        # if self.state == State.INJURED.value:
+        #     rand_num = random.randint(0, 9)
+        #     if rand_num == 0 or rand_num == 1:
+        #         self.state = State.INFECTED.value
+        #         # print("infected")
+        # return self.state == State.INFECTED.value
 
     def is_healthy(self):
         return self.state == State.HEALTHY.value
