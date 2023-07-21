@@ -43,7 +43,6 @@ for episode in tqdm(range(n_episodes)):
 
     if episode % 1000 == 0:
         print(env.scorekeeper.get_scorekeeper())
-        print(len(env.data_parser.unvisited))
 
     agent.decay_epsilon()
 
