@@ -9,9 +9,9 @@ from gameplay.scorekeeper import ScoreKeeper
 
 
 class GameEnv(gym.Env):
-    def __init__(self, scorekeeper: ScoreKeeper, data_parser: DataParser):
-        self.scorekeeper = scorekeeper
+    def __init__(self, data_parser: DataParser):
         self.data_parser = data_parser
+        self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
         self.humanoid = None
 
         self.observation_space = spaces.Dict(
@@ -50,6 +50,14 @@ class GameEnv(gym.Env):
 
         # reset scorekeeper
         self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
+
+        # select first humanoid
+        self.humanoid = self.data_parser.get_random()
+
+        observation = self._get_obs()
+        info = self._get_info()
+
+        return observation, info
 
     def close(self):
         pass
