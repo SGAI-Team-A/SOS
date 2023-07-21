@@ -3,8 +3,7 @@ from gymnasium import spaces
 
 from endpoints.data_parser import DataParser
 from gameplay.scorekeeper import ScoreKeeper
-from gameplay.enums import State
-
+from gameplay.enums import State, ActionCost
 
 class GameEnv(gym.Env):
     def __init__(self, data_parser: DataParser):
@@ -29,6 +28,9 @@ class GameEnv(gym.Env):
 
     # perform relevant function based on action number
     def _action_to_function(self, action):
+        if not self.is_legal(action):
+            return
+
         self.scorekeeper.set_reward(0)
         if action == 0:
             self.scorekeeper.save(self.humanoid)
@@ -38,6 +40,21 @@ class GameEnv(gym.Env):
             self.scorekeeper.skip(self.humanoid)
         elif action == 3:
             self.scorekeeper.squish(self.humanoid)
+
+    def is_legal(self, action):
+        # save
+        if action == 0:
+            return not self.scorekeeper.at_capacity() and \
+                self.scorekeeper.remaining_time - ActionCost.SAVE.value >= ActionCost.SCRAM.value
+        # scram
+        elif action == 1:
+            return True
+        # skip
+        elif action == 2:
+            return self.scorekeeper.remaining_time - ActionCost.SKIP.value >= ActionCost.SCRAM.value
+        # squish
+        elif action == 3:
+            return self.scorekeeper.remaining_time - ActionCost.SQUISH.value >= ActionCost.SCRAM.value
 
     def _get_obs(self):
         return {
