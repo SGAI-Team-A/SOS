@@ -18,13 +18,15 @@ class UI(object):
         self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
         self.root.geometry(str(w) + 'x' + str(h))
         self.root.resizable(False, False)
-        # Creates a canvas for update log
-        self.canvas = tk.Canvas(width=700, height=100)
-        self.canvas.place(x=1200, y=40)
+
+        self.frame = tk.Frame(self.root, width=w, height=h)
+        self.frame.place(x=0,y=0)
+
+        self.update_log = UpdateLog(self.frame)
         
         self.humanoid = data_parser.get_random()
         if not is_disable:
-            self.machine_interface = MachineInterface(self.root, w, h)
+            self.machine_interface = MachineInterface(self.frame, w, h)
 
         #  Add buttons and logo
         user_buttons = [("Skip", lambda: [scorekeeper.skip(self.humanoid),
@@ -51,7 +53,7 @@ class UI(object):
                                                data_fp,
                                                data_parser,
                                                scorekeeper)])]
-        self.button_menu = ButtonMenu(self.root, user_buttons)
+        self.button_menu = ButtonMenu(self.frame, user_buttons)
 
         if not is_disable:
             machine_buttons = [("Suggest", lambda: [self.machine_interface.suggest(self.humanoid)]),
@@ -61,22 +63,22 @@ class UI(object):
                                                     data_fp,
                                                     data_parser,
                                                     scorekeeper)])]
-            self.machine_menu = MachineMenu(self.root, machine_buttons)
+            self.machine_menu = MachineMenu(self.frame, machine_buttons)
 
         #  Display central photo
-        self.game_viewer = GameViewer(self.root, w, h, data_fp, self.humanoid)
+        self.game_viewer = GameViewer(self.frame, w, h, data_fp, self.humanoid)
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
 
         # Display the countdown
         init_h = max((math.floor(scorekeeper.remaining_time / 60.0)), 0)
         init_m = max(scorekeeper.remaining_time % 60, 0)
-        self.clock = Clock(self.root, w, h, init_h, init_m)
+        self.clock = Clock(self.frame, w, h, init_h, init_m)
 
         # Display ambulance capacity
-        self.capacity_meter = CapacityMeter(self.root, w, h, data_parser.capacity)
+        self.capacity_meter = CapacityMeter(self.frame, w, h, data_parser.capacity)
 
         # displays ambulance hud
-        self.hud = HUD(self.root, w, h)
+        # self.hud = HUD(self.frame, w, h)
 
         self.root.mainloop()
 
@@ -84,7 +86,7 @@ class UI(object):
         self.update_clock(scorekeeper)
         self.capacity_meter.update_fill(scorekeeper.get_current_capacity(), scorekeeper.get_last_saved())
          # Creates texts onto the canvas
-        UpdateLog(scorekeeper.get_update(), self.canvas)
+        self.update_log.set_update(scorekeeper.get_update())
         
     def update_clock(self, scorekeeper):
         h = (math.floor(scorekeeper.remaining_time / 60.0))

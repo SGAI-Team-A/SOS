@@ -1,7 +1,5 @@
 import tkinter as tk
-import os
 import math
-from time import strftime
 
 # class
 class Clock(object):
@@ -29,10 +27,6 @@ class Clock(object):
     
     def set_time(self, time):
         return tk.Label(self.canvas, text=time, font=("Arial", 15)).place(x=80, y=140)
-    
-    def kill_time(self):
-        self.time_label.destroy()
-        return
 
 
 # # Main Function Trigger
