@@ -21,12 +21,14 @@ class UI(object):
 
         self.frame = tk.Canvas(self.root, width=w, height=h)
         self.frame.place(x=0,y=0)
-
-        self.update_log = UpdateLog(self.frame)
         
         self.humanoid = data_parser.get_random()
         if not is_disable:
             self.machine_interface = MachineInterface(self.frame, w, h)
+
+        #  Display central photo
+        self.game_viewer = GameViewer(self.frame, w, h, data_fp, self.humanoid)
+        self.root.bind("<Delete>", self.game_viewer.delete_photo)
 
         #  Add buttons and logo
         user_buttons = [("Skip", lambda: [scorekeeper.skip(self.humanoid),
@@ -65,10 +67,6 @@ class UI(object):
                                                     scorekeeper)])]
             self.machine_menu = MachineMenu(self.frame, machine_buttons)
 
-        #  Display central photo
-        self.game_viewer = GameViewer(self.frame, w, h, data_fp, self.humanoid)
-        self.root.bind("<Delete>", self.game_viewer.delete_photo)
-
         # Display the countdown
         init_h = max((math.floor(scorekeeper.remaining_time / 60.0)), 0)
         init_m = max(scorekeeper.remaining_time % 60, 0)
@@ -77,8 +75,8 @@ class UI(object):
         # Display ambulance capacity
         self.capacity_meter = CapacityMeter(self.frame, w, h, data_parser.capacity)
 
-        # displays ambulance hud
-        self.hud = HUD(self.frame, w, h)
+        # displays update log
+        self.update_log = UpdateLog(self.frame)
 
         self.root.mainloop()
 

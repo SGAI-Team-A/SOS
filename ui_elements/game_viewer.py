@@ -2,13 +2,17 @@ import math
 import tkinter as tk
 from os.path import join
 from PIL import ImageTk, Image
+from ui_elements.hud import HUD
 
 
 class GameViewer(object):
     def __init__(self, root, w, h, data_fp, humanoid):
-        self.canvas = tk.Canvas(root, width=math.floor(0.5 * w), height=math.floor(0.75 * h))
-        self.canvas.place(x=300, y=100)
+        self.scale_factor = 0.9
+        self.canvas = tk.Canvas(root, width=w, height=h)
+        self.canvas.place(x=0, y=0)
         self.canvas.update()
+        self.width = w
+        self.height = h
 
         self.photo = None
         self.create_photo(join(data_fp, humanoid.fp))
@@ -23,17 +27,20 @@ class GameViewer(object):
         self.labels = []
         self.create_stat_card(humanoid)
 
+        self.hud = HUD(self.canvas, w, h)
+
     def update(self, fp, humanoid):
         self.create_photo(fp)
         self.create_stat_card(humanoid)
+        self.hud = HUD(self.canvas, self.width, self.height)
 
     def delete_photo(self, event=None):
         self.canvas.delete('photo')
 
     def create_photo(self, fp):
         self.canvas.delete('photo')
-        self.photo = display_photo(fp, self.canvas.winfo_width(), self.canvas.winfo_height())
-        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.photo, tags='photo')
+        self.photo = display_photo(fp, math.floor(self.canvas.winfo_width() * self.scale_factor), math.floor(self.canvas.winfo_height() * self.scale_factor))
+        self.canvas.create_image((self.canvas.winfo_width() * 0.5) - math.floor(self.scale_factor * self.canvas.winfo_width() * 0.5), 0, anchor=tk.NW, image=self.photo, tags='photo')
 
     def create_stat_card(self, humanoid):
         for label in self.labels:
