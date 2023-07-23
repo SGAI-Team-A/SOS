@@ -19,7 +19,7 @@ class UI(object):
         self.root.geometry(str(w) + 'x' + str(h))
         self.root.resizable(False, False)
 
-        self.frame = tk.Frame(self.root, width=w, height=h)
+        self.frame = tk.Canvas(self.root, width=w, height=h)
         self.frame.place(x=0,y=0)
 
         self.update_log = UpdateLog(self.frame)
@@ -78,7 +78,7 @@ class UI(object):
         self.capacity_meter = CapacityMeter(self.frame, w, h, data_parser.capacity)
 
         # displays ambulance hud
-        # self.hud = HUD(self.frame, w, h)
+        self.hud = HUD(self.frame, w, h)
 
         self.root.mainloop()
 
