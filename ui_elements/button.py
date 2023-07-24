@@ -25,7 +25,7 @@ class Button(object):
 
         return isclose(area, self.area, abs_tol=1e-8)
 
-    def callback(self, event) -> None:
+    def on_click_callback(self, event) -> None:
         if self.is_touching(event.x, event.y):
             if not self.disabled:
                 self.on_click()

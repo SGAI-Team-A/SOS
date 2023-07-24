@@ -33,8 +33,6 @@ class UI(object):
         self.game_viewer = GameViewer(self.frame, w, h, data_fp, self.humanoid, scorekeeper)
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
 
-        self.root.bind("<Button-1>", lambda e: print("x: {}, y: {}".format(e.x, e.y)))
-
         # set up the buttons
         def on_disabled():
             self.game_viewer.update_log.set_update("Not enough time left!"),
@@ -86,8 +84,17 @@ class UI(object):
             ),
         }
 
-        # bind button callbacks
-        self.root.bind("<Button-1>", lambda e: [button.callback(e) for button in buttons.values()])
+        # bind button on click callback
+        self.root.bind("<Button-1>", lambda e: [button.on_click_callback(e) for button in buttons.values()], add="+")
+
+        # on hover - change cursor to click arrow
+        def on_move_callback(e):
+            if any([button.is_touching(e.x, e.y) for button in buttons.values()]):
+                self.root.config(cursor="hand2")
+            else:
+                self.root.config(cursor="arrow")
+        self.root.bind("<Motion>", on_move_callback, add="+")
+
         self.button_menu = ButtonMenu(buttons)
 
         # Display ambulance capacity
