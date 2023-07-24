@@ -28,11 +28,12 @@ class GameViewer(object):
         self.create_stat_card(humanoid)
 
         self.hud = HUD(self.canvas, w, h)
+        self.hud.build_hud(self.canvas)
 
     def update(self, fp, humanoid):
         self.create_photo(fp)
+        self.hud.build_hud(self.canvas)
         self.create_stat_card(humanoid)
-        self.hud = HUD(self.canvas, self.width, self.height)
 
     def delete_photo(self, event=None):
         self.canvas.delete('photo')

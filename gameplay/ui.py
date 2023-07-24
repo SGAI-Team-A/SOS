@@ -8,12 +8,11 @@ from ui_elements.game_viewer import GameViewer
 from ui_elements.machine_menu import MachineMenu
 from os.path import join
 from ui_elements.update_log import UpdateLog
-from ui_elements.hud import HUD
 
 class UI(object):
     def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
         #  Base window setup
-        w, h = 1280, 800
+        w, h = 1280, 720
         self.root = tk.Tk()
         self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
         self.root.geometry(str(w) + 'x' + str(h))
