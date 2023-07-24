@@ -16,6 +16,7 @@ class UI(object):
     def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
         #  Base window setup
         w, h = 1280, 720
+        scale_factor = w / 1920  # original image size is 1920 by 1080
         self.root = tk.Tk()
         self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
         self.root.geometry(str(w) + 'x' + str(h))
@@ -34,57 +35,59 @@ class UI(object):
 
         self.root.bind("<Button-1>", lambda e: print("x: {}, y: {}".format(e.x, e.y)))
 
+        # set up the buttons
+        def on_disabled():
+            self.game_viewer.update_log.set_update("Not enough time left!"),
+            self.game_viewer.update_else()
+
         buttons = {
             'skip': Button(
-                x=0,
-                y=0,
-                width=0,
-                height=0,
+                corners=[(1290, 682), (1574, 690), (1570, 844), (1286, 828) ],
                 on_click=lambda: [scorekeeper.skip(self.humanoid),
                                   self.update_ui(scorekeeper),
                                   self.get_next(
                                       data_fp,
                                       data_parser,
-                                      scorekeeper)]
+                                      scorekeeper)],
+                on_disabled_click=on_disabled,
+                scale_factor=scale_factor
             ),
             'squish': Button(
-                x=0,
-                y=0,
-                width=0,
-                height=0,
+                corners=[(1288, 840), (1566, 856), (1562, 1008), (1284, 986),],
                 on_click=lambda: [scorekeeper.squish(self.humanoid),
                                   self.update_ui(scorekeeper),
                                   self.get_next(
                                       data_fp,
                                       data_parser,
-                                      scorekeeper)]
+                                      scorekeeper)],
+                on_disabled_click=on_disabled,
+                scale_factor=scale_factor
             ),
             'save': Button(
-                x=0,
-                y=0,
-                width=0,
-                height=0,
+                corners=[(1586, 692), (1866, 700), (1866, 856), (1582, 840)],
                 on_click=lambda: [scorekeeper.save(self.humanoid),
                                   self.update_ui(scorekeeper),
                                   self.get_next(
                                       data_fp,
                                       data_parser,
-                                      scorekeeper)]
+                                      scorekeeper)],
+                on_disabled_click=on_disabled,
+                scale_factor=scale_factor
             ),
             'scram': Button(
-                x=0,
-                y=0,
-                width=0,
-                height=0,
+                corners=[(1578, 852), (1864, 856), (1862, 1036), (1574, 1010)],
                 on_click=lambda: [scorekeeper.scram(),
                                   self.update_ui(scorekeeper),
                                   self.get_next(
                                       data_fp,
                                       data_parser,
-                                      scorekeeper)]
+                                      scorekeeper)],
+                on_disabled_click=on_disabled,
+                scale_factor=scale_factor
             ),
         }
 
+        # bind button callbacks
         for button in buttons.values():
             self.root.bind("<Button-1>", button.callback, add="+")
 
