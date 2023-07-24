@@ -115,5 +115,11 @@ class GameEnv(gym.Env):
             "time": self.scorekeeper.get_remaining_time()
         }
 
-    def get_observation_fields(self):
-        return self.get_human_readable_observation().keys()
+    def get_observation_fields(self) -> list:
+        return list(self.get_human_readable_observation().keys())
+
+    def get_results(self) -> dict:
+        return self.scorekeeper.get_scorekeeper()
+
+    def get_results_fields(self) -> list:
+        return list(self.scorekeeper.get_scorekeeper().keys())
