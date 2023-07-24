@@ -24,9 +24,14 @@ class Clock(object):
             m = 0
         time = '{:02d}:{:02d}'.format(h, m)
         self.time_render = PIL.ImageTk.PhotoImage(self.clock_font.get_render(font_size=70, txt=time))
-        self.canvas.create_image(self.x + 35, 60, image=self.time_render)
+        self.canvas.delete("clock")
+        self.canvas.create_image(self.x + 35, 60, image=self.time_render, tags="clock")
 
         return
+
+    def get_time_render(self):
+        return self.time_render
+    
 
 # # Main Function Trigger
 # if __name__ == '__main__':
