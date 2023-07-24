@@ -1,12 +1,11 @@
 import tkinter as tk
-
 class UpdateLog(object):
     def __init__(self, root):
-        self.canvas = tk.Canvas(root, width=700, height=100)
-        self.canvas.place(x=120, y=40)
-        self.canvas.delete("all")
+        self.canvas = root
+        self.canvas.delete("update_text")
 
     def set_update(self, update):
-        self.canvas.delete("all")
+        self.canvas.delete("update_text")
         if not update == "":
-            self.canvas.create_text(350, 50, text = update, fill = "black", font = ('Times 10'))
+            self.canvas.create_text(self.canvas.winfo_width()/2, 150, text = update, fill = "black", font = ('Times 10'), tags='update_text', anchor='center')
+            self.canvas.tag_raise('update_text')

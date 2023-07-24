@@ -3,16 +3,18 @@ import tkinter as tk
 from os.path import join
 from PIL import ImageTk, Image
 from ui_elements.hud import HUD
-
+from ui_elements.update_log import UpdateLog
+from ui_elements.clock import Clock
 
 class GameViewer(object):
-    def __init__(self, root, w, h, data_fp, humanoid):
+    def __init__(self, root, w, h, data_fp, humanoid, scorekeeper):
         self.scale_factor = 0.9
         self.canvas = tk.Canvas(root, width=w, height=h)
         self.canvas.place(x=0, y=0)
         self.canvas.update()
         self.width = w
         self.height = h
+        self.scorekeeper = scorekeeper
 
         self.photo = None
         self.create_photo(join(data_fp, humanoid.fp))
@@ -30,10 +32,30 @@ class GameViewer(object):
         self.hud = HUD(self.canvas, w, h)
         self.hud.build_hud(self.canvas)
 
+        init_h = max((math.floor(self.scorekeeper.remaining_time / 60.0)), 0)
+        init_m = max(self.scorekeeper.remaining_time % 60, 0)
+        self.clock = Clock(self.canvas, w, h, init_h, init_m)
+
+        self.update_log = UpdateLog(self.canvas)
+        self.update_else()
+
     def update(self, fp, humanoid):
         self.create_photo(fp)
         self.hud.build_hud(self.canvas)
         self.create_stat_card(humanoid)
+        self.update_else()
+    
+    def update_else(self):
+        self.update_clock(self.scorekeeper)
+        self.update_log.set_update(self.scorekeeper.get_update())
+    
+    def update_clock(self, scorekeeper):
+        h = (math.floor(scorekeeper.remaining_time / 60.0))
+        m = max(scorekeeper.remaining_time % 60, 0)
+        if h < 0:
+            h = 0
+            m = 0
+        self.clock.update_time(h, m)
 
     def delete_photo(self, event=None):
         self.canvas.delete('photo')

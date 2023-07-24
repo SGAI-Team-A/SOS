@@ -25,8 +25,8 @@ class UI(object):
         if not is_disable:
             self.machine_interface = MachineInterface(self.frame, w, h)
 
-        #  Display central photo
-        self.game_viewer = GameViewer(self.frame, w, h, data_fp, self.humanoid)
+        #  Display the game
+        self.game_viewer = GameViewer(self.frame, w, h, data_fp, self.humanoid, scorekeeper)
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
 
         #  Add buttons and logo
@@ -56,42 +56,14 @@ class UI(object):
                                                scorekeeper)])]
         self.button_menu = ButtonMenu(self.frame, user_buttons)
 
-        if not is_disable:
-            machine_buttons = [("Suggest", lambda: [self.machine_interface.suggest(self.humanoid)]),
-                               ("Act", lambda: [self.machine_interface.act(scorekeeper, self.humanoid),
-                                                self.update_ui(scorekeeper),
-                                                self.get_next(
-                                                    data_fp,
-                                                    data_parser,
-                                                    scorekeeper)])]
-            self.machine_menu = MachineMenu(self.frame, machine_buttons)
-
-        # Display the countdown
-        init_h = max((math.floor(scorekeeper.remaining_time / 60.0)), 0)
-        init_m = max(scorekeeper.remaining_time % 60, 0)
-        self.clock = Clock(self.frame, w, h, init_h, init_m)
-
         # Display ambulance capacity
         self.capacity_meter = CapacityMeter(self.frame, w, h, data_parser.capacity)
-
-        # displays update log
-        self.update_log = UpdateLog(self.frame)
 
         self.root.mainloop()
 
     def update_ui(self, scorekeeper):
-        self.update_clock(scorekeeper)
         self.capacity_meter.update_fill(scorekeeper.get_current_capacity(), scorekeeper.get_last_saved())
-         # Creates texts onto the canvas
-        self.update_log.set_update(scorekeeper.get_update())
-        
-    def update_clock(self, scorekeeper):
-        h = (math.floor(scorekeeper.remaining_time / 60.0))
-        m = max(scorekeeper.remaining_time % 60, 0)
-        if h < 0:
-            h = 0
-            m = 0
-        self.clock.update_time(h, m)
+        self.game_viewer.update_else()
 
     def on_resize(self, event):
         w, h = 0.6 * self.root.winfo_width(), 0.7 * self.root.winfo_height()
@@ -105,7 +77,6 @@ class UI(object):
             self.capacity_meter.update_fill(0, None)
             self.game_viewer.delete_photo(None)
             self.game_viewer.display_score(scorekeeper.get_score())
-            self.machine_menu.disable_all_buttons()
             self.button_menu.disable_buttons(scorekeeper.remaining_time, remaining, scorekeeper.at_capacity())
         else:
             humanoid = data_parser.get_random()

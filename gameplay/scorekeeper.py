@@ -18,6 +18,7 @@ class ScoreKeeper(object):
         self.__capacity = capacity
         self.max_time = int(shift_len)
         self.remaining_time = int(shift_len)  # minutes
+        self.update = ""
         
         self.last_picked = None
         assert self.last_picked in {None, "healthy", "zombie", "injured", "corpse"}
@@ -115,7 +116,7 @@ class ScoreKeeper(object):
     def empty_ambulance(self):
         for category in self.__ambulance.keys():
             self.__ambulance[category] = 0
-        cures = 0  # reset cures when emptied
+        self.__cures = 0 # reset cures when emptied
 
     def set_update(self, update):
         self.update = update
