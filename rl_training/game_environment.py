@@ -128,8 +128,5 @@ class GameEnv(gym.Env):
 
         return observation, info
     
-    #def return_queue(self):
-        #return queue
-    
     def close(self):
         pass
