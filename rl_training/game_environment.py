@@ -4,6 +4,7 @@ from gymnasium import spaces
 from endpoints.data_parser import DataParser
 from gameplay.scorekeeper import ScoreKeeper
 from gameplay.enums import State, ActionCost
+from queuelib import queue
 
 class GameEnv(gym.Env):
     def __init__(self, data_parser: DataParser):
@@ -83,10 +84,16 @@ class GameEnv(gym.Env):
         self._action_to_function(action)
 
         reward = self.scorekeeper.get_reward()
-
-        truncated = len(self.data_parser.unvisited) <= 0
+        #truncated = len(self.data_parser.unvisited) <= 0
         terminated = self.scorekeeper.remaining_time <= 0
-
+        if len(self.data_parser.unvisited) <= 0:
+            while self.scorekeeper.get_remaining_time() > 0:
+                self.scorekeeper.scram()
+            truncated = True
+        else:
+            truncated = False
+        if terminated or truncated:
+            done = True
         # if terminated or truncated:
         #     print(self.scorekeeper.get_scorekeeper())
 
@@ -120,6 +127,9 @@ class GameEnv(gym.Env):
         info = self._get_info()
 
         return observation, info
-
+    
+    #def return_queue(self):
+        #return queue
+    
     def close(self):
         pass

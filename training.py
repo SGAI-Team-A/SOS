@@ -4,8 +4,10 @@ from rl_training.game_environment import GameEnv
 from gymnasium.wrappers import FlattenObservation
 from rl_training.agent import GameAgent
 from tqdm import tqdm
+import numpy as np
+import matplotlib.pyplot as plt
 
-data_fp = os.getenv("SGAI_DATA", default=os.path.join('..', 'data', 'test_dataset'))
+data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
 data_parser = DataParser(data_fp)
 
 env = FlattenObservation(GameEnv(data_parser))
@@ -28,7 +30,6 @@ agent = GameAgent(
 for episode in tqdm(range(n_episodes)):
     obs, info = env.reset()
     done = False
-
     # play one episode
     while not done:
         action = agent.get_action(obs)
@@ -40,7 +41,6 @@ for episode in tqdm(range(n_episodes)):
         # update if the environment is done and the current obs
         done = terminated or truncated
         obs = next_obs
-
     if episode % 1000 == 0:
         print(env.scorekeeper.get_scorekeeper())
 
@@ -52,6 +52,5 @@ for episode in tqdm(range(n_episodes)):
 #
 #     if terminated or truncated:
 #         observation, info = env.reset()
-
 
 env.close()
