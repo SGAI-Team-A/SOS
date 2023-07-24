@@ -38,7 +38,6 @@ class UI(object):
         # set up the buttons
         def on_disabled():
             self.game_viewer.update_log.set_update("Not enough time left!"),
-            self.game_viewer.update_else()
 
         buttons = {
             'skip': Button(
@@ -88,35 +87,8 @@ class UI(object):
         }
 
         # bind button callbacks
-        for button in buttons.values():
-            self.root.bind("<Button-1>", button.callback, add="+")
-
-        #  Add buttons and logo
-        user_buttons = [("Skip", lambda: [scorekeeper.skip(self.humanoid),
-                                          self.update_ui(scorekeeper),
-                                          self.get_next(
-                                              data_fp,
-                                              data_parser,
-                                              scorekeeper)]),
-                        ("Squish", lambda: [scorekeeper.squish(self.humanoid),
-                                            self.update_ui(scorekeeper),
-                                            self.get_next(
-                                                data_fp,
-                                                data_parser,
-                                                scorekeeper)]),
-                        ("Save", lambda: [scorekeeper.save(self.humanoid),
-                                          self.update_ui(scorekeeper),
-                                          self.get_next(
-                                              data_fp,
-                                              data_parser,
-                                              scorekeeper)]),
-                        ("Scram", lambda: [scorekeeper.scram(),
-                                           self.update_ui(scorekeeper),
-                                           self.get_next(
-                                               data_fp,
-                                               data_parser,
-                                               scorekeeper)])]
-        self.button_menu = ButtonMenu(self.frame, user_buttons)
+        self.root.bind("<Button-1>", lambda e: [button.callback(e) for button in buttons.values()])
+        self.button_menu = ButtonMenu(buttons)
 
         # Display ambulance capacity
         self.capacity_meter = CapacityMeter(self.frame, w, h, data_parser.capacity)

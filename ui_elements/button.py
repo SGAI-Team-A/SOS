@@ -23,8 +23,6 @@ class Button(object):
             points.append((mouse_x, mouse_y))
             area += get_area_triangle(points)
 
-        print(area, self.area)
-
         return isclose(area, self.area, abs_tol=1e-8)
 
     def callback(self, event) -> None:
