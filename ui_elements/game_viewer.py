@@ -59,9 +59,10 @@ class GameViewer(object):
         self.destroy_stat_card()
         tk.Label(self.canvas, text="FINAL SCORE", font=("Arial", 30)).pack(anchor=tk.NW)
         tk.Label(self.canvas, text="Killed {}".format(score["killed_z"]) + " zombies", font=("Arial", 15)).pack(anchor=tk.NW)
-        tk.Label(self.canvas, text="Killed {}".format(score["killed_h"]) + " humans", font=("Arial", 15)).pack(anchor=tk.NW)
+        tk.Label(self.canvas, text="Killed {}".format(score["killed_h_squish"] + score["killed_zombie"]) + " humans", font=("Arial", 15)).pack(anchor=tk.NW)
         tk.Label(self.canvas, text="Saved {}".format(score["saved_z"]) + " zombies", font=("Arial", 15)).pack(anchor=tk.NW)
-        tk.Label(self.canvas, text="Saved {}".format(score["saved_h"]) + " humans", font=("Arial", 15)).pack(anchor=tk.NW)
+        tk.Label(self.canvas, text="Saved {}".format(score["saved_h"] + score["saved_in"]) + " humans", font=("Arial", 15)).pack(anchor=tk.NW)
+        tk.Label(self.canvas, text="Skipped {}".format(score["skipped_in"]) + " injured humans", font=("Arial", 15)).pack(anchor=tk.NW)
 
 
 def display_photo(img_path, w, h):
