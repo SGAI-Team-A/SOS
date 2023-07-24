@@ -32,9 +32,7 @@ class GameViewer(object):
         self.hud = HUD(self.canvas, w, h)
         self.hud.build_hud(self.canvas)
 
-        init_h = max((math.floor(self.scorekeeper.remaining_time / 60.0)), 0)
-        init_m = max(self.scorekeeper.remaining_time % 60, 0)
-        self.clock = Clock(self.canvas, w, h, init_h, init_m)
+        self.clock = Clock(self.canvas, w, h, self.scorekeeper)
 
         self.update_log = UpdateLog(self.canvas)
         self.update_else()
@@ -46,16 +44,8 @@ class GameViewer(object):
         self.update_else()
     
     def update_else(self):
-        self.update_clock(self.scorekeeper)
+        self.clock.update_time(self.scorekeeper)
         self.update_log.set_update(self.scorekeeper.get_update())
-    
-    def update_clock(self, scorekeeper):
-        h = (math.floor(scorekeeper.remaining_time / 60.0))
-        m = max(scorekeeper.remaining_time % 60, 0)
-        if h < 0:
-            h = 0
-            m = 0
-        self.clock.update_time(h, m)
 
     def delete_photo(self, event=None):
         self.canvas.delete('photo')

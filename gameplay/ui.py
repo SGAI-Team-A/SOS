@@ -1,5 +1,7 @@
 import math
 import tkinter as tk
+
+from ui_elements.button import Button
 from ui_elements.button_menu import ButtonMenu
 from ui_elements.capacity_meter import CapacityMeter
 from ui_elements.clock import Clock
@@ -9,18 +11,20 @@ from ui_elements.machine_menu import MachineMenu
 from os.path import join
 from ui_elements.update_log import UpdateLog
 
+
 class UI(object):
     def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
         #  Base window setup
         w, h = 1280, 720
+        scale_factor = w / 1920  # original image size is 1920 by 1080
         self.root = tk.Tk()
         self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
         self.root.geometry(str(w) + 'x' + str(h))
         self.root.resizable(False, False)
 
         self.frame = tk.Canvas(self.root, width=w, height=h)
-        self.frame.place(x=0,y=0)
-        
+        self.frame.place(x=0, y=0)
+
         self.humanoid = data_parser.get_random()
         if not is_disable:
             self.machine_interface = MachineInterface(self.frame, w, h)
@@ -29,32 +33,62 @@ class UI(object):
         self.game_viewer = GameViewer(self.frame, w, h, data_fp, self.humanoid, scorekeeper)
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
 
-        #  Add buttons and logo
-        user_buttons = [("Skip", lambda: [scorekeeper.skip(self.humanoid),
-                                          self.update_ui(scorekeeper),
-                                          self.get_next(
-                                              data_fp,
-                                              data_parser,
-                                              scorekeeper)]),
-                        ("Squish", lambda: [scorekeeper.squish(self.humanoid),
-                                            self.update_ui(scorekeeper),
-                                            self.get_next(
-                                                data_fp,
-                                                data_parser,
-                                                scorekeeper)]),
-                        ("Save", lambda: [scorekeeper.save(self.humanoid),
-                                          self.update_ui(scorekeeper),
-                                          self.get_next(
-                                              data_fp,
-                                              data_parser,
-                                              scorekeeper)]),
-                        ("Scram", lambda: [scorekeeper.scram(),
-                                           self.update_ui(scorekeeper),
-                                           self.get_next(
-                                               data_fp,
-                                               data_parser,
-                                               scorekeeper)])]
-        self.button_menu = ButtonMenu(self.frame, user_buttons)
+        self.root.bind("<Button-1>", lambda e: print("x: {}, y: {}".format(e.x, e.y)))
+
+        # set up the buttons
+        def on_disabled():
+            self.game_viewer.update_log.set_update("Not enough time left!"),
+
+        buttons = {
+            'skip': Button(
+                corners=[(1290, 682), (1574, 690), (1570, 844), (1286, 828) ],
+                on_click=lambda: [scorekeeper.skip(self.humanoid),
+                                  self.update_ui(scorekeeper),
+                                  self.get_next(
+                                      data_fp,
+                                      data_parser,
+                                      scorekeeper)],
+                on_disabled_click=on_disabled,
+                scale_factor=scale_factor
+            ),
+            'squish': Button(
+                corners=[(1288, 840), (1566, 856), (1562, 1008), (1284, 986),],
+                on_click=lambda: [scorekeeper.squish(self.humanoid),
+                                  self.update_ui(scorekeeper),
+                                  self.get_next(
+                                      data_fp,
+                                      data_parser,
+                                      scorekeeper)],
+                on_disabled_click=on_disabled,
+                scale_factor=scale_factor
+            ),
+            'save': Button(
+                corners=[(1586, 692), (1866, 700), (1866, 856), (1582, 840)],
+                on_click=lambda: [scorekeeper.save(self.humanoid),
+                                  self.update_ui(scorekeeper),
+                                  self.get_next(
+                                      data_fp,
+                                      data_parser,
+                                      scorekeeper)],
+                on_disabled_click=on_disabled,
+                scale_factor=scale_factor
+            ),
+            'scram': Button(
+                corners=[(1578, 852), (1864, 856), (1862, 1036), (1574, 1010)],
+                on_click=lambda: [scorekeeper.scram(),
+                                  self.update_ui(scorekeeper),
+                                  self.get_next(
+                                      data_fp,
+                                      data_parser,
+                                      scorekeeper)],
+                on_disabled_click=on_disabled,
+                scale_factor=scale_factor
+            ),
+        }
+
+        # bind button callbacks
+        self.root.bind("<Button-1>", lambda e: [button.callback(e) for button in buttons.values()])
+        self.button_menu = ButtonMenu(buttons)
 
         # Display ambulance capacity
         self.capacity_meter = CapacityMeter(self.frame, w, h, data_parser.capacity)
