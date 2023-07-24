@@ -1,5 +1,7 @@
 import math
 import tkinter as tk
+
+from ui_elements.button import Button
 from ui_elements.button_menu import ButtonMenu
 from ui_elements.capacity_meter import CapacityMeter
 from ui_elements.clock import Clock
@@ -8,6 +10,7 @@ from ui_elements.game_viewer import GameViewer
 from ui_elements.machine_menu import MachineMenu
 from os.path import join
 from ui_elements.update_log import UpdateLog
+
 
 class UI(object):
     def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
@@ -19,8 +22,8 @@ class UI(object):
         self.root.resizable(False, False)
 
         self.frame = tk.Canvas(self.root, width=w, height=h)
-        self.frame.place(x=0,y=0)
-        
+        self.frame.place(x=0, y=0)
+
         self.humanoid = data_parser.get_random()
         if not is_disable:
             self.machine_interface = MachineInterface(self.frame, w, h)
@@ -28,6 +31,62 @@ class UI(object):
         #  Display the game
         self.game_viewer = GameViewer(self.frame, w, h, data_fp, self.humanoid, scorekeeper)
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
+
+        self.root.bind("<Button-1>", lambda e: print("x: {}, y: {}".format(e.x, e.y)))
+
+        buttons = {
+            'skip': Button(
+                x=0,
+                y=0,
+                width=0,
+                height=0,
+                on_click=lambda: [scorekeeper.skip(self.humanoid),
+                                  self.update_ui(scorekeeper),
+                                  self.get_next(
+                                      data_fp,
+                                      data_parser,
+                                      scorekeeper)]
+            ),
+            'squish': Button(
+                x=0,
+                y=0,
+                width=0,
+                height=0,
+                on_click=lambda: [scorekeeper.squish(self.humanoid),
+                                  self.update_ui(scorekeeper),
+                                  self.get_next(
+                                      data_fp,
+                                      data_parser,
+                                      scorekeeper)]
+            ),
+            'save': Button(
+                x=0,
+                y=0,
+                width=0,
+                height=0,
+                on_click=lambda: [scorekeeper.save(self.humanoid),
+                                  self.update_ui(scorekeeper),
+                                  self.get_next(
+                                      data_fp,
+                                      data_parser,
+                                      scorekeeper)]
+            ),
+            'scram': Button(
+                x=0,
+                y=0,
+                width=0,
+                height=0,
+                on_click=lambda: [scorekeeper.scram(),
+                                  self.update_ui(scorekeeper),
+                                  self.get_next(
+                                      data_fp,
+                                      data_parser,
+                                      scorekeeper)]
+            ),
+        }
+
+        for button in buttons.values():
+            self.root.bind("<Button-1>", button.callback, add="+")
 
         #  Add buttons and logo
         user_buttons = [("Skip", lambda: [scorekeeper.skip(self.humanoid),
