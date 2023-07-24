@@ -39,7 +39,7 @@ class UI(object):
 
         buttons = {
             'skip': Button(
-                corners=[(1290, 682), (1574, 690), (1570, 844), (1286, 828) ],
+                corners=[(1284, 675), (1550, 683), (1540, 832), (1280, 820) ],
                 on_click=lambda: [scorekeeper.skip(self.humanoid),
                                   self.update_ui(scorekeeper),
                                   self.get_next(
@@ -50,7 +50,7 @@ class UI(object):
                 scale_factor=scale_factor
             ),
             'squish': Button(
-                corners=[(1288, 840), (1566, 856), (1562, 1008), (1284, 986),],
+                corners=[(1280, 825), (1542, 840), (1540, 996), (1275, 972),],
                 on_click=lambda: [scorekeeper.squish(self.humanoid),
                                   self.update_ui(scorekeeper),
                                   self.get_next(
@@ -61,7 +61,7 @@ class UI(object):
                 scale_factor=scale_factor
             ),
             'save': Button(
-                corners=[(1586, 692), (1866, 700), (1866, 856), (1582, 840)],
+                corners=[(1554, 682), (1850, 687), (1846, 852), (1550, 834)],
                 on_click=lambda: [scorekeeper.save(self.humanoid),
                                   self.update_ui(scorekeeper),
                                   self.get_next(
@@ -72,7 +72,7 @@ class UI(object):
                 scale_factor=scale_factor
             ),
             'scram': Button(
-                corners=[(1578, 852), (1864, 856), (1862, 1036), (1574, 1010)],
+                corners=[(1550, 840), (1847, 856), (1845, 1022), (1548, 996)],
                 on_click=lambda: [scorekeeper.scram(),
                                   self.update_ui(scorekeeper),
                                   self.get_next(
