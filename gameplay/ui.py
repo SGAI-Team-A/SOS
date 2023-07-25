@@ -30,7 +30,7 @@ class UI(object):
 
         # set up the buttons
         def on_disabled():
-            self.game_viewer.update_log.set_update("Not enough time left!"),
+            self.game_viewer.hud.update_log.set_update("Not enough time left!"),
 
         buttons = {
             'skip': Button(
@@ -114,11 +114,11 @@ class UI(object):
 
         # Ran out of humanoids? Disable skip/save/squish
         if remaining == 0 or scorekeeper.remaining_time <= 0:
-            self.game_viewer.meter.update_fill(0, None)
+            self.game_viewer.hud.meter.update_fill(0, None)
            # self.game_viewer.delete_photo(None)
             self.game_viewer.display_score(scorekeeper.get_score(), self.frame)
             self.button_menu.disable_buttons(scorekeeper.remaining_time, remaining, scorekeeper.at_capacity())
-            self.game_viewer.update_log.set_update("")
+            self.game_viewer.hud.update_log.set_update("")
         else:
             humanoid = data_parser.get_random()
             # Update visual display

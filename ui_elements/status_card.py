@@ -8,10 +8,12 @@ class StatusCard(object):
             borderwidth=1,
             relief="flat",
         )
-        self.stat_card.place(x=x, y=y)
+        self.x = x
+        self.y = y
         self.labels = []
     
     def create(self, humanoid):
+        self.recall()
         for label in self.labels:
             label.destroy()
 
@@ -30,3 +32,9 @@ class StatusCard(object):
 
     def remove(self):
         self.stat_card.destroy()
+    
+    def recall(self):
+        self.stat_card.place(x=self.x, y=self.y)
+    
+    def forget(self):
+        self.stat_card.place_forget()

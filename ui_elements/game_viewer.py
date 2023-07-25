@@ -1,5 +1,6 @@
 import math
 import tkinter as tk
+import os
 from os.path import join
 from PIL import ImageTk, Image, ImageGrab, ImageFilter
 from ui_elements.hud import HUD
@@ -22,28 +23,21 @@ class GameViewer(object):
         self.photo = None
         self.create_photo(join(data_fp, humanoid.fp))
 
-        self.status_card = StatusCard(self.canvas, 40,30)
-        self.status_card.create(humanoid)
-
-        self.hud = HUD(self.canvas, w, h)
+        self.hud = HUD(self.canvas, w, h, humanoid, data_parser, self.scorekeeper)
         self.hud.build_hud(self.canvas)
 
-        self.clock = Clock(self.canvas, w, h, self.scorekeeper)
-        self.meter = CapacityMeter(self.canvas, w, h, data_parser.capacity)
-
-        self.update_log = UpdateLog(self.canvas)
+        self.info_card = InfoCard(self.canvas, w, h)
+        self.info_card.lift_(self.canvas)
+        self.canvas.tag_bind("info_card", "<Button-1>", self.info_card.nuke)
+        
         self.update_else()
 
     def update(self, fp, humanoid):
         self.create_photo(fp)
-        self.hud.build_hud(self.canvas)
-        self.update_else()
-        self.status_card.create(humanoid)
+        self.hud.update(humanoid)
     
     def update_else(self):
-        self.clock.update_time(self.scorekeeper)
-        self.update_log.set_update(self.scorekeeper.get_update())
-        self.meter.update_fill(self.scorekeeper.get_current_capacity(), self.scorekeeper.get_last_saved())
+        self.hud.update_else()
 
     def delete_photo(self, event=None):
         self.canvas.delete('photo')
@@ -54,7 +48,7 @@ class GameViewer(object):
         self.canvas.create_image((self.canvas.winfo_width() * 0.5) - math.floor(self.scale_factor * self.canvas.winfo_width() * 0.5), 0, anchor=tk.NW, image=self.photo, tags='photo')
 
     def display_score(self, score, window):
-        self.status_card.remove()
+        self.hud.status_card.remove()
         x = window.winfo_rootx()
         y = window.winfo_rooty()
         width = window.winfo_width()
@@ -72,3 +66,23 @@ def display_photo(img_path, w, h):
 
     tk_img = ImageTk.PhotoImage(resized)
     return tk_img
+
+class InfoCard(object):
+    def __init__(self, root, w, h):
+        self.path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'graphics', 'info-card.png')
+        self.info_card = display_photo(self.path, w, h)
+        self.root = root
+        self.build(self.root)
+    
+    def build(self, root):
+        self.image = root.create_image(0, 0, anchor=tk.NW, image=self.info_card, tags='info_card')
+
+    def nuke(self, event=None):
+        try:
+            self.root.delete("info_card")
+            self.root.unbind('info_card',"<Button-1>")
+        except tk.TclError as e:
+            pass
+    
+    def lift_(self, root):
+        root.lift(self.image)
