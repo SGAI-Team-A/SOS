@@ -27,10 +27,11 @@ class UI(object):
 
         self.humanoid = data_parser.get_random()
         if not is_disable:
-            self.machine_interface = MachineInterface(self.frame, w, h)
+            # self.machine_interface = MachineInterface(self.frame, w, h)
+            pass
 
         #  Display the game
-        self.game_viewer = GameViewer(self.frame, w, h, data_fp, self.humanoid, scorekeeper)
+        self.game_viewer = GameViewer(self.frame, w, h, data_fp, self.humanoid, scorekeeper, data_parser)
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
 
         # set up the buttons
@@ -97,13 +98,9 @@ class UI(object):
 
         self.button_menu = ButtonMenu(buttons)
 
-        # Display ambulance capacity
-        self.capacity_meter = CapacityMeter(self.frame, w, h, data_parser.capacity)
-
         self.root.mainloop()
 
     def update_ui(self, scorekeeper):
-        self.capacity_meter.update_fill(scorekeeper.get_current_capacity(), scorekeeper.get_last_saved())
         self.game_viewer.update_else()
 
     def on_resize(self, event):
@@ -115,10 +112,11 @@ class UI(object):
 
         # Ran out of humanoids? Disable skip/save/squish
         if remaining == 0 or scorekeeper.remaining_time <= 0:
-            self.capacity_meter.update_fill(0, None)
+            self.game_viewer.meter.update_fill(0, None)
             self.game_viewer.delete_photo(None)
             self.game_viewer.display_score(scorekeeper.get_score())
             self.button_menu.disable_buttons(scorekeeper.remaining_time, remaining, scorekeeper.at_capacity())
+            self.game_viewer.update_log.set_update("")
         else:
             humanoid = data_parser.get_random()
             # Update visual display

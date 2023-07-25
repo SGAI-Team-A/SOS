@@ -7,5 +7,5 @@ class UpdateLog(object):
     def set_update(self, update):
         self.canvas.delete("update_text")
         if not update == "":
-            self.canvas.create_text(self.canvas.winfo_width()/2, 150, text = update, fill = "black", font = ('Times 10'), tags='update_text', anchor='center')
-            self.canvas.tag_raise('update_text')
+            self.canvas.create_text(self.canvas.winfo_width() * 4/5, 80, text = update, fill = "black", font = ('Helvetica 10'), tags='update_text', anchor='center')
+            # self.canvas.tag_raise('update_text')
