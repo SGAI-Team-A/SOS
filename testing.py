@@ -9,18 +9,18 @@ from rl_training.manual_agent import ManualAgent
 data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
 data_parser = DataParser(data_fp)
 
-FOLDER_NAME = "15_updated_model"
+FOLDER_NAME = "15_occupation_bound_ib0_sb9"
 
 env = GameEnv(data_parser)
 
-for injured_bound in range(0, 8):
-    for scram_bound in range(6, 11):
+for doctor_bound in range(0, 11):
+    for engineer_bound in range(0, 11):
         env.reset()
 
         config = {
             'n_episodes': 100,
-            'injured_bound': injured_bound,
-            'scram_bound': scram_bound
+            'doctor_bound': doctor_bound,
+            'engineer_bound': engineer_bound
         }
 
         data_logger = DataLogger(
@@ -28,15 +28,15 @@ for injured_bound in range(0, 8):
             observation_fields=env.get_observation_fields(),
             res_fields=env.get_results_fields(),
             config=config,
-            folder_name=os.path.join(FOLDER_NAME, "ib{}_sb{}".format(config['injured_bound'], config['scram_bound']))
+            folder_name=os.path.join(FOLDER_NAME, "db{}_eb{}".format(config['doctor_bound'], config['engineer_bound']))
         )
 
         n_episodes = config['n_episodes']
 
         agent = ManualAgent(
             env=env,
-            injured_bound=config['injured_bound'],
-            scram_bound=config['scram_bound']
+            doctor_bound=config['doctor_bound'],
+            engineer_bound=config['engineer_bound']
         )
 
         for episode in tqdm(range(n_episodes)):

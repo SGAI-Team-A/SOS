@@ -95,7 +95,8 @@ class GameEnv(gym.Env):
             "humanoid_status": self._humanoid_state_to_number[self.humanoid.get_state()],
             "capacity": self.scorekeeper.get_current_capacity(),
             "time": self.scorekeeper.get_remaining_time() // 5,
-            "cures": self.scorekeeper.get_cures()
+            "cures": self.scorekeeper.get_cures(),
+            "humanoid_occupation": self.occupation_to_number[self.humanoid.get_occupation()]
         }
 
     def _get_info(self):
@@ -157,7 +158,8 @@ class GameEnv(gym.Env):
             "humanoid_status": self.humanoid.get_state(),
             "capacity": self.scorekeeper.get_current_capacity(),
             "time": self.scorekeeper.get_remaining_time(),
-            "cures": self.scorekeeper.get_cures()
+            "cures": self.scorekeeper.get_cures(),
+            "humanoid_occupation": self.humanoid.get_occupation()
         }
 
     def get_observation_fields(self) -> list:

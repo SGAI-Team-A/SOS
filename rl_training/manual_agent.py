@@ -1,8 +1,9 @@
 from rl_training.game_environment import GameEnv
-from gameplay.enums import Action, State
+from gameplay.enums import Action, State, Occupation
+
 
 class ManualAgent:
-    def __init__(self, env: GameEnv, injured_bound: int, scram_bound: int):
+    def __init__(self, env: GameEnv, doctor_bound, engineer_bound, injured_bound: int = 0, scram_bound: int = 9):
         """
         Fixed strategy
             SAVE all HEALTHY
@@ -23,12 +24,15 @@ class ManualAgent:
         self.env = env
         self.injured_bound = injured_bound
         self.scram_bound = scram_bound
+        self.doctor_bound = doctor_bound
+        self.engineer_bound = engineer_bound
 
         assert 0 <= self.scram_bound <= 10
         assert 0 <= self.injured_bound <= 10
 
     def get_action(self, obs) -> int:
         state = self.env.humanoid_number_to_state[obs['humanoid_status']]
+        occupation = self.env.number_to_occupation[obs['humanoid_occupation']]
         capacity = obs['capacity']
         cures = obs['cures']
 
@@ -46,7 +50,13 @@ class ManualAgent:
             action = Action.SAVE
         # injured depends on bounds
         elif state == State.INJURED.value:
-            if capacity <= self.injured_bound:
+            bound = self.injured_bound
+            if occupation == Occupation.DOCTOR.value:
+                bound = self.doctor_bound
+            elif occupation == Occupation.ENGINEER.value:
+                bound = self.engineer_bound
+
+            if capacity <= bound:
                 action = Action.SAVE
             elif capacity >= self.scram_bound:
                 action = Action.SCRAM
