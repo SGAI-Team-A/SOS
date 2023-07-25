@@ -16,6 +16,7 @@ class GameEnv(gym.Env):
                 "humanoid_status": spaces.Discrete(5),
                 "capacity": spaces.Discrete(11),
                 "time": spaces.Discrete(145),  # 720 / 5 + 1 (all time controls are in 5 minute intervals)
+                "cures": spaces.Discrete(11)
             }
         )
 
@@ -83,7 +84,8 @@ class GameEnv(gym.Env):
         return {
             "humanoid_status": self._humanoid_state_to_number[self.humanoid.get_state()],
             "capacity": self.scorekeeper.get_current_capacity(),
-            "time": self.scorekeeper.get_remaining_time() // 5
+            "time": self.scorekeeper.get_remaining_time() // 5,
+            "cures": self.scorekeeper.get_cures()
         }
 
     def _get_info(self):
@@ -144,7 +146,8 @@ class GameEnv(gym.Env):
         return {
             "humanoid_status": self.humanoid.get_state(),
             "capacity": self.scorekeeper.get_current_capacity(),
-            "time": self.scorekeeper.get_remaining_time()
+            "time": self.scorekeeper.get_remaining_time(),
+            "cures": self.scorekeeper.get_cures()
         }
 
     def get_observation_fields(self) -> list:

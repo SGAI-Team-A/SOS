@@ -30,6 +30,11 @@ class ManualAgent:
     def get_action(self, obs) -> int:
         state = self.env.humanoid_number_to_state[obs['humanoid_status']]
         capacity = obs['capacity']
+        cures = obs['cures']
+
+        # if injured and have cure - consider person healthy
+        if state == State.INJURED.value and cures > 0:
+            state = State.HEALTHY.value
 
         action = None
 
