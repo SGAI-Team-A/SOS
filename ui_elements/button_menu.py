@@ -18,9 +18,11 @@ class ButtonMenu(object):
             self.buttons["skip"].set_disabled(False)
             self.buttons["squish"].set_disabled(False)
 
+        # Game over - no more buttons
         if remaining_humanoids == 0 or remaining_time <= 0:
             for button in self.buttons.values():
                 button.set_disabled(True)
+                button.set_on_game_screen(False)
         #  Not enough time left? Disable action
         if (remaining_time - ActionCost.SCRAM.value) < ActionCost.SKIP.value:
             self.buttons['skip'].set_disabled(True)

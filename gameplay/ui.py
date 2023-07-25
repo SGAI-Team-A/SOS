@@ -90,8 +90,16 @@ class UI(object):
 
         # on hover - change cursor to click arrow
         def on_move_callback(e):
-            if any([button.is_touching(e.x, e.y) for button in buttons.values()]):
+            # buttons aren't showing
+            if any([button.is_touching(e.x, e.y) and not button.is_on_game_screen() for button in buttons.values()]):
+                self.root.config(cursor="arrow")
+            # normal buttons
+            elif any([button.is_touching(e.x, e.y) and not button.is_disabled() for button in buttons.values()]):
                 self.root.config(cursor="hand2")
+            # buttons are disabled
+            elif any([button.is_touching(e.x, e.y) and button.is_disabled() for button in buttons.values()]):
+                self.root.config(cursor="X_cursor")
+            # not touching buttons
             else:
                 self.root.config(cursor="arrow")
         self.root.bind("<Motion>", on_move_callback, add="+")
