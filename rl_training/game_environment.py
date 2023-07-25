@@ -23,6 +23,8 @@ class GameEnv(gym.Env):
         # 4 actions: save, scram, skip, squish
         self.action_space = spaces.Discrete(4)
 
+        self.action_to_str = ["save", "scram", "skip", "squish"]
+
         self._humanoid_state_to_number = {
             val: index for index, val in enumerate([e.value for e in State])
         }
@@ -130,3 +132,19 @@ class GameEnv(gym.Env):
     
     def close(self):
         pass
+
+    def get_human_readable_observation(self):
+        return {
+            "humanoid_status": self.humanoid.get_state(),
+            "capacity": self.scorekeeper.get_current_capacity(),
+            "time": self.scorekeeper.get_remaining_time()
+        }
+
+    def get_observation_fields(self) -> list:
+        return list(self.get_human_readable_observation().keys())
+
+    def get_results(self) -> dict:
+        return self.scorekeeper.get_scorekeeper()
+
+    def get_results_fields(self) -> list:
+        return list(self.scorekeeper.get_scorekeeper().keys())
