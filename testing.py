@@ -9,6 +9,8 @@ from rl_training.manual_agent import ManualAgent
 data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
 data_parser = DataParser(data_fp)
 
+FOLDER_NAME = "15_percent_infected"
+
 env = GameEnv(data_parser)
 
 for injured_bound in range(0, 11):
@@ -26,7 +28,7 @@ for injured_bound in range(0, 11):
             observation_fields=env.get_observation_fields(),
             res_fields=env.get_results_fields(),
             config=config,
-            folder_name="ib{}_sb{}".format(config['injured_bound'], config['scram_bound'])
+            folder_name=os.path.join(FOLDER_NAME, "ib{}_sb{}".format(config['injured_bound'], config['scram_bound']))
         )
 
         n_episodes = config['n_episodes']
