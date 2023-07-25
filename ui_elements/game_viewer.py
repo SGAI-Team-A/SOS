@@ -1,12 +1,13 @@
 import math
 import tkinter as tk
 from os.path import join
-from PIL import ImageTk, Image
+from PIL import ImageTk, Image, ImageGrab, ImageFilter
 from ui_elements.hud import HUD
 from ui_elements.update_log import UpdateLog
 from ui_elements.clock import Clock
 from ui_elements.status_card import StatusCard
 from ui_elements.capacity_meter import CapacityMeter
+from ui_elements.score_screen import ScoreScreen
 
 class GameViewer(object):
     def __init__(self, root, w, h, data_fp, humanoid, scorekeeper, data_parser):
@@ -52,14 +53,18 @@ class GameViewer(object):
         self.photo = display_photo(fp, math.floor(self.canvas.winfo_width() * self.scale_factor), math.floor(self.canvas.winfo_height() * self.scale_factor))
         self.canvas.create_image((self.canvas.winfo_width() * 0.5) - math.floor(self.scale_factor * self.canvas.winfo_width() * 0.5), 0, anchor=tk.NW, image=self.photo, tags='photo')
 
-    def display_score(self, score):
-        self.status_card.destroy()
-        tk.Label(self.canvas, text="FINAL SCORE", font=("Arial", 30)).pack(anchor=tk.N)
-        tk.Label(self.canvas, text="Killed {}".format(score["killed_z"]) + " zombies", font=("Arial", 15)).pack(anchor=tk.N)
-        tk.Label(self.canvas, text="Killed {}".format(score["killed_h"]) + " humans", font=("Arial", 15)).pack(anchor=tk.N)
-        tk.Label(self.canvas, text="Saved {}".format(score["saved_z"]) + " zombies", font=("Arial", 15)).pack(anchor=tk.N)
-        tk.Label(self.canvas, text="Saved {}".format(score["saved_h"]) + " humans", font=("Arial", 15)).pack(anchor=tk.N)
-
+    def display_score(self, score, window):
+        self.status_card.remove()
+        x = window.winfo_rootx()
+        y = window.winfo_rooty()
+        width = window.winfo_width()
+        height = window.winfo_height()
+        self.canvas.delete("all")
+        image = ImageGrab.grab(bbox=(x, y, x + width, y + height))
+        blur = image.filter(ImageFilter.GaussianBlur(radius=10))
+        self.im_final = ImageTk.PhotoImage(blur.resize((width, height), Image.LANCZOS))
+        self.canvas.create_image(0, 0, image=self.im_final, anchor=tk.NW)
+        self.score_screen = ScoreScreen(self.canvas, score)
 
 def display_photo(img_path, w, h):
     img = Image.open(img_path)

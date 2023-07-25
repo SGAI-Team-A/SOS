@@ -1,6 +1,6 @@
 from PIL import ImageDraw, Image, ImageFont
 
-class RenderFont:
+class RenderFont: # we love stackoverflow
     def __init__(self, filename, fill=(0, 0, 0)):
         """
         constructor for RenderFont

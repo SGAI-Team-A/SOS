@@ -28,5 +28,5 @@ class StatusCard(object):
         self.labels[len(self.labels) - 1].pack(pady=(0,10))
         self.stat_card.update()
 
-    def destroy(self):
+    def remove(self):
         self.stat_card.destroy()

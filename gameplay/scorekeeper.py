@@ -41,7 +41,7 @@ class ScoreKeeper(object):
                     self.update = "The zombie you saved killed " + str(self.__ambulance["injured"] + self.__ambulance["healthy"]) + " people. The van is empty now."
             else:
                 if self.__ambulance["injured"] + self.__ambulance["healthy"] == 0:
-                    self.update = "The injured person you saved was actually infected! Fortunately, no passengers who were alive were in the van."
+                    self.update = "The injured person you saved was actually infected! \nFortunately, no passengers who were alive were in the van."
                 else:
                     self.update = "The infected person you saved killed " + str(self.__ambulance["injured"] + self.__ambulance["healthy"]) + " people. The van is empty now."
             
@@ -59,7 +59,7 @@ class ScoreKeeper(object):
         elif humanoid.is_corpse():
             self.__ambulance["corpse"] += 1
             self.last_picked = "corpse"
-            self.update = "You saved a corpse, one less space on the van that could have been used for others."
+            self.update = "You saved a corpse, one less space on the \nvan that could have been used for others."
 
         else:
             self.__ambulance["healthy"] += 1

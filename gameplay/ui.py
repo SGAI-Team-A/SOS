@@ -1,15 +1,9 @@
-import math
 import tkinter as tk
 
 from ui_elements.button import Button
 from ui_elements.button_menu import ButtonMenu
-from ui_elements.capacity_meter import CapacityMeter
-from ui_elements.clock import Clock
-from endpoints.machine_interface import MachineInterface
 from ui_elements.game_viewer import GameViewer
-from ui_elements.machine_menu import MachineMenu
 from os.path import join
-from ui_elements.update_log import UpdateLog
 
 
 class UI(object):
@@ -22,7 +16,7 @@ class UI(object):
         self.root.geometry(str(w) + 'x' + str(h))
         self.root.resizable(False, False)
 
-        self.frame = tk.Canvas(self.root, width=w, height=h)
+        self.frame = tk.Frame(self.root, width=w, height=h)
         self.frame.place(x=0, y=0)
 
         self.humanoid = data_parser.get_random()
@@ -121,8 +115,8 @@ class UI(object):
         # Ran out of humanoids? Disable skip/save/squish
         if remaining == 0 or scorekeeper.remaining_time <= 0:
             self.game_viewer.meter.update_fill(0, None)
-            self.game_viewer.delete_photo(None)
-            self.game_viewer.display_score(scorekeeper.get_score())
+           # self.game_viewer.delete_photo(None)
+            self.game_viewer.display_score(scorekeeper.get_score(), self.frame)
             self.button_menu.disable_buttons(scorekeeper.remaining_time, remaining, scorekeeper.at_capacity())
             self.game_viewer.update_log.set_update("")
         else:
