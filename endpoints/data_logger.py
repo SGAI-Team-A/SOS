@@ -9,13 +9,13 @@ class DataLogger(object):
         now = datetime.now()
         folder_name = "{datetime}_log".format(datetime=now.strftime("%Y-%m-%d_%H.%M.%S"))
 
-        os.mkdir(os.path.join("..", "logs", mode, folder_name))
+        os.mkdir(os.path.join("logs", mode, folder_name))
 
         actions_file_name = "actions.csv"
-        actions_filepath = os.path.join('..', "logs", mode, folder_name, actions_file_name)
+        actions_filepath = os.path.join("logs", mode, folder_name, actions_file_name)
 
         results_file_name = "results.csv"
-        results_filepath = os.path.join('..', "logs", mode, folder_name, results_file_name)
+        results_filepath = os.path.join("logs", mode, folder_name, results_file_name)
 
         self.actions_file = open(actions_filepath, 'w+', newline='')
         self.results_file = open(results_filepath, 'w+')
