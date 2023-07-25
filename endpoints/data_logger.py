@@ -1,10 +1,10 @@
 import csv
-import math
+import json
 from datetime import datetime
 import os
 
 class DataLogger(object):
-    def __init__(self, observation_fields: list, res_fields: list, mode="rl"):
+    def __init__(self, observation_fields: list, res_fields: list, config: dict, mode="rl"):
         # Set up file structure
         now = datetime.now()
         folder_name = "{datetime}_log".format(datetime=now.strftime("%Y-%m-%d_%H.%M.%S"))
@@ -16,6 +16,7 @@ class DataLogger(object):
 
         results_file_name = "results.csv"
         results_filepath = os.path.join("logs", mode, folder_name, results_file_name)
+
 
         self.actions_file = open(actions_filepath, 'w+', newline='')
         self.results_file = open(results_filepath, 'w+')
@@ -31,6 +32,16 @@ class DataLogger(object):
         res_fieldnames.insert(0, "iteration")
         self.results_writer = csv.DictWriter(self.results_file, fieldnames=res_fieldnames)
         self.results_writer.writeheader()
+
+        # set up config
+        config_filepath = os.path.join("logs", mode, folder_name, "config.json")
+        config_file = open(config_filepath, 'w+')
+        self.write_setup_file(config, config_file)
+        config_file.close()
+
+    def write_setup_file(self, config, config_file):
+        json_object = json.dumps(config, indent=4)
+        config_file.write(json_object)
 
     def log_action(self, iteration:int, action_str:str, observation: dict):
         row_dict = observation

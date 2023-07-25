@@ -12,18 +12,25 @@ data_parser = DataParser(data_fp)
 env = GameEnv(data_parser)
 env.reset()
 
+config = {
+    'n_episodes': 100,
+    'injured_bound': 5,
+    'scram_bound': 10
+}
+
 data_logger = DataLogger(
     mode="manual_testing",
     observation_fields=env.get_observation_fields(),
-    res_fields=env.get_results_fields()
+    res_fields=env.get_results_fields(),
+    config=config
 )
 
-n_episodes = 100
+n_episodes = config['n_episodes']
 
 agent = ManualAgent(
     env=env,
-    injured_bound=5,
-    scram_bound=10
+    injured_bound=config['injured_bound'],
+    scram_bound=config['scram_bound']
 )
 
 for episode in tqdm(range(n_episodes)):
