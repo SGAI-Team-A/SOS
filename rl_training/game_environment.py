@@ -3,7 +3,8 @@ from gymnasium import spaces
 
 from endpoints.data_parser import DataParser
 from gameplay.scorekeeper import ScoreKeeper
-from gameplay.enums import State, ActionCost, Action
+from gameplay.enums import State, ActionCost, Action, Occupation
+
 
 class GameEnv(gym.Env):
     def __init__(self, data_parser: DataParser):
@@ -16,7 +17,8 @@ class GameEnv(gym.Env):
                 "humanoid_status": spaces.Discrete(5),
                 "capacity": spaces.Discrete(11),
                 "time": spaces.Discrete(145),  # 720 / 5 + 1 (all time controls are in 5 minute intervals)
-                "cures": spaces.Discrete(11)
+                "cures": spaces.Discrete(11),
+                "humanoid_occupation": spaces.Discrete(3)
             }
         )
 
@@ -35,6 +37,14 @@ class GameEnv(gym.Env):
 
         self.humanoid_number_to_state = {
             val: index for index, val in self._humanoid_state_to_number.items()
+        }
+
+        self.occupation_to_number = {
+            val: index for index, val in enumerate([e.value for e in Occupation])
+        }
+
+        self.number_to_occupation = {
+            val: index for index, val in self.occupation_to_number.items()
         }
 
         self.illegal_moves = 0
