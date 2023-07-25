@@ -46,7 +46,6 @@ for episode in tqdm(range(n_episodes)):
         done = terminated or truncated
         if done:
              data_logger.log_results(episode, env.unwrapped.get_results())
-             observation, info = env.reset()
         obs = next_obs
     if episode % 1000 == 0:
         print(env.scorekeeper.get_scorekeeper())
