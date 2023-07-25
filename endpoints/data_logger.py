@@ -4,10 +4,11 @@ from datetime import datetime
 import os
 
 class DataLogger(object):
-    def __init__(self, observation_fields: list, res_fields: list, config: dict, mode="rl"):
+    def __init__(self, observation_fields: list, res_fields: list, config: dict, mode="rl", folder_name=None):
         # Set up file structure
-        now = datetime.now()
-        folder_name = "{datetime}_log".format(datetime=now.strftime("%Y-%m-%d_%H.%M.%S"))
+        if folder_name is None:
+            now = datetime.now()
+            folder_name = "{datetime}_log".format(datetime=now.strftime("%Y-%m-%d_%H.%M.%S"))
 
         os.mkdir(os.path.join("logs", mode, folder_name))
 
