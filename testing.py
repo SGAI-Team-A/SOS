@@ -9,12 +9,12 @@ from rl_training.manual_agent import ManualAgent
 data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
 data_parser = DataParser(data_fp)
 
-FOLDER_NAME = "15_percent_infected"
+FOLDER_NAME = "15_updated_model"
 
 env = GameEnv(data_parser)
 
-for injured_bound in range(0, 11):
-    for scram_bound in range(0, 11):
+for injured_bound in range(0, 8):
+    for scram_bound in range(6, 11):
         env.reset()
 
         config = {
