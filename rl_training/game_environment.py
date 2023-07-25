@@ -3,8 +3,7 @@ from gymnasium import spaces
 
 from endpoints.data_parser import DataParser
 from gameplay.scorekeeper import ScoreKeeper
-from gameplay.enums import State, ActionCost
-from queuelib import queue
+from gameplay.enums import State, ActionCost, Action
 
 class GameEnv(gym.Env):
     def __init__(self, data_parser: DataParser):
@@ -23,16 +22,24 @@ class GameEnv(gym.Env):
         # 4 actions: save, scram, skip, squish
         self.action_space = spaces.Discrete(4)
 
-        self.action_to_str = ["save", "scram", "skip", "squish"]
+        self.action_number_to_str = [Action.SAVE.value, Action.SCRAM.value, Action.SKIP.value, Action.SQUISH.value]
+
+        self.action_str_to_number = {
+            val: index for index, val in enumerate(self.action_number_to_str)
+        }
 
         self._humanoid_state_to_number = {
             val: index for index, val in enumerate([e.value for e in State])
         }
 
+        self.humanoid_number_to_state = {
+            val: index for index, val in self._humanoid_state_to_number.items()
+        }
+
         self.illegal_moves = 0
 
     # perform relevant function based on action number
-    def _action_to_function(self, action):
+    def _action_to_function(self, action: int):
         if not self.is_legal(action):
             # print("illegal")
             self.illegal_moves += 1
@@ -57,7 +64,7 @@ class GameEnv(gym.Env):
             self.scorekeeper.set_reward(-ActionCost.SQUISH.value // 5)
             self.scorekeeper.squish(self.humanoid)
 
-    def is_legal(self, action):
+    def is_legal(self, action: int):
         # save
         if action == 0:
             return not self.scorekeeper.at_capacity() and \
@@ -82,7 +89,7 @@ class GameEnv(gym.Env):
     def _get_info(self):
         return None  # No extra info (maybe change later?)
 
-    def step(self, action):
+    def step(self, action: int):
         self._action_to_function(action)
 
         reward = self.scorekeeper.get_reward()
