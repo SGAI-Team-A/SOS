@@ -28,8 +28,7 @@ class GameViewer(object):
 
         self.info_card = InfoCard(self.canvas, w, h)
         self.info_card.lift_(self.canvas)
-        self.canvas.tag_bind("info_card", "<Button-1>", self.info_card.nuke)
-        
+
         self.update_else()
 
     def update(self, fp, humanoid):

@@ -8,7 +8,7 @@ class Button(object):
         self.on_click = on_click
         self.on_disabled_click = on_disabled_click
         self.disabled = False
-        self.on_game_screen = True
+        self.interactive = True
 
         self.area = get_area_triangle(self.corners[:-1]) + get_area_triangle([self.corners[0], self.corners[2], self.corners[3]])
 
@@ -27,7 +27,7 @@ class Button(object):
         return isclose(area, self.area, abs_tol=1e-8)
 
     def on_click_callback(self, event) -> None:
-        if self.is_touching(event.x, event.y) and self.on_game_screen:
+        if self.is_touching(event.x, event.y) and self.interactive:
             if not self.disabled:
                 self.on_click()
             else:
@@ -36,14 +36,14 @@ class Button(object):
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled
 
-    def set_on_game_screen(self, on_game_screen=False):
-        self.on_game_screen = on_game_screen
+    def set_interactive(self, interactive=False):
+        self.interactive = interactive
 
     def is_disabled(self):
         return self.disabled
 
     def is_on_game_screen(self):
-        return self.on_game_screen
+        return self.interactive
 
 
 def get_area_triangle(corners):

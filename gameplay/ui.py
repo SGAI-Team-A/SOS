@@ -99,6 +99,14 @@ class UI(object):
         self.root.bind("<Motion>", on_move_callback, add="+")
 
         self.button_menu = ButtonMenu(buttons)
+        self.button_menu.set_interactive(False)
+
+        # nuke info card on click and make buttons interaction
+        self.game_viewer.canvas.tag_bind("info_card", "<ButtonRelease-1>", lambda e: [
+            self.game_viewer.info_card.nuke(e),
+            self.button_menu.set_interactive(True),
+
+        ])
 
         self.root.mainloop()
 
