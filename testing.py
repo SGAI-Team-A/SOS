@@ -9,7 +9,11 @@ from rl_training.manual_agent import ManualAgent
 data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
 data_parser = DataParser(data_fp)
 
-FOLDER_NAME = "15_occupation_bound_ib0_sb9"
+INJURED_BOUND = 2
+SCRAM_BOUND = 8
+FOLDER_NAME = "15_occupation_bound_ib{}_sb{}".format(INJURED_BOUND, SCRAM_BOUND)
+
+os.mkdir(os.path.join("logs", "manual_testing", FOLDER_NAME))
 
 env = GameEnv(data_parser)
 
@@ -36,7 +40,9 @@ for doctor_bound in range(0, 11):
         agent = ManualAgent(
             env=env,
             doctor_bound=config['doctor_bound'],
-            engineer_bound=config['engineer_bound']
+            engineer_bound=config['engineer_bound'],
+            injured_bound=INJURED_BOUND,
+            scram_bound=SCRAM_BOUND
         )
 
         for episode in tqdm(range(n_episodes)):
