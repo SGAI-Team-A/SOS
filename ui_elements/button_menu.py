@@ -8,6 +8,12 @@ class ButtonMenu(object):
     def __init__(self, buttons: [str, Button]):
         self.buttons: dict[str: Button] = buttons
 
+    # define if buttons are interactive (react at all) or not
+    def set_interactive(self, interactive=False):
+        for button in self.buttons.values():
+            button.set_interactive(interactive)
+
+
     def disable_buttons(self, remaining_time, remaining_humanoids, at_capacity):
         if at_capacity:
             self.buttons["save"].set_disabled(True)
@@ -22,7 +28,7 @@ class ButtonMenu(object):
         if remaining_humanoids == 0 or remaining_time <= 0:
             for button in self.buttons.values():
                 button.set_disabled(True)
-                button.set_on_game_screen(False)
+                button.set_interactive(False)
         #  Not enough time left? Disable action
         if (remaining_time - ActionCost.SCRAM.value) < ActionCost.SKIP.value:
             self.buttons['skip'].set_disabled(True)
