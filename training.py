@@ -7,6 +7,7 @@ from rl_training.agent import GameAgent
 from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
+import dill as pickle
 
 data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
 data_parser = DataParser(data_fp)
@@ -21,6 +22,14 @@ n_episodes = 100
 start_epsilon = 1.0
 epsilon_decay = start_epsilon / (n_episodes / 2)  # reduce the exploration over time
 final_epsilon = 0.1
+
+q_value = agent.get_q()
+#loads the saved file with q-values *have to manually put in file name*
+#with open(os.path.join("logs", "model", "2023-07-25_16.07.34_q-table_100000"), "rb") as f:
+    #q_value = pickle.load(f)
+
+now = datetime.now()
+model_name = "{datetime}_q-table_{n_episodes}".format(datetime=now.strftime("%Y-%m-%d_%H.%M.%S"), n_episodes = n_episodes)
 
 agent = GameAgent(
     env=env,
@@ -59,6 +68,8 @@ for episode in tqdm(range(n_episodes)):
 #
 #     if terminated or truncated:
 #         observation, info = env.reset()
-
+#saves q-values into a file
+with open(os.path.join("logs", "model", model_name), "wb") as f:
+    pickle.dump(agent.get_q(), f) 
 env.close()
 data_logger.close()

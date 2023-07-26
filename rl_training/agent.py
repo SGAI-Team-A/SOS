@@ -78,3 +78,7 @@ class GameAgent:
 
     def decay_epsilon(self):
         self.epsilon = max(self.final_epsilon, self.epsilon - self.epsilon_decay)
+        
+    def get_q(self):
+        q_values = self.q_values
+        return q_values
