@@ -77,7 +77,7 @@ class DataParser(object):
 
                         # calculate probability of this image being drawn
                         probability = states_probabilities[state_str] * occupation_probabilities[occupation_str] * (1 / num_imgs)
-                        probability_list.append(probability)
+                        probability_list += [probability] * num_imgs
 
         # filter humanoid list to the maximum number of images
         # sample with replacement to get correct probabilities

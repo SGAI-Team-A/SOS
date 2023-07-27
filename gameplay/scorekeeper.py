@@ -18,6 +18,7 @@ class ScoreKeeper(object):
         self.__capacity = capacity
         self.max_time = int(shift_len)
         self.remaining_time = int(shift_len)  # minutes
+        self.update = ""
         
         self.last_picked = None
         assert self.last_picked in {None, "healthy", "zombie", "injured", "corpse"}
@@ -40,7 +41,7 @@ class ScoreKeeper(object):
                     self.update = "The zombie you saved killed " + str(self.__ambulance["injured"] + self.__ambulance["healthy"]) + " people. The van is empty now."
             else:
                 if self.__ambulance["injured"] + self.__ambulance["healthy"] == 0:
-                    self.update = "The injured person you saved was actually infected! Fortunately, no passengers who were alive were in the van."
+                    self.update = "The injured person you saved was actually infected! \nFortunately, no passengers who were alive were in the van."
                 else:
                     self.update = "The infected person you saved killed " + str(self.__ambulance["injured"] + self.__ambulance["healthy"]) + " people. The van is empty now."
             
@@ -58,7 +59,7 @@ class ScoreKeeper(object):
         elif humanoid.is_corpse():
             self.__ambulance["corpse"] += 1
             self.last_picked = "corpse"
-            self.update = "You saved a corpse, one less space on the van that could have been used for others."
+            self.update = "You saved a corpse, one less space on the \nvan that could have been used for others."
 
         else:
             self.__ambulance["healthy"] += 1
@@ -94,7 +95,7 @@ class ScoreKeeper(object):
 
     def gain_battery(self):
         if self.remaining_time < self.max_time:
-            self.remaining_time += 60
+            self.remaining_time += min(60, self.max_time - self.remaining_time)
 
     def gain_cure(self):
         self.__cures += 1
@@ -115,7 +116,10 @@ class ScoreKeeper(object):
     def empty_ambulance(self):
         for category in self.__ambulance.keys():
             self.__ambulance[category] = 0
-        cures = 0  # reset cures when emptied
+        self.__cures = 0 # reset cures when emptied
 
     def set_update(self, update):
         self.update = update
+    
+    def get_cures(self):
+        return self.__cures
