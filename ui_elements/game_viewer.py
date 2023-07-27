@@ -41,7 +41,7 @@ class GameViewer(object):
 
     def display_score(self, score, window):
         self.hud.status_card.remove()
-        self.hud.cure_counter.destroy()
+        self.hud.cure_counter.remove()
         x = window.winfo_rootx()
         y = window.winfo_rooty()
         width = window.winfo_width()

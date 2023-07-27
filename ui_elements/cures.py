@@ -22,3 +22,6 @@ class CureCounter(object):
     
     def update_text(self):
         self.text.config(text="Cures: {}".format(self.scorekeeper.get_cures()))
+    
+    def remove(self):
+        self.cure_counter.destroy()
