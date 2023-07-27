@@ -1,6 +1,3 @@
-import tkinter as tk
-import os
-from PIL import ImageTk, Image
 from gameplay.enums import ActionCost
 from ui_elements.button import Button
 
@@ -13,8 +10,9 @@ class ButtonMenu(object):
         for button in self.buttons.values():
             button.set_interactive(interactive)
 
-
     def disable_buttons(self, remaining_time, remaining_humanoids, at_capacity):
+        self.buttons["scram"].set_disabled(False)
+
         if at_capacity:
             self.buttons["save"].set_disabled(True)
             self.buttons["skip"].set_disabled(True)
