@@ -42,19 +42,21 @@ class GameEnv(gym.Env):
         self.scorekeeper.set_reward(0)
         # save
         if action == 0:
-            self.scorekeeper.set_reward(-ActionCost.SAVE.value // 5)
+            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SAVE.value // 5)
+            if self.humanoid.is_healthy() or self.humanoid.is_injured():
+                self.scorekeeper.set_reward(self.scorekeeper.get_reward() +1)
             self.scorekeeper.save(self.humanoid)
         # scram
         elif action == 1:
-            self.scorekeeper.set_reward(-ActionCost.SCRAM.value // 5)
+            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SCRAM.value // 5)
             self.scorekeeper.scram()
         # skip
         elif action == 2:
-            self.scorekeeper.set_reward(-ActionCost.SCRAM.value // 5)
+            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SKIP.value // 5)
             self.scorekeeper.skip(self.humanoid)
         # squish
         elif action == 3:
-            self.scorekeeper.set_reward(-ActionCost.SQUISH.value // 5)
+            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SQUISH.value // 5)
             self.scorekeeper.squish(self.humanoid)
 
     def is_legal(self, action):
