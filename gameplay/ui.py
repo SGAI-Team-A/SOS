@@ -3,7 +3,7 @@ import tkinter as tk
 from ui_elements.button import Button
 from ui_elements.button_menu import ButtonMenu
 from ui_elements.game_viewer import GameViewer
-from ui_elements.game_viewer import InfoCard
+from ui_elements.info_card import InfoCard
 from os.path import join
 
 
@@ -105,7 +105,7 @@ class UI(object):
         def nuke(event=None):
             self.root.unbind("<Button-1>")
             self.info_card.root_.destroy()
-            
+
             # bind button on click callback
             self.root.bind("<Button-1>", lambda e: [button.on_click_callback(e) for button in buttons.values()], add="+")
             self.button_menu.set_interactive(True)

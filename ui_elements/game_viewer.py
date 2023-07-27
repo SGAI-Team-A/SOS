@@ -41,6 +41,7 @@ class GameViewer(object):
 
     def display_score(self, score, window):
         self.hud.status_card.remove()
+        self.hud.cure_counter.destroy()
         x = window.winfo_rootx()
         y = window.winfo_rooty()
         width = window.winfo_width()
@@ -58,14 +59,3 @@ def display_photo(img_path, w, h):
 
     tk_img = ImageTk.PhotoImage(resized)
     return tk_img
-
-class InfoCard(object):
-    def __init__(self, root, w, h):
-        self.path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'graphics', 'info-card.png')
-        self.info_card = display_photo(self.path, w, h)
-        self.root_ = tk.Canvas(root, width=w, height=h)
-        self.root_.place(x=0,y=0)
-        self.build(self.root_)
-    
-    def build(self, canvas):
-        self.image = canvas.create_image(0, 0, anchor=tk.NW, image=self.info_card, tags='info_card')

@@ -120,3 +120,6 @@ class ScoreKeeper(object):
 
     def set_update(self, update):
         self.update = update
+    
+    def get_cures(self):
+        return self.__cures
