@@ -117,6 +117,9 @@ class ScoreKeeper(object):
     def gain_cure(self):
         self.__cures += 1
 
+    def get_cures(self):
+        return self.__cures
+
     def get_current_capacity(self):
         return sum(self.__ambulance.values())
     
