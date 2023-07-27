@@ -1004,5 +1004,5 @@ names = [
 ]
 
 
-def generate_name():
+def generate_name(gender):
     return random.choice(names)
