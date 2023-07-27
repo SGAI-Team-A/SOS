@@ -3,6 +3,7 @@ import tkinter as tk
 from ui_elements.button import Button
 from ui_elements.button_menu import ButtonMenu
 from ui_elements.game_viewer import GameViewer
+from ui_elements.game_viewer import InfoCard
 from os.path import join
 
 
@@ -79,9 +80,6 @@ class UI(object):
             ),
         }
 
-        # bind button on click callback
-        self.root.bind("<Button-1>", lambda e: [button.on_click_callback(e) for button in buttons.values()], add="+")
-
         # on hover - change cursor to click arrow
         def on_move_callback(e):
             # buttons aren't showing
@@ -101,12 +99,18 @@ class UI(object):
         self.button_menu = ButtonMenu(buttons)
         self.button_menu.set_interactive(False)
 
+        self.info_card = InfoCard(self.frame, w, h)
         # nuke info card on click and make buttons interaction
-        self.game_viewer.canvas.tag_bind("info_card", "<ButtonRelease-1>", lambda e: [
-            self.game_viewer.info_card.nuke(e),
-            self.button_menu.set_interactive(True),
 
-        ])
+        def nuke(event=None):
+            self.root.unbind("<Button-1>")
+            self.info_card.root_.destroy()
+            
+            # bind button on click callback
+            self.root.bind("<Button-1>", lambda e: [button.on_click_callback(e) for button in buttons.values()], add="+")
+            self.button_menu.set_interactive(True)
+
+        self.root.bind("<Button-1>", nuke)
 
         self.root.mainloop()
 

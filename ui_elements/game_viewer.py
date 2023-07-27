@@ -4,15 +4,11 @@ import os
 from os.path import join
 from PIL import ImageTk, Image, ImageGrab, ImageFilter
 from ui_elements.hud import HUD
-from ui_elements.update_log import UpdateLog
-from ui_elements.clock import Clock
-from ui_elements.status_card import StatusCard
-from ui_elements.capacity_meter import CapacityMeter
 from ui_elements.score_screen import ScoreScreen
 
 class GameViewer(object):
     def __init__(self, root, w, h, data_fp, humanoid, scorekeeper, data_parser):
-        self.scale_factor = 0.9
+        self.scale_factor = 1
         self.canvas = tk.Canvas(root, width=w, height=h)
         self.canvas.place(x=0, y=0)
         self.canvas.update()
@@ -25,9 +21,6 @@ class GameViewer(object):
 
         self.hud = HUD(self.canvas, w, h, humanoid, data_parser, self.scorekeeper)
         self.hud.build_hud(self.canvas)
-
-        self.info_card = InfoCard(self.canvas, w, h)
-        self.info_card.lift_(self.canvas)
 
         self.update_else()
 
@@ -70,18 +63,9 @@ class InfoCard(object):
     def __init__(self, root, w, h):
         self.path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'graphics', 'info-card.png')
         self.info_card = display_photo(self.path, w, h)
-        self.root = root
-        self.build(self.root)
+        self.root_ = tk.Canvas(root, width=w, height=h)
+        self.root_.place(x=0,y=0)
+        self.build(self.root_)
     
-    def build(self, root):
-        self.image = root.create_image(0, 0, anchor=tk.NW, image=self.info_card, tags='info_card')
-
-    def nuke(self, event=None):
-        try:
-            self.root.delete("info_card")
-            self.root.unbind('info_card',"<Button-1>")
-        except tk.TclError as e:
-            pass
-    
-    def lift_(self, root):
-        root.lift(self.image)
+    def build(self, canvas):
+        self.image = canvas.create_image(0, 0, anchor=tk.NW, image=self.info_card, tags='info_card')
