@@ -76,17 +76,17 @@ class UI(object):
         # on hover - change cursor to click arrow
         def on_move_callback(e):
             # buttons aren't showing
-            if any([button.is_touching(e.x, e.y) and not button.is_on_game_screen() for button in buttons.values()]):
-                self.root.config(cursor="arrow")
+            if not any([button.is_on_game_screen() for button in buttons.values()]):
+                return
             # normal buttons
             elif any([button.is_touching(e.x, e.y) and not button.is_disabled() for button in buttons.values()]):
-                self.root.config(cursor="hand2")
+                self.set_cursor("hand2")
             # buttons are disabled
             elif any([button.is_touching(e.x, e.y) and button.is_disabled() for button in buttons.values()]):
-                self.root.config(cursor="X_cursor")
+                self.set_cursor("X_cursor")
             # not touching buttons
-            else:
-                self.root.config(cursor="arrow")
+            elif not any([button.is_touching(e.x, e.y) for button in buttons.values()]):
+                self.set_cursor("arrow")
         self.root.bind("<Motion>", on_move_callback, add="+")
 
         self.button_menu = ButtonMenu(buttons)
@@ -142,3 +142,6 @@ class UI(object):
 
         # Disable button(s) if options are no longer possible
         self.button_menu.disable_buttons(self.scorekeeper.remaining_time, remaining, self.scorekeeper.at_capacity())
+
+    def set_cursor(self, cursor_type: str = "arrow"):
+        self.root.config(cursor=cursor_type)
