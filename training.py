@@ -35,10 +35,15 @@ agent = GameAgent(
     final_epsilon=final_epsilon,
 )
 
-#q_value = agent.get_q()
+q_value = agent.get_q()
 #loads the saved file with q-values *have to manually put in file name*
-#with open(os.path.join("logs", "model", "2023-07-25_16.07.34_q-table_100000"), "rb") as f:
-    #q_value = pickle.load(f)
+try:
+    with open(os.path.join("logs", "model", "2023-07-25_16.07.34_q-table_100000"), "rb") as f:
+        q_value = pickle.load(f)
+except:
+    print("wrong name or not existing file")
+else:
+    print("loaded q-table")
     
 for episode in tqdm(range(n_episodes)):
     obs, info = env.reset()
@@ -62,14 +67,8 @@ for episode in tqdm(range(n_episodes)):
 
     agent.decay_epsilon()
 
-# for _ in range(1000):
-#     action = env.action_space.sample()
-#     observation, reward, terminated, truncated, info = env.step(action)
-#
-#     if terminated or truncated:
-#         observation, info = env.reset()
 #saves q-values into a file
-#with open(os.path.join("logs", "model", model_name), "wb") as f:
-    #pickle.dump(agent.get_q(), f) 
+with open(os.path.join("logs", "model", model_name), "wb") as f:
+    pickle.dump(agent.get_q(), f) 
 env.close()
 data_logger.close()
