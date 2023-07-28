@@ -4,8 +4,9 @@ from gameplay.scorekeeper import ScoreKeeper
 from ui_elements.button import Button
 from ui_elements.button_menu import ButtonMenu
 from ui_elements.game_viewer import GameViewer
-from ui_elements.info_card import InfoCard
 from os.path import join
+
+from ui_elements.intro_cards import IntroCards
 
 
 class UI(object):
@@ -92,18 +93,17 @@ class UI(object):
         self.button_menu = ButtonMenu(buttons)
         self.button_menu.set_interactive(False)
 
-        self.info_card = InfoCard(self.frame, w, h)
         # nuke info card on click and make buttons interaction
-
         def nuke(event=None):
             self.root.unbind("<Button-1>")
-            self.info_card.root_.destroy()
 
             # bind button on click callback
             self.root.bind("<Button-1>", lambda e: [button.on_click_callback(e) for button in buttons.values()], add="+")
             self.button_menu.set_interactive(True)
 
-        self.root.bind("<Button-1>", nuke)
+        self.intro_cards = IntroCards(self.frame, w, h, nuke)
+
+        self.root.bind("<Button-1>", lambda e: self.intro_cards.show_next())
 
         self.root.mainloop()
 
