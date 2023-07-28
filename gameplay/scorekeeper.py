@@ -110,7 +110,6 @@ class ScoreKeeper(object):
         return sum(self.__ambulance.values()) >= self.__capacity
 
     def get_score(self):
-        self.scram()
         return self.__scorekeeper
 
     def empty_ambulance(self):

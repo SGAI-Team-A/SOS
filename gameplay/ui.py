@@ -1,5 +1,6 @@
 import tkinter as tk
-
+from endpoints.data_logger import DataLogger
+from endpoints.data_parser import DataParser
 from gameplay.scorekeeper import ScoreKeeper
 from ui_elements.button import Button
 from ui_elements.button_menu import ButtonMenu
@@ -10,10 +11,15 @@ from ui_elements.intro_cards import IntroCards
 
 
 class UI(object):
-    def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
+    def __init__(self, data_parser: DataParser, scorekeeper: ScoreKeeper, data_fp, data_logger: DataLogger, is_disable, rounds = 0):
         self.data_parser = data_parser
         self.scorekeeper = scorekeeper
         self.data_fp = data_fp
+        self.data_logger = data_logger
+        self.humanoid = data_parser.get_random()
+
+        # number of rounds played
+        self.rounds = rounds
 
         #  Base window setup
         w, h = 1280, 720
@@ -26,7 +32,6 @@ class UI(object):
         self.frame = tk.Frame(self.root, width=w, height=h)
         self.frame.place(x=0, y=0)
 
-        self.humanoid = data_parser.get_random()
         if not is_disable:
             # self.machine_interface = MachineInterface(self.frame, w, h)
             pass
@@ -112,6 +117,8 @@ class UI(object):
         self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
         self.humanoid = self.data_parser.get_random()
 
+        self.rounds += 1
+
         # reset buttons
         self.button_menu.set_interactive(True)
         self.button_menu.disable_buttons(self.scorekeeper.remaining_time, len(self.data_parser.unvisited), self.scorekeeper.at_capacity())
@@ -126,13 +133,17 @@ class UI(object):
     def get_next(self):
         remaining = len(self.data_parser.unvisited)
 
-        # Ran out of humanoids? Disable skip/save/squish
+        # Game Over
         if remaining == 0 or self.scorekeeper.remaining_time <= 0:
+            # log results
+            self.data_logger.log_results(self.rounds, self.scorekeeper.get_score())
+
+            # update ui
             self.game_viewer.hud.meter.update_fill(0, None)
-           # self.game_viewer.delete_photo(None)
             self.game_viewer.display_score(self.scorekeeper.get_score(), self.frame)
             self.button_menu.disable_buttons(self.scorekeeper.remaining_time, remaining, self.scorekeeper.at_capacity())
             self.game_viewer.hud.update_log.set_update("")
+        # get next humanoid
         else:
             humanoid = self.data_parser.get_random()
             # Update visual display
