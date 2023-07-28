@@ -19,10 +19,10 @@ class ActionCost(Enum):
     SCRAM = 120
 
 class Age(Enum):
-    YOUNG = 0
-    MIDDLE = 1
-    OLD = 2
+    YOUNG = "young"
+    MIDDLE = "middle"
+    OLD = "old"
 
 class Gender(Enum):
-    MALE = 0
-    FEMALE = 1
+    MALE = "man"
+    FEMALE = "woman"

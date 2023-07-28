@@ -7,7 +7,7 @@ class Humanoid(object):
     Are they a human or a zombie???
     """
 
-    def __init__(self, fp, state, occupation, age=None, name=None):
+    def __init__(self, fp, state, occupation, age=None, gender=None):
         self.fp = fp
         self.state = state
         self.occupation = occupation
@@ -31,10 +31,10 @@ class Humanoid(object):
                 upper_bound = 70
         self.age = random.randint(lower_bound, upper_bound)
 
-        if name is None:
-            self.name = generate_name()
-        else:
-            self.name = name
+        self.name = generate_name()
+
+        self.gender = gender
+        
 
     def is_zombie(self):
         return self.state == State.ZOMBIE.value
@@ -87,4 +87,4 @@ class Humanoid(object):
         return self.occupation
     
     def get_gender(self):
-        pass
+        return self.gender
