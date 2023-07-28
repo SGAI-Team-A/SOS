@@ -55,7 +55,7 @@ class GameEnv(gym.Env):
         if not self.is_legal(action):
             # print("illegal")
             self.illegal_moves += 1
-            self.scorekeeper.set_reward(-100000)
+            #self.scorekeeper.set_reward(-100000)
             return
 
         self.scorekeeper.set_reward(0)
