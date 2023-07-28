@@ -53,7 +53,10 @@ class GameAgent:
 
         # with probability (1 - epsilon) act greedily (exploit)
         else:
-            return int(np.argmax(self.q_values[tuple(obs)]))
+            action = int(np.argmax(self.q_values[tuple(obs)]))
+            while not self.env.is_legal(action):
+                action = self.env.action_space.sample()
+            return action
 
     def update(
         self,
