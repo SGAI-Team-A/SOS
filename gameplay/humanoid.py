@@ -31,10 +31,8 @@ class Humanoid(object):
                 upper_bound = 70
         self.age = random.randint(lower_bound, upper_bound)
 
-        self.name = generate_name()
-
         self.gender = gender
-        
+        self.name = generate_name(gender)
 
     def is_zombie(self):
         return self.state == State.ZOMBIE.value

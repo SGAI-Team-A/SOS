@@ -15,7 +15,7 @@ def get_random_name(name_path):
 
 def generate_name(gender):
     fp = ""
-    if gender == "female":
+    if gender == "woman":
         fp = "fem_names.csv"
     else:
         fp = "masc_names.csv"
