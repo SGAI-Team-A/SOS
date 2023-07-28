@@ -32,7 +32,7 @@ class DataParser(object):
                 filename = h["name"]
                 pic_fp = os.path.join(self.data_fp, filename)
                 if os.path.isfile(pic_fp) and pic_fp.endswith('.png'):
-                    self.unvisited.append(Humanoid(h["name"], h["state"], h["occupation"]))
+                    self.unvisited.append(Humanoid(h["name"], h["state"], h["occupation"], h["age"], h["gender"]))
                     i += 1
             self.shift_length = md['shift_length']
             self.capacity = md['capacity']
@@ -71,11 +71,27 @@ class DataParser(object):
                         num_imgs = 0  # number of images in the current folder
                         for img_file_path in os.listdir(os.path.join(self.data_fp, path_, occupation_path)):
                             if img_file_path.endswith('.png'):
+                                img_file_name = img_file_path[:-4]  # remove .png
+                                state, gender, occupation, age, _ = img_file_name.split("_")
+
+                                gender_to_full = {
+                                    'w': "woman",
+                                    'm': "man"
+                                }
+
+                                age_to_full = {
+                                    'y': "young",
+                                    'm': "middle",
+                                    'o': "old"
+                                }
+
                                 num_imgs += 1
                                 pic_dict = {
                                     'name': os.path.join(path_, occupation_path, img_file_path),
                                     'state': state_str,
-                                    'occupation': occupation_str
+                                    'occupation': occupation_str,
+                                    'gender': gender_to_full[gender],
+                                    'age': age_to_full[age]
                                 }
                                 self.humanoid_list.append(pic_dict)
 
