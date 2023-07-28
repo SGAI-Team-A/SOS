@@ -1,4 +1,4 @@
-from gameplay.enums import State, Occupation
+from gameplay.enums import State, Occupation, Age, Gender
 from gameplay.names import generate_name
 import random
 
@@ -11,21 +11,25 @@ class Humanoid(object):
         self.fp = fp
         self.state = state
         self.occupation = occupation
-
-        if age is None:
+        
+        if age == Age.YOUNG.value:
             lower_bound = 8
-            upper_bound = 80
-
+            upper_bound = 17
+        elif age == Age.MIDDLE.value:
+            lower_bound = 18
+            upper_bound = 54
             if self.is_doctor():
                 lower_bound = 25
-                upper_bound = 65
             elif self.is_engineer():
                 lower_bound = 20
+        elif age == Age.OLD.value:
+            lower_bound = 55
+            upper_bound = 80
+            if self.is_doctor():
+                upper_bound = 65
+            elif self.is_engineer():
                 upper_bound = 70
-
-            self.age = random.randint(lower_bound, upper_bound)
-        else:
-            self.age = age
+        self.age = random.randint(lower_bound, upper_bound)
 
         if name is None:
             self.name = generate_name()
@@ -81,3 +85,6 @@ class Humanoid(object):
 
     def get_occupation(self):
         return self.occupation
+    
+    def get_gender(self):
+        pass

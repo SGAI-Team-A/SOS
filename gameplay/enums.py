@@ -23,3 +23,6 @@ class Age(Enum):
     MIDDLE = 1
     OLD = 2
 
+class Gender(Enum):
+    MALE = 0
+    FEMALE = 1
