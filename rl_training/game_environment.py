@@ -48,6 +48,7 @@ class GameEnv(gym.Env):
         }
 
         self.illegal_moves = 0
+        self.reward = 0
 
     # perform relevant function based on action number
     def _action_to_function(self, action: int):
@@ -60,21 +61,21 @@ class GameEnv(gym.Env):
         self.scorekeeper.set_reward(0)
         # save
         if action == 0:
-            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SAVE.value // 5)
+            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SAVE.value // 2)
             if self.humanoid.is_healthy() or self.humanoid.is_injured():
-                self.scorekeeper.set_reward(self.scorekeeper.get_reward() +1)
+                self.scorekeeper.set_reward(self.scorekeeper.get_reward() + 10)
             self.scorekeeper.save(self.humanoid)
         # scram
         elif action == 1:
-            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SCRAM.value // 5)
+            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SCRAM.value // 2)
             self.scorekeeper.scram()
         # skip
         elif action == 2:
-            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SKIP.value // 5)
+            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SKIP.value // 2)
             self.scorekeeper.skip(self.humanoid)
         # squish
         elif action == 3:
-            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SQUISH.value // 5)
+            self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SQUISH.value // 2)
             self.scorekeeper.squish(self.humanoid)
 
     def is_legal(self, action: int):
@@ -108,6 +109,9 @@ class GameEnv(gym.Env):
         self._action_to_function(action)
 
         reward = self.scorekeeper.get_reward()
+
+        self.reward += reward
+
         #truncated = len(self.data_parser.unvisited) <= 0
         terminated = self.scorekeeper.remaining_time <= 0
         if len(self.data_parser.unvisited) <= 0:
@@ -136,6 +140,7 @@ class GameEnv(gym.Env):
         # seed self.np_random
         super().reset(seed=seed)
 
+        self.reward = 0
         self.illegal_moves = 0
 
         # select new random set of images
@@ -168,7 +173,12 @@ class GameEnv(gym.Env):
         return list(self.get_human_readable_observation().keys())
 
     def get_results(self) -> dict:
-        return self.scorekeeper.get_scorekeeper()
+        res = self.scorekeeper.get_scorekeeper()
+        res['reward'] = self.reward
+
+        return res
 
     def get_results_fields(self) -> list:
-        return list(self.scorekeeper.get_scorekeeper().keys())
+        fields = list(self.scorekeeper.get_scorekeeper().keys())
+        fields.append("reward")
+        return fields

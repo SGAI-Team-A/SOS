@@ -16,13 +16,23 @@ data_parser = DataParser(data_fp)
 env = FlattenObservation(GameEnv(data_parser))
 observation, info = env.reset()
 
-data_logger = DataLogger(observation_fields=env.unwrapped.get_observation_fields(), res_fields=env.unwrapped.get_results_fields())
-
 learning_rate = 0.01
-n_episodes = 10000
+n_episodes = 1000000
 start_epsilon = 1.0
 epsilon_decay = start_epsilon / (n_episodes / 2)  # reduce the exploration over time
 final_epsilon = 0.1
+
+data_logger = DataLogger(
+    observation_fields=env.unwrapped.get_observation_fields(),
+    res_fields=env.unwrapped.get_results_fields(),
+    config={
+        "lr": learning_rate,
+        "n": n_episodes,
+        "start_ep": start_epsilon,
+        "decay_ep": epsilon_decay,
+        "final_ep": final_epsilon
+    }
+)
 
 now = datetime.now()
 model_name = "{datetime}_q-table_{n_episodes}".format(datetime=now.strftime("%Y-%m-%d_%H.%M.%S"), n_episodes = n_episodes)
@@ -51,7 +61,7 @@ for episode in tqdm(range(n_episodes)):
     # play one episode
     while not done:
         action = agent.get_action(obs)
-        data_logger.log_action(episode, env.unwrapped.action_to_str[action], env.unwrapped.get_human_readable_observation())
+        data_logger.log_action(episode, env.unwrapped.action_number_to_str[action], env.unwrapped.get_human_readable_observation())
         next_obs, reward, terminated, truncated, info = env.step(action)
 
         # update the agent
