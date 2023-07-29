@@ -31,6 +31,7 @@ class UI(object):
         self.game_viewer = GameViewer(self, self.frame, w, h)
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
         self.game_ended = False
+        self.real_time_enabled = True
 
         self.intro_cards = IntroCards(self.frame, w, h, self.game_viewer.hud.nuke)
 
@@ -45,7 +46,8 @@ class UI(object):
         # reset buttons
         self.game_viewer.hud.button_menu.set_interactive(True)
         self.game_viewer.hud.button_menu.disable_buttons(self.scorekeeper.remaining_time, len(self.data_parser.unvisited), self.scorekeeper.at_capacity())
-        self.game_viewer.hud.clock.count_down_real_time(self, self.scorekeeper)
+        if self.real_time_enabled:
+            self.game_viewer.hud.clock.count_down_real_time(self, self.scorekeeper)
 
     def update_ui(self):
         self.game_viewer.update_else()
