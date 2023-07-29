@@ -1,11 +1,11 @@
 import tkinter as tk
+import asyncio
 
 from gameplay.scorekeeper import ScoreKeeper
 from ui_elements.button import Button
 from ui_elements.button_menu import ButtonMenu
 from ui_elements.game_viewer import GameViewer
 from os.path import join
-
 from ui_elements.intro_cards import IntroCards
 
 
@@ -34,6 +34,7 @@ class UI(object):
         #  Display the game
         self.game_viewer = GameViewer(self, self.frame, w, h)
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
+        self.game_ended = False
 
         # set up the buttons
         def on_disabled():
@@ -100,6 +101,7 @@ class UI(object):
             # bind button on click callback
             self.root.bind("<Button-1>", lambda e: [button.on_click_callback(e) for button in buttons.values()], add="+")
             self.button_menu.set_interactive(True)
+            self.game_viewer.hud.clock.count_down_real_time(self, self.scorekeeper)
 
         self.intro_cards = IntroCards(self.frame, w, h, nuke)
 
@@ -111,10 +113,12 @@ class UI(object):
         self.data_parser.reset_game()
         self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
         self.humanoid = self.data_parser.get_random()
+        self.game_ended = False
 
         # reset buttons
         self.button_menu.set_interactive(True)
         self.button_menu.disable_buttons(self.scorekeeper.remaining_time, len(self.data_parser.unvisited), self.scorekeeper.at_capacity())
+        self.game_viewer.hud.clock.count_down_real_time(self, self.scorekeeper)
 
     def update_ui(self):
         self.game_viewer.update_else()
@@ -124,15 +128,11 @@ class UI(object):
         self.game_viewer.canvas.config(width=w, height=h)
 
     def get_next(self):
-        remaining = len(self.data_parser.unvisited)
+        self.remaining = len(self.data_parser.unvisited)
 
         # Ran out of humanoids? Disable skip/save/squish
-        if remaining == 0 or self.scorekeeper.remaining_time <= 0:
-            self.game_viewer.hud.meter.update_fill(0, None)
-           # self.game_viewer.delete_photo(None)
-            self.game_viewer.display_score(self.scorekeeper.get_score(), self.frame)
-            self.button_menu.disable_buttons(self.scorekeeper.remaining_time, remaining, self.scorekeeper.at_capacity())
-            self.game_viewer.hud.update_log.set_update("")
+        if self.remaining == 0 or self.scorekeeper.remaining_time <= 0:
+            self.end_game(self.remaining)
         else:
             humanoid = self.data_parser.get_random()
             # Update visual display
@@ -141,7 +141,17 @@ class UI(object):
             self.game_viewer.update(fp, self.humanoid)
 
         # Disable button(s) if options are no longer possible
-        self.button_menu.disable_buttons(self.scorekeeper.remaining_time, remaining, self.scorekeeper.at_capacity())
+        self.button_menu.disable_buttons(self.scorekeeper.remaining_time, self.remaining, self.scorekeeper.at_capacity())
 
     def set_cursor(self, cursor_type: str = "arrow"):
         self.root.config(cursor=cursor_type)
+
+    def end_game(self, remaining):
+        if not self.game_ended:
+            self.game_viewer.hud.meter.update_fill(0, None)
+            # self.game_viewer.delete_photo(None)
+            self.game_viewer.display_score(self.scorekeeper.get_score(), self.frame)
+            self.button_menu.disable_buttons(self.scorekeeper.remaining_time, remaining, self.scorekeeper.at_capacity())
+            self.game_viewer.hud.update_log.set_update("")
+            self.game_ended = True
+        
