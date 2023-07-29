@@ -1,5 +1,4 @@
 import tkinter as tk
-import asyncio
 
 from gameplay.scorekeeper import ScoreKeeper
 from ui_elements.game_viewer import GameViewer
