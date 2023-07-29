@@ -79,7 +79,7 @@ class UI(object):
             self.game_viewer.hud.meter.update_fill(0, None)
             # self.game_viewer.delete_photo(None)
             self.game_viewer.display_score(self.scorekeeper.get_score(), self.frame)
-            self.button_menu.disable_buttons(self.scorekeeper.remaining_time, remaining, self.scorekeeper.at_capacity())
+            self.game_viewer.hud.button_menu.disable_buttons(self.scorekeeper.remaining_time, remaining, self.scorekeeper.at_capacity())
             self.game_viewer.hud.update_log.set_update("")
             self.game_ended = True
         
