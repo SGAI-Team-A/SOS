@@ -2,8 +2,6 @@ import tkinter as tk
 import asyncio
 
 from gameplay.scorekeeper import ScoreKeeper
-from ui_elements.button import Button
-from ui_elements.button_menu import ButtonMenu
 from ui_elements.game_viewer import GameViewer
 from os.path import join
 from ui_elements.intro_cards import IntroCards
@@ -16,8 +14,7 @@ class UI(object):
         self.data_fp = data_fp
 
         #  Base window setup
-        w, h = 1280, 720
-        scale_factor = w / 1920  # original image size is 1920 by 1080
+        w, h = 1280, 720  # original image size is 1920 by 1080
         self.root = tk.Tk()
         self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
         self.root.geometry(str(w) + 'x' + str(h))
@@ -36,76 +33,7 @@ class UI(object):
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
         self.game_ended = False
 
-        # set up the buttons
-        def on_disabled():
-            self.game_viewer.hud.update_log.set_update("Not enough time left!"),
-
-        buttons = {
-            'skip': Button(
-                corners=[(1284, 675), (1550, 683), (1540, 832), (1280, 820) ],
-                on_click=lambda: [self.scorekeeper.skip(self.humanoid),
-                                  self.update_ui(),
-                                  self.get_next()],
-                on_disabled_click=on_disabled,
-                scale_factor=scale_factor
-            ),
-            'squish': Button(
-                corners=[(1280, 825), (1542, 840), (1540, 996), (1275, 972),],
-                on_click=lambda: [self.scorekeeper.squish(self.humanoid),
-                                  self.update_ui(),
-                                  self.get_next()],
-                on_disabled_click=on_disabled,
-                scale_factor=scale_factor
-            ),
-            'save': Button(
-                corners=[(1554, 682), (1850, 687), (1846, 852), (1550, 834)],
-                on_click=lambda: [self.scorekeeper.save(self.humanoid),
-                                  self.update_ui(),
-                                  self.get_next()],
-                on_disabled_click=on_disabled,
-                scale_factor=scale_factor
-            ),
-            'scram': Button(
-                corners=[(1550, 840), (1847, 856), (1845, 1022), (1548, 996)],
-                on_click=lambda: [self.scorekeeper.scram(),
-                                  self.update_ui(),
-                                  self.get_next()],
-                on_disabled_click=on_disabled,
-                scale_factor=scale_factor
-            ),
-        }
-
-        # on hover - change cursor to click arrow
-        def on_move_callback(e):
-            # buttons aren't showing
-            if not any([button.is_on_game_screen() for button in buttons.values()]):
-                return
-            # normal buttons
-            elif any([button.is_touching(e.x, e.y) and not button.is_disabled() for button in buttons.values()]):
-                self.set_cursor("hand2")
-            # buttons are disabled
-            elif any([button.is_touching(e.x, e.y) and button.is_disabled() for button in buttons.values()]):
-                self.set_cursor("X_cursor")
-            # not touching buttons
-            elif not any([button.is_touching(e.x, e.y) for button in buttons.values()]):
-                self.set_cursor("arrow")
-        self.root.bind("<Motion>", on_move_callback, add="+")
-
-        self.button_menu = ButtonMenu(buttons)
-        self.button_menu.set_interactive(False)
-
-        # nuke info card on click and make buttons interaction
-        def nuke(event=None):
-            self.root.unbind("<Button-1>")
-
-            # bind button on click callback
-            self.root.bind("<Button-1>", lambda e: [button.on_click_callback(e) for button in buttons.values()], add="+")
-            self.button_menu.set_interactive(True)
-            self.game_viewer.hud.clock.count_down_real_time(self, self.scorekeeper)
-
-        self.intro_cards = IntroCards(self.frame, w, h, nuke)
-
-        self.root.bind("<Button-1>", lambda e: self.intro_cards.show_next())
+        self.intro_cards = IntroCards(self.frame, w, h, self.game_viewer.hud.nuke)
 
         self.root.mainloop()
 
@@ -116,8 +44,8 @@ class UI(object):
         self.game_ended = False
 
         # reset buttons
-        self.button_menu.set_interactive(True)
-        self.button_menu.disable_buttons(self.scorekeeper.remaining_time, len(self.data_parser.unvisited), self.scorekeeper.at_capacity())
+        self.game_viewer.hud.button_menu.set_interactive(True)
+        self.game_viewer.hud.button_menu.disable_buttons(self.scorekeeper.remaining_time, len(self.data_parser.unvisited), self.scorekeeper.at_capacity())
         self.game_viewer.hud.clock.count_down_real_time(self, self.scorekeeper)
 
     def update_ui(self):
@@ -141,7 +69,7 @@ class UI(object):
             self.game_viewer.update(fp, self.humanoid)
 
         # Disable button(s) if options are no longer possible
-        self.button_menu.disable_buttons(self.scorekeeper.remaining_time, self.remaining, self.scorekeeper.at_capacity())
+        self.game_viewer.hud.button_menu.disable_buttons(self.scorekeeper.remaining_time, self.remaining, self.scorekeeper.at_capacity())
 
     def set_cursor(self, cursor_type: str = "arrow"):
         self.root.config(cursor=cursor_type)
