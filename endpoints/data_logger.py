@@ -13,7 +13,6 @@ class LoggerMode(Enum):
 class DataLogger(object):
     def __init__(self, observation_fields: list, res_fields: list, config: dict, mode=LoggerMode.RL.value, folder_name=None):
         assert mode in [m.value for m in LoggerMode]
-
         # Set up file structure
         if folder_name is None:
             now = datetime.now()
@@ -26,7 +25,7 @@ class DataLogger(object):
 
         results_file_name = "results.csv"
         results_filepath = os.path.join("logs", mode, folder_name, results_file_name)
-
+        
         self.actions_file = open(actions_filepath, 'w+', newline='')
         self.results_file = open(results_filepath, 'w+')
 
@@ -66,4 +65,3 @@ class DataLogger(object):
     def close(self):
         self.actions_file.close()
         self.results_file.close()
-

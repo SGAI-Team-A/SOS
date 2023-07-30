@@ -42,10 +42,10 @@ class Humanoid(object):
 
     def is_infected(self):
         if self.state == State.INJURED.value:
-            rand_num = random.randint(0, 9)
-            if rand_num == 0 or rand_num == 1:
+            rand_num = random.random()
+            if rand_num < 0.15:
                 self.state = State.INFECTED.value
-                print("infected")
+                # print("infected")
         return self.state == State.INFECTED.value
 
     def is_healthy(self):
@@ -69,7 +69,7 @@ class Humanoid(object):
             scorekeeper.set_update("You took in a doctor and got +1 cure (save the next injured).")
 
     def cure(self, scorekeeper):
-        print("cured!")
+        # print("cured!")
         self.state = State.HEALTHY.value
 
     def get_name(self):

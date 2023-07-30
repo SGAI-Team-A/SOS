@@ -17,7 +17,7 @@ class ActionCost(Enum):
     SQUISH = 5
     SKIP = 15
     SCRAM = 120
-
+    
 class Action(Enum):
     SAVE = "save"
     SQUISH = "squish"

@@ -78,7 +78,6 @@ class GameViewer(object):
 
         self.score_screen = ScoreScreen(self.canvas, score, self)
 
-
 def display_photo(img_path, w, h):
     img = Image.open(img_path)
     resized = img.resize((w, h), Image.LANCZOS)
