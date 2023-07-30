@@ -18,6 +18,12 @@ class ActionCost(Enum):
     SKIP = 15
     SCRAM = 120
 
+class Action(Enum):
+    SAVE = "save"
+    SQUISH = "squish"
+    SKIP = "skip"
+    SCRAM = "scram"
+
 class Age(Enum):
     YOUNG = "young"
     MIDDLE = "middle"

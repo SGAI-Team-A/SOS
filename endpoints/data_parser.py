@@ -51,8 +51,8 @@ class DataParser(object):
 
         # probabilities for each occupation when being randomly chosen
         occupation_probabilities = {
-            Occupation.DOCTOR.value: 0.0,
-            Occupation.ENGINEER.value: 0.0,
+            Occupation.DOCTOR.value: 0.1,
+            Occupation.ENGINEER.value: 0.1,
         }
         occupation_probabilities[Occupation.OTHER.value] = 1 - sum(occupation_probabilities.values())
 
