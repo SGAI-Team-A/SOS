@@ -42,10 +42,10 @@ class DataParser(object):
     def _init_humanoids_and_probabilities(self):
         # probabilities for each state when being randomly chosen
         states_probabilities = {
-            State.ZOMBIE.value: 0.35,
-            State.CORPSE.value: 0.0,
+            State.ZOMBIE.value: 0.3,
+            State.CORPSE.value: 0.1,
             State.HEALTHY.value: 0.25,
-            State.INJURED.value: 0.4
+            State.INJURED.value: 0.35
         }
         assert (sum(states_probabilities.values()) == 1)
 
