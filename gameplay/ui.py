@@ -1,115 +1,105 @@
-import math
 import tkinter as tk
-from ui_elements.button_menu import ButtonMenu
-from ui_elements.capacity_meter import CapacityMeter
-from ui_elements.clock import Clock
-from endpoints.machine_interface import MachineInterface
+from endpoints.data_logger import DataLogger
+from endpoints.data_parser import DataParser
+from gameplay.scorekeeper import ScoreKeeper
 from ui_elements.game_viewer import GameViewer
-from ui_elements.machine_menu import MachineMenu
 from os.path import join
-from ui_elements.update_log import UpdateLog
+from ui_elements.intro_cards import IntroCards
+
 
 class UI(object):
-    def __init__(self, data_parser, scorekeeper, data_fp, is_disable):
+    def __init__(self, data_parser: DataParser, scorekeeper: ScoreKeeper, data_fp, data_logger: DataLogger, is_disable, rounds = 0):
+        self.data_parser = data_parser
+        self.scorekeeper = scorekeeper
+        self.data_fp = data_fp
+        self.data_logger = data_logger
+        self.humanoid = data_parser.get_random()
+
+        # number of rounds played
+        self.rounds = rounds
+
         #  Base window setup
-        w, h = 1280, 800
+        w, h = 1280, 720  # original image size is 1920 by 1080
         self.root = tk.Tk()
         self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
         self.root.geometry(str(w) + 'x' + str(h))
         self.root.resizable(False, False)
-        # Creates a canvas for update log
-        self.canvas = tk.Canvas(width=700, height=100)
-        self.canvas.place(x=1200, y=40)
-        
-        self.humanoid = data_parser.get_random()
-        if not is_disable:
-            self.machine_interface = MachineInterface(self.root, w, h)
 
-        #  Add buttons and logo
-        user_buttons = [("Skip", lambda: [scorekeeper.skip(self.humanoid),
-                                          self.update_ui(scorekeeper),
-                                          self.get_next(
-                                              data_fp,
-                                              data_parser,
-                                              scorekeeper)]),
-                        ("Squish", lambda: [scorekeeper.squish(self.humanoid),
-                                            self.update_ui(scorekeeper),
-                                            self.get_next(
-                                                data_fp,
-                                                data_parser,
-                                                scorekeeper)]),
-                        ("Save", lambda: [scorekeeper.save(self.humanoid),
-                                          self.update_ui(scorekeeper),
-                                          self.get_next(
-                                              data_fp,
-                                              data_parser,
-                                              scorekeeper)]),
-                        ("Scram", lambda: [scorekeeper.scram(),
-                                           self.update_ui(scorekeeper),
-                                           self.get_next(
-                                               data_fp,
-                                               data_parser,
-                                               scorekeeper)])]
-        self.button_menu = ButtonMenu(self.root, user_buttons)
+        self.frame = tk.Frame(self.root, width=w, height=h)
+        self.frame.place(x=0, y=0)
 
         if not is_disable:
-            machine_buttons = [("Suggest", lambda: [self.machine_interface.suggest(self.humanoid)]),
-                               ("Act", lambda: [self.machine_interface.act(scorekeeper, self.humanoid),
-                                                self.update_ui(scorekeeper),
-                                                self.get_next(
-                                                    data_fp,
-                                                    data_parser,
-                                                    scorekeeper)])]
-            self.machine_menu = MachineMenu(self.root, machine_buttons)
+            # self.machine_interface = MachineInterface(self.frame, w, h)
+            pass
 
-        #  Display central photo
-        self.game_viewer = GameViewer(self.root, w, h, data_fp, self.humanoid)
+        #  Display the game
+        self.game_viewer = GameViewer(self, self.frame, w, h)
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
+        self.game_ended = False
+        self.real_time_enabled = True
 
-        # Display the countdown
-        init_h = max((math.floor(scorekeeper.remaining_time / 60.0)), 0)
-        init_m = max(scorekeeper.remaining_time % 60, 0)
-        self.clock = Clock(self.root, w, h, init_h, init_m)
-
-        # Display ambulance capacity
-        self.capacity_meter = CapacityMeter(self.root, w, h, data_parser.capacity)
+        self.intro_cards = IntroCards(self.frame, w, h, self.game_viewer.hud.nuke)
 
         self.root.mainloop()
 
-    def update_ui(self, scorekeeper):
-        self.update_clock(scorekeeper)
-        self.capacity_meter.update_fill(scorekeeper.get_current_capacity(), scorekeeper.get_last_saved())
-         # Creates texts onto the canvas
-        UpdateLog(scorekeeper.get_update(), self.canvas)
-        
-    def update_clock(self, scorekeeper):
-        h = (math.floor(scorekeeper.remaining_time / 60.0))
-        m = max(scorekeeper.remaining_time % 60, 0)
-        if h < 0:
-            h = 0
-            m = 0
-        self.clock.update_time(h, m)
+    def reset_game(self):
+        self.data_parser.reset_game()
+        self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
+        self.humanoid = self.data_parser.get_random()
+        self.game_ended = False
+
+        self.rounds += 1
+
+        # reset buttons
+        self.game_viewer.hud.button_menu.set_interactive(True)
+        self.game_viewer.hud.button_menu.disable_buttons(self.scorekeeper.remaining_time, len(self.data_parser.unvisited), self.scorekeeper.at_capacity())
+        if self.real_time_enabled:
+            self.game_viewer.hud.clock.count_down_real_time(self, self.scorekeeper)
+
+    def update_ui(self):
+        self.game_viewer.update_else()
 
     def on_resize(self, event):
         w, h = 0.6 * self.root.winfo_width(), 0.7 * self.root.winfo_height()
         self.game_viewer.canvas.config(width=w, height=h)
 
-    def get_next(self, data_fp, data_parser, scorekeeper):
-        remaining = len(data_parser.unvisited)
+    def get_next(self):
+        self.remaining = len(self.data_parser.unvisited)
 
         # Ran out of humanoids? Disable skip/save/squish
-        if remaining == 0 or scorekeeper.remaining_time <= 0:
-            self.capacity_meter.update_fill(0, None)
-            self.game_viewer.delete_photo(None)
-            self.game_viewer.display_score(scorekeeper.get_score())
-            self.machine_menu.disable_all_buttons()
-            self.button_menu.disable_buttons(scorekeeper.remaining_time, remaining, scorekeeper.at_capacity())
+        if self.remaining == 0 or self.scorekeeper.remaining_time <= 0:
+            self.end_game(self.remaining)
+        # get next humanoid
         else:
-            humanoid = data_parser.get_random()
+            humanoid = self.data_parser.get_random()
             # Update visual display
             self.humanoid = humanoid
-            fp = join(data_fp, self.humanoid.fp)
+            fp = join(self.data_fp, self.humanoid.fp)
             self.game_viewer.update(fp, self.humanoid)
 
         # Disable button(s) if options are no longer possible
-        self.button_menu.disable_buttons(scorekeeper.remaining_time, remaining, scorekeeper.at_capacity())
+        self.game_viewer.hud.button_menu.disable_buttons(self.scorekeeper.remaining_time, self.remaining, self.scorekeeper.at_capacity())
+
+    def set_cursor(self, cursor_type: str = "arrow"):
+        self.root.config(cursor=cursor_type)
+
+    def get_observation(self):
+        obs = self.humanoid.get_obs_dict()
+        obs['capacity'] = self.data_parser.capacity
+        obs['time'] = self.scorekeeper.remaining_time
+        obs['cures'] = self.scorekeeper.get_cures()
+
+        return obs
+
+    def end_game(self, remaining):
+      if not self.game_ended:
+          # log results
+          self.data_logger.log_results(self.rounds, self.scorekeeper.get_score())
+
+          # update ui
+          self.game_viewer.hud.meter.update_fill(0, None)
+          self.game_viewer.display_score(self.scorekeeper.get_score(), self.frame)
+          self.game_viewer.hud.button_menu.disable_buttons(self.scorekeeper.remaining_time, remaining, self.scorekeeper.at_capacity())
+          self.game_viewer.hud.update_log.set_update("")
+          self.game_ended = True
+        
