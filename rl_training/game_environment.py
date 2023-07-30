@@ -63,7 +63,7 @@ class GameEnv(gym.Env):
         if action == 0:
             self.scorekeeper.set_reward(self.scorekeeper.get_reward() - ActionCost.SAVE.value // 2)
             if self.humanoid.is_healthy() or self.humanoid.is_injured():
-                self.scorekeeper.set_reward(self.scorekeeper.get_reward() + 10)
+                self.scorekeeper.set_reward(self.scorekeeper.get_reward() + 12)
             self.scorekeeper.save(self.humanoid)
         # scram
         elif action == 1:
