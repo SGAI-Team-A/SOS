@@ -11,7 +11,7 @@ class DataParser(object):
     Parses the input data photos and assigns their file locations to a dictionary for later access
     """
 
-    def __init__(self, data_fp, num_data=50):
+    def __init__(self, data_fp, num_data=144):
         self.data_fp = data_fp
         self.num_data = num_data
 
@@ -42,10 +42,10 @@ class DataParser(object):
     def _init_humanoids_and_probabilities(self):
         # probabilities for each state when being randomly chosen
         states_probabilities = {
-            State.ZOMBIE.value: 0.25,
+            State.ZOMBIE.value: 0.3,
             State.CORPSE.value: 0.1,
             State.HEALTHY.value: 0.25,
-            State.INJURED.value: 0.4
+            State.INJURED.value: 0.35
         }
         assert (sum(states_probabilities.values()) == 1)
 
@@ -105,8 +105,10 @@ class DataParser(object):
 
     def get_random(self):
         if len(self.unvisited) == 0:
-            raise ValueError("No humanoids remain")
-        index = random.randint(0, (len(self.unvisited) - 1))  # Technically semirandom
-        humanoid = self.unvisited.pop(index)
-        self.visited.append(humanoid)
-        return humanoid
+            #raise ValueError("No humanoids remain")
+            print("No humanoids remain")
+        else :
+            index = random.randint(0, (len(self.unvisited) - 1))  # Technically semirandom
+            humanoid = self.unvisited.pop(index)
+            self.visited.append(humanoid)
+            return humanoid

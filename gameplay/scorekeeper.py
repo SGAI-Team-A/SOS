@@ -10,10 +10,16 @@ class ScoreKeeper(object):
         }
         self.__cures = 0
         self.__scorekeeper = {
-            "killed_h": 0,
+            "killed_h_squish": 0,
+            "killed_in_squish": 0,
+            "killed_zombie": 0,
+            "skipped_in": 0,
             "saved_h": 0,
+            "saved_in": 0,
             "killed_z": 0,
-            "saved_z": 0
+            "killed_c": 0,
+            "saved_z": 0,
+            "saved_c": 0
         }
         self.__capacity = capacity
         self.max_time = int(shift_len)
@@ -24,7 +30,7 @@ class ScoreKeeper(object):
 
         self.update = ""  # for human UI
         self.reward = 0  # for RL model
-
+        
     def save(self, humanoid):
         if self.get_current_capacity() >= self.__capacity:
             return
@@ -51,7 +57,7 @@ class ScoreKeeper(object):
                     self.update = "The infected person you saved killed " + str(self.__ambulance["injured"] + self.__ambulance["healthy"]) + " people. The van is empty now."
             
             # Immediately kill injured and healthy
-            self.increment_scorekeeper("killed_h", self.__ambulance["injured"] + self.__ambulance["healthy"])
+            self.increment_scorekeeper("killed_zombie", self.__ambulance["injured"] + self.__ambulance["healthy"])
             # Remove those killed and the zombie from the van
             self.last_picked = "zombie"
             self.empty_ambulance()
@@ -73,26 +79,33 @@ class ScoreKeeper(object):
 
     def squish(self, humanoid):
         self.remaining_time -= ActionCost.SQUISH.value
-        if humanoid.is_zombie() or humanoid.is_corpse():
+        if humanoid.is_zombie():
             self.increment_scorekeeper("killed_z", 1)
             self.update = ""
+        elif humanoid.is_corpse():
+            self.increment_scorekeeper("killed_c", 1)
+            self.update = ""
         else:
-            self.increment_scorekeeper("killed_h", 1)
+            if humanoid.is_injured():
+                self.increment_scorekeeper("killed_in_squish", 1)
+            else:
+                self.increment_scorekeeper("killed_h_squish", 1)
             self.update = "You killed a human!"
             
     def skip(self, humanoid):
         self.update = ""
         self.remaining_time -= ActionCost.SKIP.value
         if humanoid.is_injured():
-            self.increment_scorekeeper("killed_h", 1)
+            self.__scorekeeper["skipped_in"] += 1
 
     def scram(self):
         self.update = ""
         self.remaining_time -= ActionCost.SCRAM.value
 
         # Update score
-        self.increment_scorekeeper("saved_h", self.__ambulance["injured"] + self.__ambulance["healthy"])
-        self.increment_scorekeeper("saved_z", self.__ambulance["corpse"])
+        self.increment_scorekeeper("saved_h", self.__ambulance["healthy"])
+        self.increment_scorekeeper("saved_in", self.__ambulance["injured"])
+        self.increment_scorekeeper("saved_c", self.__ambulance["corpse"])
         self.empty_ambulance()
     
     def get_update(self):
@@ -103,6 +116,9 @@ class ScoreKeeper(object):
 
     def gain_cure(self):
         self.__cures += 1
+
+    def get_cures(self):
+        return self.__cures
 
     def get_current_capacity(self):
         return sum(self.__ambulance.values())
@@ -119,7 +135,7 @@ class ScoreKeeper(object):
     def get_score(self):
         self.scram()
         return self.__scorekeeper
-
+    
     def empty_ambulance(self):
         for category in self.__ambulance.keys():
             self.__ambulance[category] = 0
@@ -140,10 +156,19 @@ class ScoreKeeper(object):
     def increment_scorekeeper(self, key, amount):
         self.__scorekeeper[key] += amount
 
-        if key == "killed_h":
-            self.set_reward(-amount)
+        if key == "killed_h_squish":
+            self.set_reward(self.get_reward() - amount*10)
+        if key == "killed_zombie":
+            self.set_reward(self.get_reward() - amount*10)
         if key == "saved_h":
-            self.set_reward(amount)
-
+            self.set_reward(self.get_reward() + amount*10)
+        if key == "saved_in":
+            self.set_reward(self.get_reward() + amount*10)
+        if key == "saved_z":
+            self.set_reward(self.get_reward() - amount*10)
+        if key == "saved_c":
+            self.set_reward(self.get_reward() - amount*10)
+        
     def get_scorekeeper(self):
         return self.__scorekeeper
+    
