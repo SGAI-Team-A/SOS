@@ -1,11 +1,6 @@
 # SGAI_2023
 
-Dependencies:
-- PIL
-  - `pip3 install pillow`
-- TKinter
-  - `pip3 install tk`
-- Pytorch 
-  - `pip3 install pytorch`
-
-To run, type "python3 main.py" in the terminal.
+1. Install pipenv
+   - `pip3 install pipenv`
+2. Run the game
+   - `pipenv run python3 main.py`
