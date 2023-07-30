@@ -7,17 +7,19 @@ class ScoreScreen(object):
         self.bg.place(relx=0.5, rely=0.5, anchor="center")
 
         self.bg.create_text(200, 50, text="RESULTS", font=("Arial", 30), anchor="center")
-        self.bg.create_text(200, 100, text="Killed {} zombies".format(score["killed_z"]), font=("Arial", 15),
-                            anchor="center")
-        self.bg.create_text(200, 130, text="Killed {} humans".format(score["killed_h"]), font=("Arial", 15),
-                            anchor="center")
-        self.bg.create_text(200, 160, text="Saved {} zombies".format(score["saved_z"]), font=("Arial", 15),
-                            anchor="center")
-        self.bg.create_text(200, 190, text="Saved {} humans".format(score["saved_h"]), font=("Arial", 15),
-                            anchor="center")
+        self.bg.create_text(200, 100, text="Killed {}".format(score["killed_z"]) + " zombies",
+                            font=("Arial", 15), anchor="center")
+        self.bg.create_text(200, 130, text="Killed {}".format(score["killed_h_squish"] + score["killed_zombie"]) +
+                            " humans", font=("Arial", 15), anchor="center")
+        self.bg.create_text(200, 160, text="Saved {}".format(score["saved_z"]) + " zombies",
+                            font=("Arial", 15), anchor="center")
+        self.bg.create_text(200, 190, text="Saved {}".format(score["saved_h"] + score["saved_in"]) + " humans",
+                            font=("Arial", 15), anchor="center")
+        self.bg.create_text(200, 220, text="Skipped {}".format(score["skipped_in"]) + " injured humans",
+                            font=("Arial", 15), anchor="center")
 
-        playbutton = self.bg.create_rectangle(150, 220, 250, 250, fill="white", tags="playbutton")
-        playtext = self.bg.create_text(200, 235, text="Play Again", tags="playbutton")
+        playbutton = self.bg.create_rectangle(150, 250, 250, 280, fill="white", tags="playbutton")
+        playtext = self.bg.create_text(200, 265, text="Play Again", tags="playbutton")
 
         self.bg.tag_bind("playbutton", "<Button-1>", lambda e: game_viewer.restart_game())
         self.bg.tag_bind("playbutton", "<Enter>", lambda e: game_viewer.ui.set_cursor("hand2"))
