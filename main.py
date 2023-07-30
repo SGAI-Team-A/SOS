@@ -1,9 +1,7 @@
 import argparse
 import os
-
 from endpoints.data_logger import DataLogger, LoggerMode
 from endpoints.data_parser import DataParser
-from endpoints.machine_interface import MachineInterface
 from gameplay.scorekeeper import ScoreKeeper
 from gameplay.ui import UI
 
@@ -15,21 +13,8 @@ class Main(object):
         self.data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
         self.data_parser = DataParser(self.data_fp)
         self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
-
-        if not is_automode:  # Launch UI gameplay
-            self.data_logger = DataLogger(["state", "occupation", "age", "gender", "name", 'capacity', 'time', 'cures'], self.scorekeeper.get_score(), config={}, mode=LoggerMode.HUMAN.value)
-            self.ui = UI(self.data_parser, self.scorekeeper, self.data_fp, self.data_logger, is_disable)
-        else:  # Run in background until all humanoids are processed
-            simon = MachineInterface(None, None, None, is_automode)
-            while len(self.data_parser.unvisited) > 0:
-                if self.scorekeeper.remaining_time <= 0:
-                    break
-                else:
-                    humanoid = self.data_parser.get_random()
-                    simon.suggest(humanoid, self.scorekeeper.at_capacity())
-                    simon.act(self.scorekeeper, humanoid)
-            print(self.scorekeeper.get_score())
-
+        self.data_logger = DataLogger(["state", "occupation", "age", "gender", "name", 'capacity', 'time', 'cures'], self.scorekeeper.get_score(), config={}, mode=LoggerMode.HUMAN.value)
+        self.ui = UI(self.data_parser, self.scorekeeper, self.data_fp, self.data_logger, is_disable)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
