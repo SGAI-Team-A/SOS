@@ -17,7 +17,7 @@ class Main(object):
         self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
 
         if not is_automode:  # Launch UI gameplay
-            self.data_logger = DataLogger([], self.scorekeeper.get_score(), config={}, mode=LoggerMode.HUMAN.value)
+            self.data_logger = DataLogger(["state", "occupation", "age", "gender", "name", 'capacity', 'time', 'cures'], self.scorekeeper.get_score(), config={}, mode=LoggerMode.HUMAN.value)
             self.ui = UI(self.data_parser, self.scorekeeper, self.data_fp, self.data_logger, is_disable)
         else:  # Run in background until all humanoids are processed
             simon = MachineInterface(None, None, None, is_automode)

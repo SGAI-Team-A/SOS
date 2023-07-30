@@ -85,3 +85,11 @@ class UI(object):
 
     def set_cursor(self, cursor_type: str = "arrow"):
         self.root.config(cursor=cursor_type)
+
+    def get_observation(self):
+        obs = self.humanoid.get_obs_dict()
+        obs['capacity'] = self.data_parser.capacity
+        obs['time'] = self.scorekeeper.remaining_time
+        obs['cures'] = self.scorekeeper.get_cures()
+
+        return obs

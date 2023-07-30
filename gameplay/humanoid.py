@@ -86,3 +86,12 @@ class Humanoid(object):
     
     def get_gender(self):
         return self.gender
+
+    def get_obs_dict(self):
+        return {
+            "state": self.state,
+            "occupation": self.occupation,
+            "age": self.age,
+            "gender": self.gender,
+            "name": self.name
+        }
