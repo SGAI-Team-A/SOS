@@ -5,7 +5,7 @@ data/default_dataset/metadata.yaml
 data/test_dataset/metadata.yaml
 
 # ignore logs
-log/human/*_log/
+logs/human/*/
 logs/model/
 logs/rl/
 logs/manual_testing/
