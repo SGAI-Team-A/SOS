@@ -13,7 +13,7 @@ def get_random_name(name_path):
     random_name = random.choice(names_list)[0].strip()
     return random_name
 
-def generate_name(gender):
+def generate_name(gender, special_occupation: bool):
     easter_m = ["Alexander Wang", "Lucas Helms"]
     easter_f = ["Sabrina Yen-Ko", "Seonyoung Lee"]
     num = random.randint(0,100)
@@ -25,7 +25,7 @@ def generate_name(gender):
         fp = "masc_names.csv"
         easter_egg_name = random.choice(easter_m)
 
-    if num == 27:
+    if num == 27 and special_occupation:
         return easter_egg_name
 
     last_name_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'name_data', 'last_names.csv')
