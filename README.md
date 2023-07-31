@@ -1,5 +1,6 @@
 # SGAI_2023
 
+## Setup
 1. Install pipenv
    - `pip3 install pipenv`
 2. Install packages

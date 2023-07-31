@@ -5,7 +5,10 @@ data/default_dataset/metadata.yaml
 data/test_dataset/metadata.yaml
 
 # ignore logs
-logs/
+log/human/*_log/
+logs/model/
+logs/rl/
+logs/manual_testing/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
