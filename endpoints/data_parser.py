@@ -18,26 +18,36 @@ class DataParser(object):
         self._init_humanoids_and_probabilities()  # only needs to be called once
         self.reset_game()
 
-    def reset_game(self):
+    def reset_game(self, use_metadata=True):
         self.unvisited = []
         self.visited = []
-        self._build_yaml(self.data_fp, self.num_data)
-        i = 0
-        metadata_fp = os.path.join(self.data_fp, "metadata.yaml")
-        with open(metadata_fp, 'r') as file:
-            md = yaml.safe_load(file)
-            for h in md['humanoids']:
+
+        if use_metadata:
+            self._build_yaml(self.data_fp)
+            i = 0
+            metadata_fp = os.path.join(self.data_fp, "metadata.yaml")
+            with open(metadata_fp, 'r') as file:
+                md = yaml.safe_load(file)
+                for h in md['humanoids']:
+                    if i >= self.num_data:
+                        break
+                    filename = h["name"]
+                    pic_fp = os.path.join(self.data_fp, filename)
+                    if os.path.isfile(pic_fp) and pic_fp.endswith('.png'):
+                        self.unvisited.append(Humanoid(h["name"], h["state"], h["occupation"], h["age"], h["gender"]))
+                        i += 1
+                self.shift_length = md['shift_length']
+                self.capacity = md['capacity']
+        else:
+            data = self._get_data()
+            i = 0
+            self.capacity = data['capacity']
+            self.shift_length = data['shift_length']
+            for h in data['humanoids']:
                 if i >= self.num_data:
                     break
-                filename = h["name"]
-                pic_fp = os.path.join(self.data_fp, filename)
-                if os.path.isfile(pic_fp) and pic_fp.endswith('.png'):
-                    self.unvisited.append(Humanoid(h["name"], h["state"], h["occupation"], h["age"], h["gender"]))
-                    i += 1
-            self.shift_length = md['shift_length']
-            self.capacity = md['capacity']
-
-        # print(len([x for x in self.unvisited if x.occupation == "other"]) / len(self.unvisited)) # double check probabilities
+                self.unvisited.append(Humanoid(h["name"], h["state"], h["occupation"]))
+                i += 1
 
     def _init_humanoids_and_probabilities(self):
         # probabilities for each state when being randomly chosen
@@ -100,7 +110,7 @@ class DataParser(object):
                             occupation_str] * (1 / num_imgs)
                         self.probability_list += [probability] * num_imgs
 
-    def _build_yaml(self, data_fp, max_num_data=50):
+    def _get_data(self):
         shift_length = 720
         capacity = 10
 
@@ -108,14 +118,19 @@ class DataParser(object):
         # sample with replacement to get correct probabilities
         humanoid_list_filtered = np.random.choice(
             self.humanoid_list,
-            size=max_num_data,
+            size=self.num_data,
             replace=True,
             p=self.probability_list
         )
-        assert (len(humanoid_list_filtered) == max_num_data)
+        assert (len(humanoid_list_filtered) == self.num_data)
 
-        # make full dictionary and export into the yaml file
+        # return full dictionary
         md_dict = {'shift_length': shift_length, 'capacity': capacity, 'humanoids': humanoid_list_filtered.tolist()}
+        return md_dict
+
+    def _build_yaml(self, data_fp):
+        # make full dictionary and export into the yaml file
+        md_dict = self._get_data()
         with open(os.path.join(data_fp, "metadata.yaml"), 'w') as f_:
             yaml.dump(md_dict, f_)
 

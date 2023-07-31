@@ -144,7 +144,7 @@ class GameEnv(gym.Env):
         self.illegal_moves = 0
 
         # select new random set of images
-        self.data_parser.reset_game()
+        self.data_parser.reset_game(use_metadata=False)
 
         # reset scorekeeper
         self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
