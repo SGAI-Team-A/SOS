@@ -72,7 +72,7 @@ class DataParser(object):
                         for img_file_path in os.listdir(os.path.join(self.data_fp, path_, occupation_path)):
                             if img_file_path.endswith('.png'):
                                 img_file_name = img_file_path[:-4]  # remove .png
-                                state, gender, occupation, age, _ = img_file_name.split("_")
+                                state, occupation, age, _ = img_file_name.split("_")
 
                                 gender_to_full = {
                                     'w': "woman",
