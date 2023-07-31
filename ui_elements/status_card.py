@@ -17,11 +17,16 @@ class StatusCard(object):
         for label in self.labels:
             label.destroy()
 
+        if humanoid.get_name() in ["Alexander Wang", "Sabrina Yen-Ko", "Lucas Helms", "Seonyoung Lee"]:
+            occupation = "Game Developer"
+        else:
+            occupation = humanoid.get_occupation()
+
         self.labels = [
             tk.Label(self.stat_card, text="{}".format(humanoid.get_name()), font=("Arial", 20)),
             tk.Label(self.stat_card, text="~~ {} ~~".format(humanoid.get_state().capitalize()), font=("Arial", 15)),
             tk.Label(self.stat_card, text="Age: {}".format(humanoid.get_age()), font=("Arial", 15)),
-            tk.Label(self.stat_card, text="Occupation: {}".format(humanoid.get_occupation().capitalize()), font=("Arial", 15))
+            tk.Label(self.stat_card, text="Occupation: {}".format(occupation.capitalize()), font=("Arial", 15))
         ]
         for label in self.labels:
             label.pack(anchor=tk.N, padx=10)
