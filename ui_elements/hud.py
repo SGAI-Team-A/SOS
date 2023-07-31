@@ -34,7 +34,7 @@ class HUD(object):
 
         # set up the buttons
         def on_disabled():
-            self.update_log.set_update("Not enough time left!"),
+            self.update_log.set_update("Action is disabled!"),
 
         self.buttons = {
             'skip': Button(
