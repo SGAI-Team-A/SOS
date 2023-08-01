@@ -66,6 +66,9 @@ class UI(object):
     def get_next(self):
         self.remaining = len(self.data_parser.unvisited)
 
+        # Disable button(s) if options are no longer possible
+        self.game_viewer.hud.button_menu.disable_buttons(self.scorekeeper.remaining_time, self.remaining, self.scorekeeper.at_capacity())
+
         # Ran out of humanoids? Disable skip/save/squish
         if self.remaining == 0 or self.scorekeeper.remaining_time <= 0:
             self.end_game(self.remaining)
@@ -77,8 +80,6 @@ class UI(object):
             fp = join(self.data_fp, self.humanoid.fp)
             self.game_viewer.update(fp, self.humanoid)
 
-        # Disable button(s) if options are no longer possible
-        self.game_viewer.hud.button_menu.disable_buttons(self.scorekeeper.remaining_time, self.remaining, self.scorekeeper.at_capacity())
 
     def set_cursor(self, cursor_type: str = "arrow"):
         self.root.config(cursor=cursor_type)
