@@ -12,9 +12,16 @@ class IntroCards(object):
 
         self.destroy_callback = destroy_callback
 
+        image_names = [
+            'title_card.png',
+            'instructions.png',
+            'instructions2.png',
+            'instructions3.png',
+            'info-card.png',
+        ]
+
         self.image_paths = [
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), 'graphics', 'info-card.png'),
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), 'graphics', 'info-card-2.png')
+            os.path.join(os.path.dirname(os.path.abspath(__file__)), 'graphics', name) for name in image_names
         ]
         self.ui = ui
         self.current_id = 0
