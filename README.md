@@ -14,4 +14,6 @@
 ## Instructions for Testing
 Please fill out your name and the number of times you've played our game before in [setup.py](setup.py).
 
+When you've finished testing, please send us the files in the folder [logs/human/](logs/human).
+
 Thank you!
