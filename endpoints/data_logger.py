@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 import os
 from enum import Enum
+from setup import ROUNDS_PLAYED_BEFORE, CONFIG
 
 class LoggerMode(Enum):
     RL = "rl"
@@ -13,6 +14,8 @@ class LoggerMode(Enum):
 class DataLogger(object):
     def __init__(self, observation_fields: list, res_fields: list, config: dict, mode=LoggerMode.RL.value, folder_name=None):
         assert mode in [m.value for m in LoggerMode]
+        self.mode = mode
+
         # Set up file structure
         if folder_name is None:
             now = datetime.now()
@@ -42,19 +45,27 @@ class DataLogger(object):
         self.results_writer.writeheader()
 
         # set up config
-        config_filepath = os.path.join("logs", mode, folder_name, "config.json")
-        config_file = open(config_filepath, 'w+')
-        self.write_setup_file(config, config_file)
-        config_file.close()
+        self._config_filepath = os.path.join("logs", mode, folder_name, "config.json")
+        if config is not None:
+            self.write_setup_file(config)
 
-    def write_setup_file(self, config, config_file):
+    def write_setup_file(self, config):
+        if self.mode == LoggerMode.HUMAN.value:
+            config.update(CONFIG)
+
+        config_file = open(self._config_filepath, 'w+')
         json_object = json.dumps(config, indent=4)
         config_file.write(json_object)
+        config_file.close()
 
-    def log_action(self, iteration:int, action_str:str, observation: dict):
+    def log_action(self, iteration: int, action_str: str, observation: dict):
         row_dict = observation
         row_dict['action'] = action_str
         row_dict['iteration'] = iteration
+
+        if self.mode == LoggerMode.HUMAN.value:
+            row_dict['iteration'] = iteration + ROUNDS_PLAYED_BEFORE
+
         self.actions_writer.writerow(row_dict)
 
     def log_results(self, iteration: int, results: dict):

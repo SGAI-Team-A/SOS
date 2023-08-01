@@ -13,7 +13,12 @@ class Main(object):
         self.data_fp = os.getenv("SGAI_DATA", default=os.path.join('data', 'test_dataset'))
         self.data_parser = DataParser(self.data_fp)
         self.scorekeeper = ScoreKeeper(self.data_parser.shift_length, self.data_parser.capacity)
-        self.data_logger = DataLogger(["state", "occupation", "age", "gender", "name", 'capacity', 'time', 'cures'], self.scorekeeper.get_score(), config={}, mode=LoggerMode.HUMAN.value)
+        self.data_logger = DataLogger(
+            ["state", "occupation", "age", "gender", "name", 'capacity', 'time', 'cures'],
+            self.scorekeeper.get_score(),
+            config={},
+            mode=LoggerMode.HUMAN.value
+        )
         self.ui = UI(self.data_parser, self.scorekeeper, self.data_fp, self.data_logger, is_disable)
 
 if __name__ == "__main__":
