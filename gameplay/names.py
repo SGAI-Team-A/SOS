@@ -25,7 +25,7 @@ def generate_name(gender, special_occupation: bool):
         fp = "masc_names.csv"
         easter_egg_name = random.choice(easter_m)
 
-    if num == 27 and special_occupation:
+    if num == 27 and not special_occupation:
         return easter_egg_name
 
     last_name_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'name_data', 'last_names.csv')

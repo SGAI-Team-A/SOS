@@ -21,7 +21,7 @@ class UI(object):
         #  Base window setup
         w, h = 1280, 720  # original image size is 1920 by 1080
         self.root = tk.Tk()
-        self.root.title("Beaverworks SGAI 2023 - Dead or Alive")
+        self.root.title("Beaverworks SGAI 2023 - S.O.S: SALVATION OF SURVIVORS")
         self.root.geometry(str(w) + 'x' + str(h))
         self.root.resizable(False, False)
 
