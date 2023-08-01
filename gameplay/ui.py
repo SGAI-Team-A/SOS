@@ -38,7 +38,8 @@ class UI(object):
         self.game_ended = False
         self.real_time_enabled = False
 
-        self.intro_cards = IntroCards(self.frame, w, h, self.game_viewer.hud.nuke, self)
+        self.intro_cards = IntroCards(self.frame, w, h, self.game_viewer.hud.nuke)
+        self.root.bind("<Button-1>", lambda e: self.intro_cards.show_next())
 
         self.root.mainloop()
 

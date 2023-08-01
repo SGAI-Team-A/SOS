@@ -65,35 +65,34 @@ class DataParser(object):
                 # iterate through each of the different occupations
                 for occupation_path in os.listdir(os.path.join(self.data_fp, path_)):
                     if os.path.isdir(os.path.join(self.data_fp, path_, occupation_path)):
-                        state_str = path_
-                        occupation_str = occupation_path
-
                         num_imgs = 0  # number of images in the current folder
-                        for img_file_path in os.listdir(os.path.join(self.data_fp, path_, occupation_path)):
-                            if img_file_path.endswith('.png'):
-                                img_file_name = img_file_path[:-4]  # remove .png
-                                state, gender, occupation, age, _ = img_file_name.split("_")
 
-                                gender_to_full = {
-                                    'w': "woman",
-                                    'm': "man"
-                                }
+                        # iterate through each of the different ages
+                        for age_path in os.listdir(os.path.join(self.data_fp, path_, occupation_path)):
+                            if os.path.isdir(os.path.join(self.data_fp, path_, occupation_path, age_path)):
+                                state_str = path_
+                                occupation_str = occupation_path
+                                age_str = age_path
 
-                                age_to_full = {
-                                    'y': "young",
-                                    'm': "middle",
-                                    'o': "old"
-                                }
+                                for img_file_path in os.listdir(os.path.join(self.data_fp, path_, occupation_path, age_path)):
+                                    if img_file_path.endswith('.png'):
+                                        img_file_name = img_file_path[:-4]  # remove .png
+                                        state, gender, occupation, age, _ = img_file_name.split("_")
 
-                                num_imgs += 1
-                                pic_dict = {
-                                    'name': os.path.join(path_, occupation_path, img_file_path),
-                                    'state': state_str,
-                                    'occupation': occupation_str,
-                                    'gender': gender_to_full[gender],
-                                    'age': age_to_full[age]
-                                }
-                                self.humanoid_list.append(pic_dict)
+                                        gender_to_full = {
+                                            'w': "woman",
+                                            'm': "man"
+                                        }
+
+                                        num_imgs += 1
+                                        pic_dict = {
+                                            'name': os.path.join(path_, occupation_path, age_path, img_file_path),
+                                            'state': state_str,
+                                            'occupation': occupation_str,
+                                            'gender': gender_to_full[gender],
+                                            'age': age_str
+                                        }
+                                        self.humanoid_list.append(pic_dict)
 
                         # calculate probability of this image being drawn
                         probability = states_probabilities[state_str] * occupation_probabilities[

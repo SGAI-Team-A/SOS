@@ -99,7 +99,6 @@ class HUD(object):
         self.button_menu = ButtonMenu(self.buttons)
         self.button_menu.set_interactive(False)
 
-        self.ui.root.bind("<Button-1>", lambda e: self.ui.intro_cards.show_next())
 
         self.update_log = UpdateLog(self.canvas)
 
