@@ -7,7 +7,9 @@ from ui_elements.score_screen import ScoreScreen
 
 
 class GameViewer(object):
-
+    """"
+    Graphics curtesy of Lucas
+    """
     def __init__(self, ui, root, w, h):
         self.ui = ui
         self.width = w
@@ -16,7 +18,7 @@ class GameViewer(object):
 
         self.scale_factor = 1
         self.canvas = tk.Canvas(root, width=self.width, height=self.height)
-        self.canvas.place(x=0, y=0)
+        self.canvas.place(x=0,y=0)
         self.canvas.update()
 
         self.photo = None
