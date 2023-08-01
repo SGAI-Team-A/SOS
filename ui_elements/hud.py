@@ -94,11 +94,17 @@ class HUD(object):
             elif not any([button.is_touching(e.x, e.y) for button in self.buttons.values()]):
                 self.ui.set_cursor("arrow")
 
-        self.ui.root.bind("<Motion>", on_move_callback, add="+")
+        self.ui.root.bind("<Motion>", on_move_callback)
 
         self.button_menu = ButtonMenu(self.buttons)
         self.button_menu.set_interactive(False)
 
+        # bind button on click callback
+        if self.ui.rounds > 0:
+            self.ui.root.unbind("<Button-1>")  # unbind old buttons
+            self.ui.root.bind("<Button-1>", lambda e: [button.on_click_callback(e) for button in self.buttons.values()],
+                          add="+")
+            self.button_menu.set_interactive(True)
 
         self.update_log = UpdateLog(self.canvas)
 
