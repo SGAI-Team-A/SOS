@@ -43,7 +43,7 @@ class Humanoid(object):
     def is_infected(self):
         if self.state == State.INJURED.value:
             rand_num = random.random()
-            if rand_num < 0.15:
+            if rand_num < 0.2:
                 self.state = State.INFECTED.value
                 # print("infected")
         return self.state == State.INFECTED.value
