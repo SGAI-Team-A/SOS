@@ -9,9 +9,9 @@ class ScoreScreen(object):
         self.bg.create_text(200, 50, text="RESULTS", font=("Arial", 30), anchor="center")
         self.bg.create_text(200, 100, text="Killed {}".format(score["killed_z"]) + " zombies",
                             font=("Arial", 15), anchor="center")
-        self.bg.create_text(200, 130, text="Killed {}".format(score["killed_h_squish"] + score["killed_zombie"]) +
-                            " humans", font=("Arial", 15), anchor="center")
-        self.bg.create_text(200, 160, text="Saved {}".format(score["saved_z"]) + " zombies",
+        self.bg.create_text(200, 130, text="Killed {} humans".format(score["killed_zombie"]), font=("Arial", 15), anchor="center")
+        self.bg.create_text(200, 130, text="Squished {} humans".format(score["killed_in_squish"] + score["killed_h_squish"]), font=("Arial", 15), anchor="center")
+        self.bg.create_text(200, 160, text="Saved {} zombies".format(score["saved_z"]),
                             font=("Arial", 15), anchor="center")
         self.bg.create_text(200, 190, text="Saved {}".format(score["saved_h"] + score["saved_in"]) + " humans",
                             font=("Arial", 15), anchor="center")
