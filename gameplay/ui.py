@@ -36,9 +36,9 @@ class UI(object):
         self.game_viewer = GameViewer(self, self.frame, w, h)
         self.root.bind("<Delete>", self.game_viewer.delete_photo)
         self.game_ended = False
-        self.real_time_enabled = True
+        self.real_time_enabled = False
 
-        self.intro_cards = IntroCards(self.frame, w, h, self.game_viewer.hud.nuke)
+        self.intro_cards = IntroCards(self.frame, w, h, self.game_viewer.hud.nuke, self)
 
         self.root.mainloop()
 
@@ -90,6 +90,9 @@ class UI(object):
         obs['cures'] = self.scorekeeper.get_cures()
 
         return obs
+    
+    def set_real_time(self, time):
+        self.real_time_enabled = time
 
     def end_game(self, remaining):
       if not self.game_ended:
