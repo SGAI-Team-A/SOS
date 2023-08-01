@@ -20,7 +20,7 @@ class IntroCards(object):
         self.current_id = 0
         self.path = self.image_paths[self.current_id]
         self.build()
-        #self.root_.bind("<Button-1>", lambda e: self.show_next())
+        self.root_.bind("<Button-1>", lambda e: self.show_next())
         
     def build(self):
         self.info_card = ImageTk.PhotoImage(Image.open(self.path).resize((self.width, self.height), Image.LANCZOS))
@@ -29,11 +29,14 @@ class IntroCards(object):
     def show_next(self):
         self.current_id += 1
         if self.current_id == len(self.image_paths)-1:
-                self.var = tk.IntVar()
-                self.c1 = tk.Checkbutton(self.ui.root, text='real time',variable=self.var, onvalue=1, offvalue=0, command=self.selection)
-                self.c1.pack()
+            self.var = tk.IntVar()
+            self.c1 = tk.Checkbutton(self.ui.root, text='real time', variable=self.var, onvalue=1, offvalue=0, command=self.selection)
+            self.c1.pack()
+
         if self.current_id >= len(self.image_paths):
+            self.root_.unbind("<Button-1>")
             self.root_.destroy()
+            self.c1.destroy()
             self.destroy_callback()
         else:
             self.path = self.image_paths[self.current_id]
@@ -44,5 +47,3 @@ class IntroCards(object):
             self.ui.set_real_time(True)
         else:
             self.ui.set_real_time(False)
-        print(self.ui.real_time_enabled)
-

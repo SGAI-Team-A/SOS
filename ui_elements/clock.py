@@ -15,7 +15,7 @@ class Clock(object):
         self.clock_font = RenderFont(filename=font_path, fill="green")
 
         self.update_time(scorekeeper)
-        print("clock")
+
     def update_time(self, scorekeeper):
         h = (math.floor(scorekeeper.remaining_time / 60.0))
         m = max(scorekeeper.remaining_time % 60, 0)

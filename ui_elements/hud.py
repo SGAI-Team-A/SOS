@@ -124,7 +124,6 @@ class HUD(object):
         self.ui.root.bind("<Button-1>", lambda e: [button.on_click_callback(e) for button in self.buttons.values()],
                           add="+")
         self.button_menu.set_interactive(True)
-        print("nuke")
         if self.ui.real_time_enabled:
             self.clock.count_down_real_time(self.ui, self.ui.scorekeeper)
 
