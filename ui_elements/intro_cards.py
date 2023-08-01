@@ -39,7 +39,7 @@ class IntroCards(object):
             self.var = tk.IntVar()
             self.c1 = tk.Checkbutton(self.ui.root, text='real time', variable=self.var, onvalue=1, offvalue=0, command=self.selection)
             self.c1.pack()
-            self.c1.place(x=1180, y=90)
+            self.c1.place(x=1180, y=95)
             
         if self.current_id >= len(self.image_paths):
             self.root_.unbind("<Button-1>")
