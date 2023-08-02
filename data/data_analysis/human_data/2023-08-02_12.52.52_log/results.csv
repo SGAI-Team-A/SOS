@@ -1,0 +1,5 @@
+iteration,killed_h_squish,killed_in_squish,killed_zombie,skipped_in,saved_h,saved_in,killed_z,killed_c,saved_z,saved_c
+0,0,0,2,1,7,2,7,5,2,0
+1,0,0,0,3,8,4,11,4,0,0
+2,0,0,0,5,13,1,6,3,0,0
+3,0,0,0,2,11,7,11,5,0,0
