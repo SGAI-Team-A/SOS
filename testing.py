@@ -1,6 +1,6 @@
 import os
 from endpoints.data_parser import DataParser
-from endpoints.data_logger import DataLogger
+from endpoints.data_logger import DataLogger, LoggerMode
 from rl_training.game_environment import GameEnv
 from tqdm import tqdm
 
@@ -11,54 +11,57 @@ data_parser = DataParser(data_fp)
 
 INJURED_BOUND = 2
 SCRAM_BOUND = 8
-FOLDER_NAME = "15_occupation_bound_ib{}_sb{}".format(INJURED_BOUND, SCRAM_BOUND)
+DOCTOR_BOUND = 7
+ENGINEER_BOUND = 8
+FOLDER_NAME = "20_occupation_bound_ib{}_sb{}_db{}_eb{}".format(INJURED_BOUND, SCRAM_BOUND, DOCTOR_BOUND, ENGINEER_BOUND)
 
-os.mkdir(os.path.join("logs", "manual_testing", FOLDER_NAME))
+# os.mkdir(os.path.join("logs", "manual_testing", FOLDER_NAME))
 
 env = GameEnv(data_parser)
 
-for doctor_bound in range(0, 11):
-    for engineer_bound in range(0, 11):
-        env.reset()
+# for doctor_bound in range(0, 11):
+#     for engineer_bound in range(0, 11):
+env.reset()
 
-        config = {
-            'n_episodes': 100,
-            'doctor_bound': doctor_bound,
-            'engineer_bound': engineer_bound
-        }
+config = {
+    'n_episodes': 10000,
+    'doctor_bound': DOCTOR_BOUND,
+    'engineer_bound': ENGINEER_BOUND
+}
 
-        data_logger = DataLogger(
-            mode="manual_testing",
-            observation_fields=env.get_observation_fields(),
-            res_fields=env.get_results_fields(),
-            config=config,
-            folder_name=os.path.join(FOLDER_NAME, "db{}_eb{}".format(config['doctor_bound'], config['engineer_bound']))
-        )
+data_logger = DataLogger(
+    mode=LoggerMode.MANUAL_AGENT.value,
+    observation_fields=env.get_observation_fields(),
+    res_fields=env.get_results_fields(),
+    config=config,
+    folder_name=FOLDER_NAME
+    # folder_name=os.path.join(FOLDER_NAME, "db{}_eb{}".format(config['doctor_bound'], config['engineer_bound']))
+)
 
-        n_episodes = config['n_episodes']
+n_episodes = config['n_episodes']
 
-        agent = ManualAgent(
-            env=env,
-            doctor_bound=config['doctor_bound'],
-            engineer_bound=config['engineer_bound'],
-            injured_bound=INJURED_BOUND,
-            scram_bound=SCRAM_BOUND
-        )
+agent = ManualAgent(
+    env=env,
+    doctor_bound=config['doctor_bound'],
+    engineer_bound=config['engineer_bound'],
+    injured_bound=INJURED_BOUND,
+    scram_bound=SCRAM_BOUND
+)
 
-        for episode in tqdm(range(n_episodes)):
-            obs, info = env.reset()
-            done = False
-            # play one episode
-            while not done:
-                action = agent.get_action(obs)
-                data_logger.log_action(episode, env.action_number_to_str[action], env.get_human_readable_observation())
-                next_obs, reward, terminated, truncated, info = env.step(action)
+for episode in tqdm(range(n_episodes)):
+    obs, info = env.reset()
+    done = False
+    # play one episode
+    while not done:
+        action = agent.get_action(obs)
+        data_logger.log_action(episode, env.action_number_to_str[action], env.get_human_readable_observation())
+        next_obs, reward, terminated, truncated, info = env.step(action)
 
-                # update if the environment is done and the current obs
-                done = terminated or truncated
-                if done:
-                    data_logger.log_results(episode, env.get_results())
-                obs = next_obs
-            # print(env.scorekeeper.get_scorekeeper())
-        data_logger.close()
+        # update if the environment is done and the current obs
+        done = terminated or truncated
+        if done:
+            data_logger.log_results(episode, env.get_results())
+        obs = next_obs
+    # print(env.scorekeeper.get_scorekeeper())
+data_logger.close()
 env.close()

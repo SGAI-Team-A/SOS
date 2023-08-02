@@ -17,10 +17,10 @@ env = FlattenObservation(GameEnv(data_parser))
 observation, info = env.reset()
 
 learning_rate = 0.01
-n_episodes = 1000000
-start_epsilon = 1.0
-epsilon_decay = start_epsilon / (n_episodes / 2)  # reduce the exploration over time
-final_epsilon = 0.1
+n_episodes = 100000
+start_epsilon = 0.0
+epsilon_decay = 0 # start_epsilon / (2*n_episodes / 3)  # reduce the exploration over time
+final_epsilon = 0.00
 
 data_logger = DataLogger(
     observation_fields=env.unwrapped.get_observation_fields(),
@@ -48,8 +48,10 @@ agent = GameAgent(
 q_value = agent.get_q()
 #loads the saved file with q-values *have to manually put in file name*
 try:
-    with open(os.path.join("logs", "model", "2023-07-25_16.07.34_q-table_100000"), "rb") as f:
+    with open(os.path.join("logs", "model", "2023-08-01_07.11.29_q-table_10000000"), "rb") as f:
+        # pass
         q_value = pickle.load(f)
+        agent.q_values = q_value
 except:
     print("wrong name or not existing file")
 else:
@@ -65,7 +67,7 @@ for episode in tqdm(range(n_episodes)):
         next_obs, reward, terminated, truncated, info = env.step(action)
 
         # update the agent
-        agent.update(obs, action, reward, terminated, next_obs)
+        # agent.update(obs, action, reward, terminated, next_obs)
 
         # update if the environment is done and the current obs
         done = terminated or truncated
