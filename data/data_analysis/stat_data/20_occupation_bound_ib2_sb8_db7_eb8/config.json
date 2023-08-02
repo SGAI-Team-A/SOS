@@ -1,0 +1,5 @@
+{
+    "n_episodes": 100000,
+    "doctor_bound": 7,
+    "engineer_bound": 8
+}

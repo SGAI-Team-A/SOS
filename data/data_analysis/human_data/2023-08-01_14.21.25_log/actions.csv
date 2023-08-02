@@ -1,0 +1,25 @@
+iteration,state,occupation,age,gender,name,capacity,time,cures,action
+0,zombie,doctor,40,man,Chuck Parsons,10,709,0,save
+0,zombie,other,20,woman,Jayla Hammond,10,671,0,squish
+0,healthy,other,46,man,Stephan Pollard,10,662,0,save
+0,injured,other,14,man,Marc Roach,10,628,0,save
+0,zombie,other,8,woman,Mila Lang,10,593,0,squish
+0,injured,other,11,woman,Hadley Phan,10,577,0,squish
+0,corpse,other,39,man,Kai Taylor,10,568,0,squish
+0,healthy,engineer,42,man,Branden Valencia,10,558,0,save
+0,zombie,other,15,man,Horace Meza,10,582,0,squish
+0,healthy,other,72,man,Cyrus Schneider,10,574,0,save
+0,corpse,other,51,woman,Florence Quinn,10,539,0,squish
+0,injured,doctor,57,woman,Maria Tyler,10,531,0,save
+0,healthy,other,17,man,Byron Barnett,10,498,1,save
+0,corpse,other,8,woman,Francine Alvarez,10,465,1,squish
+0,healthy,doctor,45,man,Rogelio Horne,10,457,1,save
+0,healthy,other,11,man,Drake Mckee,10,424,2,save
+0,injured,other,8,man,Erik Johnston,10,390,2,scram
+0,injured,other,45,man,Leonard Rios,10,265,0,save
+0,corpse,engineer,65,woman,Ruth Williams,10,231,0,save
+0,corpse,other,22,man,Galen Lim,10,194,0,squish
+0,zombie,engineer,51,man,Oscar Cardenas,10,186,0,squish
+0,healthy,other,56,man,Miguel French,10,178,0,save
+0,healthy,doctor,57,woman,Colette Larsen,10,141,0,scram
+0,healthy,other,9,man,Finnegan Love,10,13,0,scram
