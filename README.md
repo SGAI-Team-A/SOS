@@ -17,3 +17,5 @@ Please fill out your name and the number of times you've played our game before 
 When you've finished testing, please send us the files in the folder [logs/human/](logs/human).
 
 Thank you!
+
+Developed by Sabria Yen-Ko, Lucas Helms, Alexander Wang, and Seonyoung Lee
