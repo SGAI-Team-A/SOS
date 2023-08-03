@@ -9,13 +9,12 @@ class ScoreScreen(object):
         self.bg.create_text(200, 50, text="RESULTS", font=("Arial", 30), anchor="center")
         self.bg.create_text(200, 100, text="Killed {}".format(score["killed_z"]) + " zombies",
                             font=("Arial", 15), anchor="center")
-        self.bg.create_text(200, 130, text="Killed {} humans".format(score["killed_zombie"]), font=("Arial", 15), anchor="center")
-        self.bg.create_text(200, 130, text="Squished {} humans".format(score["killed_in_squish"] + score["killed_h_squish"]), font=("Arial", 15), anchor="center")
+        self.bg.create_text(200, 130, text="Killed {} humans".format(score["killed_zombie"] + score["killed_in_squish"] + score["killed_h_squish"]), font=("Arial", 15), anchor="center")
         self.bg.create_text(200, 160, text="Saved {} zombies".format(score["saved_z"]),
                             font=("Arial", 15), anchor="center")
-        self.bg.create_text(200, 190, text="Saved {}".format(score["saved_h"] + score["saved_in"]) + " humans",
+        self.bg.create_text(200, 190, text="Saved {} humans".format(score["saved_h"] + score["saved_in"]),
                             font=("Arial", 15), anchor="center")
-        self.bg.create_text(200, 220, text="Skipped {}".format(score["skipped_in"]) + " injured humans",
+        self.bg.create_text(200, 220, text="Skipped {} injured humans".format(score["skipped_in"]),
                             font=("Arial", 15), anchor="center")
 
         playbutton = self.bg.create_rectangle(150, 250, 250, 280, fill="white", tags="playbutton")
