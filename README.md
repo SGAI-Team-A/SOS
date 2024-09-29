@@ -1,5 +1,7 @@
 # SGAI_2023: SOS - Salvation of Survivors
 
+A serious game created for 2023 BeaverWorks Summer Institute exploring ethical dilemmas and the use of AI in crisis scenarios.
+
 ## Running the game
 1. Clone the repository or download the code
 2. Install pipenv
@@ -18,4 +20,4 @@ When you've finished testing, please send us the files in the folder [logs/human
 
 Thank you!
 
-Developed by Sabria Yen-Ko, Lucas Helms, Alexander Wang, and Seonyoung Lee
+Developed by Sabrina Yen-Ko, Lucas Helms, Alexander Wang, and Seonyoung Lee
